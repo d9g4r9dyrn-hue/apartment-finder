@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>unit-0044 — 3-bedroom, 2-bath home in the heart of Pinellas Park.</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+    :root {
+      --bg:        #0f1117;
+      --surface:   #181c27;
+      --border:    #252a38;
+      --accent:    #4fd1c5;
+      --accent2:   #f6ad55;
+      --muted:     #4a5168;
+      --text:      #e2e8f0;
+      --subtext:   #8892a4;
+      --red:       #fc8181;
+      --purple:    #b794f4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: var(--subtext);
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .address {
+      color: var(--subtext);
+      margin-bottom: 16px;
+    }
+
+    .detail-map {
+      height: 280px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .badge {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 13px;
+      color: var(--subtext);
+    }
+
+    .badge.price {
+      color: var(--accent2);
+      font-weight: 600;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .badge.quality {
+      color: var(--accent2);
+      letter-spacing: 1px;
+    }
+
+    .badge.age-restricted {
+      background: var(--red);
+      color: var(--bg);
+      border-color: var(--red);
+      font-weight: 600;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .info-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .info-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--subtext);
+      margin-bottom: 4px;
+    }
+
+    .info-value {
+      font-size: 15px;
+    }
+
+    .section {
+      margin-bottom: 24px;
+    }
+
+    .section h2 {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--subtext);
+      margin-bottom: 8px;
+    }
+
+    .description {
+      white-space: pre-wrap;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .photos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 8px;
+    }
+
+    .photos img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      display: block;
+    }
+
+    .your-notes {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .fav-toggle-btn {
+      background: var(--bg);
+      color: var(--subtext);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .fav-toggle-btn.active {
+      color: var(--accent2);
+      border-color: var(--accent2);
+    }
+
+    .your-notes textarea {
+      display: block;
+      width: 100%;
+      min-height: 100px;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+
+    .notes-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .notes-actions .save-btn {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 4px;
+      padding: 6px 14px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .notes-actions .save-btn:hover {
+      opacity: 0.9;
+    }
+
+    .saved-msg {
+      font-size: 12px;
+      color: var(--accent);
+    }
+
+    .timeline-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .timeline-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .timeline-entry {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+
+    .timeline-entry-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      white-space: nowrap;
+      padding-top: 1px;
+    }
+
+    .timeline-entry-text {
+      flex: 1;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .timeline-entry-remove {
+      background: transparent;
+      border: none;
+      color: var(--subtext);
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 2px;
+    }
+
+    .timeline-entry-remove:hover { color: var(--red); }
+
+    .timeline-empty {
+      font-size: 12px;
+      color: var(--subtext);
+      font-style: italic;
+      margin-bottom: 12px;
+    }
+
+    .timeline-add-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .timeline-add-row input[type="date"] {
+      flex: 0 0 150px;
+    }
+
+    .timeline-add-row input[type="text"] {
+      flex: 1;
+    }
+
+    .timeline-add-row input {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+    }
+
+    .timeline-add-row button {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+</style>
+</head>
+<body>
+  <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
+  <h1>3-bedroom, 2-bath home in the heart of Pinellas Park.</h1>
+  <div class="address">Address unknown</div>
+  <div class="badges"><div class="badge price">$1,300/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,133 sqft</div><div class="badge">House</div><div class="badge">7.5 mi away</div><div class="badge">🧺 Washer/Dryer</div><div class="badge">cats are OK - purrr</div><div class="badge">dogs are OK - wooof</div><div class="badge">w/d in unit</div><div class="badge">attached garage</div></div>
+  <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://tampa.craigslist.org/pnl/apa/d/pinellas-park-bedroom-bath-home-in-the/7940885694.html" target="_blank">Craigslist &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-15</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0044</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (67d)</div></div></div>
+  <div class="section">
+    <h2>Location</h2>
+    <div id="detail-map" class="detail-map"></div>
+  </div>
+  <div class="section">
+    <h2>Description (from listing)</h2>
+    <div class="description">QR Code Link to This Post
+Welcome to this well-maintained 3-bedroom, 2-bath home in the heart of Pinellas Park. This spacious residence features a bright and open floor plan with plenty of natural light, creating a warm and inviting atmosphere. The living and dining areas flow seamlessly, perfect for everyday living and entertaining. The kitchen offers ample cabinet space and functionality, while the bedrooms are generously sized with great closet storage. Enjoy a private outdoor area ideal for relaxing or hosting guests. Conveniently located near shopping, dining, parks, and just a short drive to the beautiful Gulf beaches, this home offers comfort and convenience in a great location.</div>
+  </div>
+  <div class="section">
+    <h2>Photos (7)</h2>
+    <div class="photos"><a href="../../photos/unit-0044/photo-1.jpg" target="_blank"><img src="../../photos/unit-0044/photo-1.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0044/photo-2.jpg" target="_blank"><img src="../../photos/unit-0044/photo-2.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0044/photo-3.jpg" target="_blank"><img src="../../photos/unit-0044/photo-3.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0044/photo-4.jpg" target="_blank"><img src="../../photos/unit-0044/photo-4.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0044/photo-5.jpg" target="_blank"><img src="../../photos/unit-0044/photo-5.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0044/photo-6.jpg" target="_blank"><img src="../../photos/unit-0044/photo-6.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0044/photo-7.jpg" target="_blank"><img src="../../photos/unit-0044/photo-7.jpg" alt="Photo" loading="lazy"></a></div>
+  </div>
+  <div class="section">
+    <h2>Commute</h2>
+    <div id="commute-list" class="info-grid"></div>
+  </div>
+  <div class="section">
+    <h2>Your Notes</h2>
+    <div class="your-notes">
+      <button id="fav-toggle-btn" class="fav-toggle-btn" onclick="toggleDetailFavorite()">&#9734; Add to favorites</button>
+      <textarea id="detail-notes-textarea" placeholder="Add private notes about this unit..."></textarea>
+      <div class="notes-actions">
+        <button class="save-btn" onclick="saveDetailNotes()">Save Notes</button>
+        <span id="notes-saved-msg" class="saved-msg"></span>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <h2>Interaction Timeline</h2>
+    <div class="timeline-section">
+      <div id="detail-timeline-entries" class="timeline-entries"></div>
+      <div class="timeline-add-row">
+        <input type="date" id="detail-timeline-date">
+        <input type="text" id="detail-timeline-text" placeholder="e.g. Called landlord, toured unit...">
+        <button onclick="addDetailTimelineEntry()">Add</button>
+      </div>
+    </div>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const UNIT_ID = "unit-0044";
+    const UNIT_LAT = 27.8387;
+    const UNIT_LON = -82.7151;
+    const UNIT_ADDRESS = "Address unknown";
+    const TARGET_LAT = 27.95;
+    const TARGET_LON = -82.73;
+    const TARGET_NAME = "Clearwater, FL";
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function haversineMiles(lat1, lon1, lat2, lon2) {
+      const R = 3959;
+      const toRad = d => d * Math.PI / 180;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+      return R * 2 * Math.asin(Math.sqrt(a));
+    }
+
+    // Distance to each work location is computed client-side from the same
+    // `workLocations` list (name/address/lat/lon) saved by the list page
+    function renderCommute() {
+      const list = document.getElementById('commute-list');
+      let workLocations = [];
+      try { workLocations = JSON.parse(localStorage.getItem('workLocations') || '[]'); } catch (e) {}
+
+      if (!workLocations.length) {
+        list.innerHTML = '<div class="info-item" style="grid-column: 1 / -1;"><div class="info-value">Add work locations from the list page to see commute distances here.</div></div>';
+        return;
+      }
+      if (UNIT_LAT == null || UNIT_LON == null) {
+        list.innerHTML = '<div class="info-item" style="grid-column: 1 / -1;"><div class="info-value">This unit\'s location is unknown, so commute distance can\'t be calculated.</div></div>';
+        return;
+      }
+      list.innerHTML = workLocations.map(loc => {
+        const d = Math.round(haversineMiles(UNIT_LAT, UNIT_LON, loc.lat, loc.lon) * 10) / 10;
+        return `<div class="info-item"><div class="info-label">${escapeHtml(loc.name)}</div><div class="info-value">${d} mi</div></div>`;
+      }).join('');
+    }
+
+    function loadDetailOverrides() {
+      try { return JSON.parse(localStorage.getItem('unitOverrides') || '{}'); } catch (e) { return {}; }
+    }
+
+    function saveDetailOverrides(overrides) {
+      try { localStorage.setItem('unitOverrides', JSON.stringify(overrides)); } catch (e) {}
+    }
+
+    function updateFavToggleBtn(overrides) {
+      const btn = document.getElementById('fav-toggle-btn');
+      const isFav = !!(overrides[UNIT_ID] && overrides[UNIT_ID].favorite);
+      btn.textContent = isFav ? '\u2605 Favorited' : '\u2606 Add to favorites';
+      btn.classList.toggle('active', isFav);
+    }
+
+    function toggleDetailFavorite() {
+      const overrides = loadDetailOverrides();
+      const entry = overrides[UNIT_ID] || {};
+      entry.favorite = !entry.favorite;
+      overrides[UNIT_ID] = entry;
+      saveDetailOverrides(overrides);
+      updateFavToggleBtn(overrides);
+    }
+
+    function saveDetailNotes() {
+      const overrides = loadDetailOverrides();
+      const entry = overrides[UNIT_ID] || {};
+      entry.notes = document.getElementById('detail-notes-textarea').value;
+      overrides[UNIT_ID] = entry;
+      saveDetailOverrides(overrides);
+      const msg = document.getElementById('notes-saved-msg');
+      msg.textContent = '\u2713 Saved';
+      setTimeout(() => { msg.textContent = ''; }, 1500);
+    }
+
+    function formatTimelineDate(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      if (isNaN(d.getTime())) return dateStr;
+      return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function renderDetailTimeline() {
+      const overrides = loadDetailOverrides();
+      const entries = (overrides[UNIT_ID] && overrides[UNIT_ID].timeline) || [];
+      const list = document.getElementById('detail-timeline-entries');
+      if (!entries.length) {
+        list.innerHTML = '<div class="timeline-empty">No interactions logged yet.</div>';
+        return;
+      }
+      const sorted = entries.map((e, i) => ({ ...e, i })).sort((a, b) => b.date.localeCompare(a.date));
+      list.innerHTML = sorted.map(entry => `<div class="timeline-entry">` +
+        `<div class="timeline-entry-date">${formatTimelineDate(entry.date)}</div>` +
+        `<div class="timeline-entry-text">${escapeHtml(entry.text)}</div>` +
+        `<button class="timeline-entry-remove" title="Remove" onclick="removeDetailTimelineEntry(${entry.i})">\u2715</button>` +
+      `</div>`).join('');
+    }
+
+    function addDetailTimelineEntry() {
+      const date = document.getElementById('detail-timeline-date').value;
+      const text = document.getElementById('detail-timeline-text').value.trim();
+      if (!date || !text) return;
+      const overrides = loadDetailOverrides();
+      const entry = overrides[UNIT_ID] || {};
+      const timeline = entry.timeline || [];
+      timeline.push({ date, text });
+      entry.timeline = timeline;
+      overrides[UNIT_ID] = entry;
+      saveDetailOverrides(overrides);
+      document.getElementById('detail-timeline-text').value = '';
+      renderDetailTimeline();
+    }
+
+    function removeDetailTimelineEntry(index) {
+      const overrides = loadDetailOverrides();
+      const entry = overrides[UNIT_ID] || {};
+      const timeline = entry.timeline || [];
+      timeline.splice(index, 1);
+      entry.timeline = timeline;
+      overrides[UNIT_ID] = entry;
+      saveDetailOverrides(overrides);
+      renderDetailTimeline();
+    }
+
+    function initDetailMap() {
+      const mapEl = document.getElementById('detail-map');
+      if (UNIT_LAT == null || UNIT_LON == null) {
+        mapEl.outerHTML = '<div class="timeline-empty">This unit\'s location is unknown, so it can\'t be shown on a map.</div>';
+        return;
+      }
+      const map = L.map('detail-map', { scrollWheelZoom: false });
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(map);
+
+      const points = [[UNIT_LAT, UNIT_LON]];
+      L.marker([UNIT_LAT, UNIT_LON]).addTo(map)
+        .bindPopup(`<b>This unit</b><br>${escapeHtml(UNIT_ADDRESS)}`)
+        .openPopup();
+
+      if (TARGET_LAT != null && TARGET_LON != null) {
+        points.push([TARGET_LAT, TARGET_LON]);
+        L.marker([TARGET_LAT, TARGET_LON]).addTo(map)
+          .bindPopup(`<b>${escapeHtml(TARGET_NAME || 'Search center')}</b>`);
+        L.polyline(points, { color: '#63b3ed', weight: 2, dashArray: '4 6' }).addTo(map);
+      }
+
+      if (points.length > 1) {
+        map.fitBounds(points, { padding: [30, 30] });
+      } else {
+        map.setView(points[0], 13);
+      }
+      setTimeout(() => map.invalidateSize(), 100);
+    }
+
+    (function() {
+      const overrides = loadDetailOverrides();
+      const entry = overrides[UNIT_ID] || {};
+      document.getElementById('detail-notes-textarea').value = entry.notes || '';
+      updateFavToggleBtn(overrides);
+      renderCommute();
+      document.getElementById('detail-timeline-date').value = new Date().toISOString().slice(0, 10);
+      renderDetailTimeline();
+      initDetailMap();
+    })();
+  </script>
+</body>
+</html>

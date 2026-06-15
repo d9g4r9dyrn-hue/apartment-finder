@@ -1,0 +1,2776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Units Found — Rental Finder</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+    :root {
+      --bg:        #0f1117;
+      --surface:   #181c27;
+      --border:    #252a38;
+      --accent:    #4fd1c5;
+      --accent2:   #f6ad55;
+      --muted:     #4a5168;
+      --text:      #e2e8f0;
+      --subtext:   #8892a4;
+      --green:     #68d391;
+      --red:       #fc8181;
+      --purple:    #b794f4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 0 0 auto;
+    }
+
+    .page-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--subtext);
+    }
+
+    .layout {
+      flex: 1 1 auto;
+      display: flex;
+      padding: 16px 20px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      flex: 0 0 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      padding-right: 14px;
+      min-width: 240px;
+      max-width: 70%;
+    }
+
+    .resizer {
+      flex: 0 0 8px;
+      cursor: col-resize;
+      position: relative;
+    }
+
+    .resizer::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 3px;
+      width: 2px;
+      border-radius: 1px;
+      background: var(--border);
+      transition: background 0.15s ease;
+    }
+
+    .resizer:hover::after,
+    .resizer.resizing::after {
+      background: var(--accent);
+    }
+
+    .list-panel {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: auto;
+      padding-left: 6px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+      font-size: 13px;
+      color: var(--subtext);
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-value {
+      font-family: 'DM Mono', monospace;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .criteria-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .criteria-text {
+      color: var(--subtext);
+    }
+
+    .criteria-text strong {
+      color: var(--text);
+    }
+
+    .edit-icon-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--subtext);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 11px;
+      line-height: 1.6;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+
+    .edit-icon-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .criteria-edit {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      margin-top: 4px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .criteria-edit.open {
+      display: flex;
+    }
+
+    .criteria-edit label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--subtext);
+    }
+
+    .criteria-edit input,
+    .criteria-edit select {
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+    }
+
+    .checkbox-cell {
+      justify-content: center;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      text-transform: none;
+      letter-spacing: normal;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+      width: auto;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .criteria-edit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 10px;
+    }
+
+    .criteria-edit-grid > div {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .criteria-edit-grid .full {
+      grid-column: 1 / -1;
+    }
+
+    .columns-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 12px;
+    }
+
+    .columns-grid label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      text-transform: none;
+      letter-spacing: normal;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .columns-grid input[type="checkbox"] {
+      width: auto;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .work-locations-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .work-location-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 8px;
+    }
+
+    .work-location-name {
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .work-location-address {
+      color: var(--subtext);
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .work-location-remove {
+      background: transparent;
+      border: none;
+      color: var(--subtext);
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1;
+      padding: 0 2px;
+    }
+
+    .work-location-remove:hover { color: var(--red); }
+
+    .work-loc-col {
+      width: 90px;
+      text-align: right;
+      font-size: 12px;
+      color: var(--subtext);
+    }
+
+    /* Column visibility toggles - hides both header and body cells for a column */
+    .units-table.hide-mine .mine-col { display: none; }
+    .units-table.hide-photo .photo-col,
+    .units-table.hide-photo .unit-thumb-col { display: none; }
+    .units-table.hide-distance .distance-col,
+    .units-table.hide-distance .unit-distance-col { display: none; }
+    .units-table.hide-price .price-col,
+    .units-table.hide-price .unit-price-col { display: none; }
+    .units-table.hide-beds .beds-col { display: none; }
+    .units-table.hide-baths .baths-col { display: none; }
+    .units-table.hide-sqft .sqft-col { display: none; }
+    .units-table.hide-type .type-col,
+    .units-table.hide-type .unit-type-col { display: none; }
+    .units-table.hide-amenities .amenity-col,
+    .units-table.hide-amenities .unit-amenity-col { display: none; }
+    .units-table.hide-flooring .flooring-col { display: none; }
+    .units-table.hide-movein .movein-col { display: none; }
+    .units-table.hide-source .source-col,
+    .units-table.hide-source .unit-source-col { display: none; }
+    .units-table.hide-quality .quality-col { display: none; }
+    .units-table.hide-details .details-col { display: none; }
+
+    .criteria-edit-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .criteria-edit-status {
+      font-size: 11px;
+      color: var(--subtext);
+    }
+
+    .refresh-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+    }
+
+    .ctrl-btn:hover { border-color: var(--accent); }
+    .ctrl-btn-icon { padding: 6px 10px; font-weight: 600; }
+    .ctrl-btn.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 600; }
+    .ctrl-btn.primary:hover { opacity: 0.9; }
+
+    .howto-panel {
+      display: none;
+      margin-top: 8px;
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--subtext);
+    }
+
+    .howto-panel p { margin-bottom: 6px; }
+
+    .howto-panel code {
+      display: block;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 8px;
+      margin-bottom: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+
+    #map {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .map-marker {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid #1a1f2e;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+    .map-marker.marker-apartment, .map-legend-dot.marker-apartment { background: var(--accent); }
+    .map-marker.marker-house, .map-legend-dot.marker-house { background: var(--accent2); }
+    .map-marker.marker-other, .map-legend-dot.marker-other { background: var(--muted); }
+
+    .map-marker-work {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      background: var(--purple);
+      border: 2px solid #1a1f2e;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      line-height: 1;
+    }
+    .map-legend-dot.marker-work { background: var(--purple); border-radius: 3px; }
+
+    .map-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--subtext);
+    }
+    .map-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .map-legend-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid #1a1f2e;
+    }
+
+    .photo-tooltip { padding: 0; border: none; background: transparent; box-shadow: none; }
+    .photo-tooltip::before { display: none; }
+    .popup-photo {
+      width: 180px; height: 130px; object-fit: cover; border-radius: 4px;
+      display: block; margin: 6px 0; cursor: pointer;
+    }
+    .popup-photo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+      width: 180px;
+      height: 130px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 6px 0;
+    }
+    .popup-photo-grid img {
+      width: 100%; height: 100%; object-fit: cover; cursor: pointer; display: block;
+    }
+    .popup-photo-grid img:hover {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+    .popup-type, .tooltip-type {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: #555;
+    }
+    .tooltip-type {
+      font-weight: 600;
+      background: #fff;
+      padding: 2px 6px;
+      border-radius: 4px 4px 0 0;
+      margin-bottom: -2px;
+    }
+    .popup-address {
+      font-size: 12px;
+      color: #555;
+      margin: 2px 0 4px;
+    }
+    .unit-tooltip-wrapper { background: #fff; border: 1px solid #ccc; border-radius: 4px; padding: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+    .unit-tooltip-wrapper::before { display: none; }
+    .unit-tooltip {
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+      padding: 5px 8px;
+      max-width: 200px;
+    }
+    .unit-tooltip .map-marker { margin-top: 2px; flex-shrink: 0; }
+    .unit-tooltip b { display: block; font-size: 12px; color: #1a1f2e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 170px; }
+    .tooltip-header-address {
+      font-size: 11px;
+      color: #666;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 170px;
+    }
+    .popup-notes {
+      font-style: italic;
+      color: #555;
+      margin: 4px 0;
+      max-width: 180px;
+      white-space: pre-wrap;
+    }
+
+    .filter-note {
+      background: rgba(79, 209, 197, 0.05);
+      border-left: 3px solid var(--accent);
+      padding: 12px 16px;
+      font-size: 12px;
+      color: var(--subtext);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 40px;
+      color: var(--muted);
+    }
+
+    .empty-state .icon { font-size: 48px; display: block; margin-bottom: 16px; }
+    .empty-state h2 { font-size: 18px; font-weight: 400; color: var(--subtext); margin-bottom: 8px; }
+    .empty-state p { font-size: 13px; line-height: 1.7; }
+    .empty-state code { background: var(--surface); padding: 4px 8px; border-radius: 3px; }
+
+    .units-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .units-table thead {
+      background: var(--border);
+      position: sticky;
+      top: 0;
+    }
+
+    .units-table th {
+      padding: 12px 8px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .units-table th.sortable {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .units-table th.sortable:hover {
+      color: var(--accent);
+    }
+
+    .units-table th.sort-asc::after { content: ' \25b2'; font-size: 9px; }
+    .units-table th.sort-desc::after { content: ' \25bc'; font-size: 9px; }
+
+    .units-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.2s ease;
+    }
+
+    .units-table tbody tr:hover {
+      background: rgba(79, 209, 197, 0.05);
+    }
+
+    .units-table tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    /* Units sharing an address (same property, different floorplans) are
+       grouped together in the list - tie them together visually */
+    .units-table tbody tr.same-property {
+      border-left: 2px solid var(--accent);
+    }
+    .units-table tbody tr.group-continues {
+      border-bottom: none;
+    }
+
+    .units-table td {
+      padding: 10px 8px;
+      color: var(--text);
+      vertical-align: middle;
+    }
+
+    .photo-col {
+      width: 80px;
+      text-align: center;
+    }
+
+    .mine-col {
+      width: 84px;
+      text-align: center;
+    }
+
+    .icon-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      font-size: 15px;
+      line-height: 1;
+      padding: 2px 4px;
+      cursor: pointer;
+      color: var(--subtext);
+    }
+
+    .icon-btn:hover {
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    .fav-btn.active {
+      color: var(--accent2);
+    }
+
+    .note-btn.active {
+      color: var(--accent);
+    }
+
+    .timeline-btn.active {
+      color: var(--purple);
+    }
+
+    .quality-col {
+      width: 64px;
+      text-align: right;
+      color: var(--accent2);
+      letter-spacing: 1px;
+      cursor: default;
+    }
+
+    .distance-col {
+      width: 70px;
+      text-align: right;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .unit-distance-col {
+      text-align: right;
+    }
+
+    .unit-thumb {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 4px;
+      display: inline-block;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+
+    .unit-thumb:hover {
+      border-color: var(--accent);
+    }
+
+    .unit-thumb-empty {
+      width: 70px;
+      height: 70px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--border);
+      border-radius: 4px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .thumb-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+      width: 70px;
+      height: 70px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .thumb-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+      display: block;
+    }
+
+    .thumb-grid img:hover {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+
+    .address-col {
+      width: 25%;
+      min-width: 200px;
+    }
+
+    .unit-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .unit-link:hover {
+      text-decoration: underline;
+    }
+
+    .dup-tag {
+      font-size: 11px;
+      color: var(--subtext);
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    .unit-id-tag {
+      font-size: 11px;
+      color: var(--subtext);
+      font-family: 'DM Mono', monospace;
+      margin-top: 2px;
+    }
+
+    .price-col {
+      width: 90px;
+      text-align: right;
+      font-family: 'DM Mono', monospace;
+      font-weight: 600;
+      color: var(--accent2);
+    }
+
+    .unit-price-col {
+      text-align: right;
+    }
+
+    .spec-col {
+      width: 70px;
+      text-align: right;
+      color: var(--muted);
+    }
+
+    .unit-spec-col {
+      text-align: right;
+    }
+
+    .type-col {
+      width: 90px;
+      text-align: left;
+      font-size: 12px;
+    }
+
+    .unit-type-col {
+      text-align: left;
+      font-size: 12px;
+      color: var(--subtext);
+    }
+
+    .age-badge {
+      display: inline-block;
+      background: var(--red);
+      color: var(--bg);
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 0 4px;
+      margin-left: 2px;
+      vertical-align: middle;
+      cursor: default;
+    }
+
+    .amenity-col {
+      width: 80px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .unit-amenity-col {
+      text-align: center;
+    }
+
+    .amenity-more {
+      font-size: 10px;
+      color: var(--subtext);
+    }
+
+    .flooring-col {
+      width: 80px;
+      text-align: left;
+      font-size: 12px;
+      color: var(--subtext);
+    }
+
+    .movein-col {
+      width: 90px;
+      text-align: left;
+      font-size: 12px;
+      color: var(--subtext);
+    }
+
+    .source-col {
+      width: 90px;
+      text-align: left;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .unit-source-col {
+      text-align: left;
+    }
+
+    .details-col {
+      width: 70px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .details-link {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .details-link:hover {
+      text-decoration: underline;
+    }
+
+    .tools-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .filter-group {
+      flex: 1 1 100px;
+      min-width: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--subtext);
+    }
+
+    .filter-group select,
+    .filter-group input {
+      width: 100%;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+    }
+
+    .tool-btn {
+      flex: 1 1 100px;
+      min-width: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 7px 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .tool-btn:hover {
+      border-color: var(--accent);
+    }
+
+    .tool-btn.open {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .tool-badge {
+      background: var(--accent);
+      color: var(--bg);
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .tools-panel {
+      margin-top: 0;
+      padding: 12px 16px;
+      border-top: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      cursor: zoom-out;
+    }
+
+    .lightbox-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 4px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: #fff;
+      font-size: 28px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .lightbox-prev { left: 24px; }
+    .lightbox-next { right: 24px; }
+
+    .lightbox-counter {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 4px 14px;
+      border-radius: 12px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      z-index: 1001;
+    }
+
+    .notes-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+    }
+
+    .notes-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      width: 90%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .notes-modal h3 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .notes-modal textarea {
+      width: 100%;
+      min-height: 120px;
+      resize: vertical;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+    }
+
+    .notes-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .timeline-modal {
+      max-width: 480px;
+    }
+
+    .timeline-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .timeline-entry {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+
+    .timeline-entry-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      white-space: nowrap;
+      padding-top: 1px;
+    }
+
+    .timeline-entry-text {
+      flex: 1;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .timeline-entry-remove {
+      background: transparent;
+      border: none;
+      color: var(--subtext);
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 2px;
+    }
+
+    .timeline-entry-remove:hover { color: var(--red); }
+
+    .timeline-empty {
+      font-size: 12px;
+      color: var(--subtext);
+      font-style: italic;
+    }
+
+    .timeline-add-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .timeline-add-row input[type="date"] {
+      flex: 0 0 130px;
+    }
+
+    .timeline-add-row input[type="text"] {
+      flex: 1;
+    }
+
+    .timeline-add-row input {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+    }
+
+    /* Narrow / tall (mobile) viewports: stack the sidebar above the list
+       instead of side-by-side, and let the page scroll vertically */
+    @media (max-width: 860px) {
+      body {
+        height: auto;
+        overflow: auto;
+      }
+
+      .layout {
+        flex-direction: column;
+        overflow: visible;
+        height: auto;
+      }
+
+      .sidebar {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+        overflow-y: visible;
+        padding-right: 0;
+      }
+
+      .resizer {
+        display: none;
+      }
+
+      .list-panel {
+        flex: 1 1 auto;
+        padding-left: 0;
+      }
+
+      #map {
+        aspect-ratio: 16 / 9;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="page-title">UNITS FOUND</div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="tools-row">
+        <div class="filter-group">
+          <label for="search-contains">Contains</label>
+          <input type="text" id="search-contains" placeholder="e.g. gated" oninput="applySearchFilters()">
+        </div>
+        <div class="filter-group">
+          <label for="search-excludes">Doesn't contain</label>
+          <input type="text" id="search-excludes" placeholder="e.g. 55+" oninput="applySearchFilters()">
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="stat-total">41</div>
+          <div class="stat-label">Units Matching Criteria</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-scraped">42</div>
+          <div class="stat-label">Total Scraped</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-updated">2026-06-15</div>
+          <div class="stat-label">Last Updated</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="stat-lease-value">Aug 21, 2026</div>
+          <div class="stat-label" id="stat-lease-label">Your Lease Ends (67d)</div>
+        </div>
+      </div>
+
+      <div class="criteria-bar">
+        <div class="criteria-text">
+          <strong>Criteria:</strong> <span id="criteria-text-value">within 10 mi of Bluestone on the Bay · $1000–$1999/mo · 2–3 bd</span>
+          <button id="edit-criteria-btn" class="edit-icon-btn" title="Edit search criteria">&#9998; Edit</button>
+        </div>
+        <div id="criteria-edit" class="criteria-edit">
+          <div class="criteria-edit-grid">
+            <div class="full">
+              <label for="address-input">Your address (distance & map center)</label>
+              <input type="text" id="address-input" placeholder="123 Main St, City, ST 12345">
+            </div>
+            <div class="full">
+              <label for="lease-end-input">Lease end date</label>
+              <input type="date" id="lease-end-input">
+            </div>
+            <div>
+              <label for="radius-input">Radius (mi)</label>
+              <input type="number" id="radius-input" min="0" step="0.5">
+            </div>
+            <div>
+              <label for="min-sqft-input">Min sqft</label>
+              <input type="number" id="min-sqft-input" min="0" step="50">
+            </div>
+            <div>
+              <label for="min-price-input">Min price ($)</label>
+              <input type="number" id="min-price-input" min="0" step="50">
+            </div>
+            <div>
+              <label for="max-price-input">Max price ($)</label>
+              <input type="number" id="max-price-input" min="0" step="50">
+            </div>
+            <div>
+              <label for="min-beds-input">Min beds</label>
+              <input type="number" id="min-beds-input" min="0" step="1">
+            </div>
+            <div>
+              <label for="max-beds-input">Max beds</label>
+              <input type="number" id="max-beds-input" min="0" step="1">
+            </div>
+            <div>
+              <label for="min-baths-input">Min baths</label>
+              <input type="number" id="min-baths-input" min="0" step="0.5">
+            </div>
+          </div>
+          <div class="criteria-edit-actions">
+            <button id="save-criteria-btn" class="ctrl-btn">Save</button>
+            <button id="cancel-criteria-btn" class="ctrl-btn">Cancel</button>
+            <button id="reset-criteria-btn" class="ctrl-btn" title="Clear saved overrides and reload config.json defaults">Reset</button>
+            <span id="criteria-edit-status" class="criteria-edit-status"></span>
+          </div>
+        </div>
+        <div class="refresh-controls">
+          <button id="reload-btn" class="ctrl-btn" title="Reload this page from disk">&#10227; Reload</button>
+          <button id="refetch-btn" class="ctrl-btn" title="Re-fetch units.json and refresh without reloading">&#10227; Re-fetch</button>
+          <button id="howto-btn" class="ctrl-btn ctrl-btn-icon" title="How to update results">&#9432;</button>
+        </div>
+        <div id="howto-panel" class="howto-panel">
+          <p>To pull fresh listings and rebuild this page, run in a terminal:</p>
+          <code>python scripts/crawl_all.py</code>
+          <code>python scripts/generate-map.py</code>
+          <code>python scripts/generate-html.py</code>
+          <p>Then click Reload above. (Re-fetch only works if this page is served over http://, not opened as a file.)</p>
+        </div>
+      </div>
+
+      <div id="filter-note" class="filter-note" style="display:none;"></div>
+
+      <div id="map"></div>
+      <div id="map-legend" class="map-legend"></div>
+
+      <div class="tools-row">
+        <div class="filter-group">
+          <label for="type-select">Housing type</label>
+          <select id="type-select" onchange="applyTypeFilter()">
+            <option value="">All types</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="quality-select">Min quality</label>
+          <select id="quality-select" onchange="applyQualityFilter()">
+            <option value="">Any</option>
+            <option value="2">&#9733;&#9733; (2+)</option>
+            <option value="3">&#9733;&#9733;&#9733; (3+)</option>
+            <option value="4">&#9733;&#9733;&#9733;&#9733; (4+)</option>
+            <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733; (5)</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="favorites-select">Favorites</label>
+          <select id="favorites-select" onchange="applyFavoritesFilter()">
+            <option value="">All units</option>
+            <option value="1">&#9733; Favorites only</option>
+          </select>
+        </div>
+        <button id="list-filters-btn" class="tool-btn" title="Narrow the displayed list without changing your search criteria">List filters<span id="list-filters-badge" class="tool-badge" style="display:none;"></span></button>
+        <button id="columns-btn" class="tool-btn" title="Choose which table columns are displayed">Columns<span id="columns-badge" class="tool-badge" style="display:none;"></span></button>
+        <button id="work-locations-btn" class="tool-btn" title="Add work locations to show distance columns">Work locations<span id="work-locations-badge" class="tool-badge" style="display:none;"></span></button>
+      </div>
+
+      <div id="list-filters-panel" class="criteria-edit tools-panel">
+        <div id="list-filters-grid" class="criteria-edit-grid">
+          <div>
+            <label for="lf-max-distance">Max distance (mi)</label>
+            <input type="number" id="lf-max-distance" min="0" step="0.5" placeholder="Any" oninput="applyListFilters()">
+          </div>
+          <div>
+            <label for="lf-min-sqft">Min sqft</label>
+            <input type="number" id="lf-min-sqft" min="0" step="50" placeholder="Any" oninput="applyListFilters()">
+          </div>
+          <div>
+            <label for="lf-min-price">Min price ($)</label>
+            <input type="number" id="lf-min-price" min="0" step="50" placeholder="Any" oninput="applyListFilters()">
+          </div>
+          <div>
+            <label for="lf-max-price">Max price ($)</label>
+            <input type="number" id="lf-max-price" min="0" step="50" placeholder="Any" oninput="applyListFilters()">
+          </div>
+          <div>
+            <label for="lf-min-beds">Min beds</label>
+            <input type="number" id="lf-min-beds" min="0" step="1" placeholder="Any" oninput="applyListFilters()">
+          </div>
+          <div>
+            <label for="lf-min-baths">Min baths</label>
+            <input type="number" id="lf-min-baths" min="0" step="0.5" placeholder="Any" oninput="applyListFilters()">
+          </div>
+          <div>
+            <label for="lf-flooring">Flooring</label>
+            <select id="lf-flooring" onchange="applyListFilters()">
+              <option value="">Any</option>
+              <option value="hardwood">Hardwood</option>
+              <option value="tile">Tile</option>
+              <option value="carpet">Carpet</option>
+              <option value="vinyl">Vinyl</option>
+              <option value="concrete">Concrete</option>
+              <option value="mixed">Mixed</option>
+              <option value="unknown">Unknown</option>
+            </select>
+          </div>
+          <div>
+            <label for="lf-available-by">Available by</label>
+            <input type="date" id="lf-available-by" oninput="applyListFilters()">
+          </div>
+          <div class="checkbox-cell">
+            <label class="checkbox-label"><input type="checkbox" id="lf-washer-dryer" onchange="applyListFilters()"> Washer/Dryer</label>
+          </div>
+          <div class="checkbox-cell">
+            <label class="checkbox-label"><input type="checkbox" id="lf-gated" onchange="applyListFilters()"> Gated</label>
+          </div>
+          <div class="checkbox-cell">
+            <label class="checkbox-label"><input type="checkbox" id="lf-hide-age-restricted" onchange="applyListFilters()"> Hide age-restricted (55+)</label>
+          </div>
+        </div>
+        <div class="criteria-edit-actions">
+          <button id="clear-list-filters-btn" class="ctrl-btn">Clear</button>
+          <span id="list-filters-summary" class="criteria-edit-status"></span>
+        </div>
+      </div>
+
+      <div id="columns-panel" class="criteria-edit tools-panel">
+        <div class="criteria-edit-grid columns-grid">
+          <label><input type="checkbox" data-col="mine" onchange="onColumnToggle(this)"> Mine</label>
+          <label><input type="checkbox" data-col="photo" onchange="onColumnToggle(this)"> Photo</label>
+          <label><input type="checkbox" data-col="distance" onchange="onColumnToggle(this)"> Distance</label>
+          <label><input type="checkbox" data-col="price" onchange="onColumnToggle(this)"> Price</label>
+          <label><input type="checkbox" data-col="beds" onchange="onColumnToggle(this)"> Beds</label>
+          <label><input type="checkbox" data-col="baths" onchange="onColumnToggle(this)"> Baths</label>
+          <label><input type="checkbox" data-col="sqft" onchange="onColumnToggle(this)"> Sqft</label>
+          <label><input type="checkbox" data-col="type" onchange="onColumnToggle(this)"> Type</label>
+          <label><input type="checkbox" data-col="movein" onchange="onColumnToggle(this)"> Move-in</label>
+          <label><input type="checkbox" data-col="amenities" onchange="onColumnToggle(this)"> Amenities</label>
+          <label><input type="checkbox" data-col="flooring" onchange="onColumnToggle(this)"> Flooring</label>
+          <label><input type="checkbox" data-col="source" onchange="onColumnToggle(this)"> Source</label>
+          <label><input type="checkbox" data-col="quality" onchange="onColumnToggle(this)"> Quality</label>
+          <label><input type="checkbox" data-col="details" onchange="onColumnToggle(this)"> Details</label>
+        </div>
+        <div class="criteria-edit-actions">
+          <button id="reset-columns-btn" class="ctrl-btn">Show All</button>
+        </div>
+      </div>
+
+      <div id="work-locations-panel" class="criteria-edit tools-panel">
+        <div id="work-locations-list" class="work-locations-list"></div>
+        <div class="criteria-edit-grid">
+          <div>
+            <label for="work-loc-name-input">Name</label>
+            <input type="text" id="work-loc-name-input" placeholder="e.g. Cort Work">
+          </div>
+          <div>
+            <label for="work-loc-address-input">Address</label>
+            <input type="text" id="work-loc-address-input" placeholder="123 Main St, City, ST">
+          </div>
+        </div>
+        <div class="criteria-edit-actions">
+          <button id="add-work-location-btn" class="ctrl-btn">Add</button>
+          <span id="work-location-status" class="criteria-edit-status"></span>
+        </div>
+      </div>
+    </aside>
+
+    <div class="resizer" id="resizer"></div>
+
+    <div class="list-panel">
+      <table class="units-table">
+        <thead>
+          <tr>
+            <th class="mine-col sortable" data-sort="favorite" onclick="applySort('favorite')">Mine</th>
+            <th class="photo-col">Photo</th>
+            <th class="distance-col sortable" data-sort="distance_miles" onclick="applySort('distance_miles')">Distance</th>
+            <th class="address-col sortable" data-sort="address" onclick="applySort('address')">Address</th>
+            <th class="price-col sortable" data-sort="price" onclick="applySort('price')">Price/mo</th>
+            <th class="spec-col beds-col sortable" data-sort="beds" onclick="applySort('beds')">Beds</th>
+            <th class="spec-col baths-col sortable" data-sort="baths" onclick="applySort('baths')">Baths</th>
+            <th class="spec-col sqft-col sortable" data-sort="sqft" onclick="applySort('sqft')">Sqft</th>
+            <th class="type-col sortable" data-sort="housing_type" onclick="applySort('housing_type')">Type</th>
+            <th class="movein-col sortable" data-sort="move_in_sort" onclick="applySort('move_in_sort')">Move-in</th>
+            <th class="amenity-col">Amenities</th>
+            <th class="flooring-col sortable" data-sort="flooring_type" onclick="applySort('flooring_type')">Flooring</th>
+            <th class="source-col sortable" data-sort="source" onclick="applySort('source')">Source</th>
+            <th class="quality-col sortable" data-sort="quality_rating" onclick="applySort('quality_rating')">Quality</th>
+            <th id="details-th" class="details-col">Details</th>
+          </tr>
+        </thead>
+        <tbody id="units-tbody"></tbody>
+      </table>
+      <div id="empty-state" class="empty-state" style="display:none;"></div>
+    </div>
+  </div>
+
+  <div id="lightbox-overlay" class="lightbox-overlay" onclick="closeLightbox(event)">
+    <button class="lightbox-nav lightbox-prev" onclick="lightboxPrev(event)">&#8249;</button>
+    <img id="lightbox-img" src="" alt="Full-size photo">
+    <button class="lightbox-nav lightbox-next" onclick="lightboxNext(event)">&#8250;</button>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+  </div>
+
+  <div id="notes-modal-overlay" class="notes-modal-overlay" onclick="closeNotesModal(event)">
+    <div class="notes-modal">
+      <h3>Your Notes</h3>
+      <textarea id="notes-modal-textarea" placeholder="Add private notes about this unit..."></textarea>
+      <div class="notes-modal-actions">
+        <button class="ctrl-btn" onclick="closeNotesModal()">Cancel</button>
+        <button class="ctrl-btn primary" onclick="saveNotes()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="timeline-modal-overlay" class="notes-modal-overlay" onclick="closeTimelineModal(event)">
+    <div class="notes-modal timeline-modal">
+      <h3>Interaction Timeline</h3>
+      <div id="timeline-entries" class="timeline-entries"></div>
+      <div class="timeline-add-row">
+        <input type="date" id="timeline-add-date">
+        <input type="text" id="timeline-add-text" placeholder="e.g. Called landlord, toured unit...">
+      </div>
+      <div class="notes-modal-actions">
+        <button class="ctrl-btn" onclick="closeTimelineModal()">Close</button>
+        <button class="ctrl-btn primary" onclick="addTimelineEntry()">Add Entry</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+  <script>
+    const CONFIG = {"target_location": {"name": "Clearwater, FL", "address": "Clearwater, FL area", "lat": 27.95, "lon": -82.73}, "target_name": "Clearwater, FL", "search_radius_miles": 10, "min_price": 1000, "max_price": 1999, "min_beds": 2, "max_beds": 3, "min_baths": null, "min_sqft": null, "min_quality": null, "current_lease_end": "2026-08-21"};
+    const INITIAL_DATA = {"units": [{"id": "unit-0000", "title": "Open for tour today", "address": "", "price": 1400, "beds": 2, "baths": 1.0, "sqft": 967, "housing_type": "House", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-open-for-tour-today/7939048315.html", "lat": 27.947, "lon": -82.7943, "photos": ["photos/unit-0000/photo-1.jpg", "photos/unit-0000/photo-2.jpg", "photos/unit-0000/photo-3.jpg", "photos/unit-0000/photo-4.jpg", "photos/unit-0000/photo-5.jpg", "photos/unit-0000/photo-6.jpg", "photos/unit-0000/photo-7.jpg", "photos/unit-0000/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "attached garage"], "age_restriction": null, "quality_rating": 4, "quality_notes": "Modern, clean, and well-maintained with updated kitchen appliances.", "flooring_type": "tile", "move_in_date": "now", "move_in_sort": 0, "notes": "QR Code Link to This Post\nCall or text landlord to schedule a tour and apply Mr Robert 601 488 752 5\n2bed/1bath ready for move in. All bills paid in a great location.\nFenced backyard and pet friendly.\nMonthly rent: $1,400\nSecurity deposit: $1,400\nTotal move in cost: $2,800"}, {"id": "unit-0003", "title": "Condo in 55 plus resort style community on the bay!", "address": "", "price": 1800, "beds": 2, "baths": 2.0, "sqft": null, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-condo-in-55-plus-resort/7938244299.html", "lat": 27.916, "lon": -82.7343, "photos": ["photos/unit-0003/photo-1.jpg", "photos/unit-0003/photo-2.jpg", "photos/unit-0003/photo-3.jpg", "photos/unit-0003/photo-4.jpg", "photos/unit-0003/photo-5.jpg", "photos/unit-0003/photo-6.jpg", "photos/unit-0003/photo-7.jpg", "photos/unit-0003/photo-8.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["laundry in bldg", "off-street parking"], "age_restriction": 55, "quality_rating": 1, "quality_notes": "No interior photos of the unit to assess its condition.", "flooring_type": "unknown", "move_in_date": "now", "move_in_sort": 0, "notes": "QR Code Link to This Post\nMove-in ready in Imperial Cove! This light and open 55+ waterfront condo offers a comfortable floor plan with an open kitchen, ss refrigerator, range/oven, dishwasher and microwave, spacious living and dining areas, a primary bedroom with ensuite bathroom and great closet space, plus a second bedroom ideal for guests or an office. Nice spacious sunroom. Imperial Cove offers resort-style amenities including a waterfront pool, fitness center, sauna, shuffleboard, fishing pier, scenic boardwalk, putting green, library, and grilling areas. Minutes to Clearwater Beach, shopping, dining, Tampa International Airport, and St. Pete-Clearwater International Airport.  Gated Community.  Call or text, no emails please."}, {"id": "unit-0004", "title": "Brand New Manufactured Home in 55+ Community", "address": "Thames near Windsor RD N", "price": 1250, "beds": 2, "baths": 2.0, "sqft": 1056, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/hil/apa/d/pinellas-park-brand-new-manufactured/7939804578.html", "lat": 27.868556, "lon": -82.727402, "photos": ["photos/unit-0004/photo-1.jpg", "photos/unit-0004/photo-2.jpg", "photos/unit-0004/photo-3.jpg", "photos/unit-0004/photo-4.jpg", "photos/unit-0004/photo-5.jpg", "photos/unit-0004/photo-6.jpg", "photos/unit-0004/photo-7.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "carport", "air conditioning"], "age_restriction": 55, "quality_rating": 4, "quality_notes": "Fresh paint, new vinyl flooring, and clean finishes make this unit look move-in ready.", "flooring_type": "vinyl", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nSnag this stunning, brand-new home before anyone else! The open floor plan, bright white cabinetry, and luxury vinyl flooring are just waiting for your personal touch. The spacious primary bedroom comes with its own private bath. LED lighting adds a modern vibe throughout. Plus, the attached carport and shed make life super convenient. Make your move today!"}, {"id": "unit-0005", "title": "Spacious 3BR Family Home with Huge Yard", "address": "Emerald Hill", "price": 1100, "beds": 3, "baths": 2.0, "sqft": 1759, "housing_type": "House", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-spacious-3br-family-home/7936432852.html", "lat": 27.92, "lon": -82.737, "photos": ["photos/unit-0005/photo-1.jpg", "photos/unit-0005/photo-2.jpg", "photos/unit-0005/photo-3.jpg", "photos/unit-0005/photo-4.jpg", "photos/unit-0005/photo-5.jpg", "photos/unit-0005/photo-6.jpg", "photos/unit-0005/photo-7.jpg", "photos/unit-0005/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "attached garage"], "age_restriction": null, "quality_rating": 3, "quality_notes": "Clean and well-maintained; however, finishes like cabinets and counters appear dated.", "flooring_type": "mixed", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nSpacious 3BR/2BA family home! Huge driveway and front yard, backyard with garden space and a gazebo, plus room for a pool. Perfect for family living and entertaining!\nFor any additional questions or information, please call me."}, {"id": "unit-0006", "title": "FOR RENT A1", "address": "405 S Cirus Ave", "price": 1525, "beds": 2, "baths": 1.5, "sqft": null, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-for-rent-a1/7939682426.html", "lat": 27.96146, "lon": -82.753587, "photos": ["photos/unit-0006/photo-1.jpg", "photos/unit-0006/photo-2.jpg", "photos/unit-0006/photo-3.jpg", "photos/unit-0006/photo-4.jpg", "photos/unit-0006/photo-5.jpg", "photos/unit-0006/photo-6.jpg", "photos/unit-0006/photo-7.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["$75 Per Adult 18yrs+", "cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "off-street parking", "air conditioning"], "age_restriction": null, "quality_rating": 3, "quality_notes": "Manually adjusted: bedroom ceiling has a visible water stain/damage in photo 7, despite otherwise clean, updated finishes.", "flooring_type": "mixed", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nEscape to the tranquil setting of Courtyard Gardenview Apartment Homes. Experience the perfect balance of comfort and style with our beautiful 2 Bed / 1.5 Bath apartment homes. Select fully renovated units feature brand new cabinets, flooring, and more, ensuring a fresh and contemporary living experience. Immerse yourself in the serenity of our community while enjoying the ease of onsite laundry facilities and a wide selection of floor plans to cater to your needs. Our prime central location provides convenient access to the breathtaking beaches of Clearwater, the vibrant city of Tampa, and renowned shopping destinations. Get a glimpse into the inviting ambiance and layout of our units by browsing through our sample pictures. NOTE: Photos may not reflect the exact unit currently available and square footage is approximate. To fully appreciate the beauty of our property, schedule a tailored appointment to view it in person. Don't let this opportunity to reside in a meticulously maintained and captivating community slip away. Contact Radiant Asset Management today and mention the property that has captured your interest"}, {"id": "unit-0007", "title": "2/2 Renovated.. 2 Mo's. Free!!!! Great Clearwater Location..Secluded!!", "address": "2175 62nd Street North", "price": 1350, "beds": 2, "baths": 2.0, "sqft": 900, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-2-renovated-mos-free-great/7937020258.html", "lat": 27.9004, "lon": -82.7152, "photos": ["photos/unit-0007/photo-1.jpg", "photos/unit-0007/photo-2.jpg", "photos/unit-0007/photo-3.jpg", "photos/unit-0007/photo-4.jpg", "photos/unit-0007/photo-5.jpg", "photos/unit-0007/photo-6.jpg", "photos/unit-0007/photo-7.jpg", "photos/unit-0007/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["$35 Per Person", "cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "street parking", "air conditioning"], "age_restriction": null, "quality_rating": 3, "quality_notes": "Bedroom looks clean and well-kept, but sparse photos limit full unit assessment.", "flooring_type": "carpet", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nWe are located right in heart of Clearwater!!\nWe are a small, quiet and quaint apartment community conveniently located Roosevelt Blvd. and a minutes away from great shopping, fantastic restaurants, and beautiful beaches. Fenced in patio's and back yards in select units\nPET FRIENDLY!!\ud83d\udc36\ud83d\udc31 Breed restrictions and fees apply. Reserved parking!"}, {"id": "unit-0012", "title": "Pinebrook  Estates - 2 bedrooms 2.5 bath Town House", "address": "6620 121st Ave. North, Unit 1 near Keen and 118th Ave. North", "price": 1900, "beds": 2, "baths": 2.5, "sqft": 1080, "housing_type": "House", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/largo-pinebrook-estates-bedrooms-25/7938116988.html", "lat": 27.881115, "lon": -82.729969, "photos": ["photos/unit-0012/photo-1.jpg", "photos/unit-0012/photo-2.jpg", "photos/unit-0012/photo-3.jpg", "photos/unit-0012/photo-4.jpg", "photos/unit-0012/photo-5.jpg", "photos/unit-0012/photo-6.jpg", "photos/unit-0012/photo-7.jpg", "photos/unit-0012/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["$50 for famiy", "cats are OK - purrr", "w/d hookups", "off-street parking", "no smoking"], "age_restriction": null, "quality_rating": 3, "quality_notes": "Some dated features like older appliances and paint, but generally clean.", "flooring_type": "tile", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nBeautifully renovated a 2 bedroom, 3 bath townhouse, in very quite and nice neighborhood, Living room, dining room, , kitchen, tile, wood and carpet floors,  with washer and dryer hook up, Central Air,  corner unit.\nPlease call or text\nshow contact info\nfor appointment."}, {"id": "unit-0013", "title": "Covered Parking Included", "address": "1513 16Th Cir Se", "price": 1500, "beds": 2, "baths": 2.0, "sqft": 1200, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/largo-covered-parking-included/7938992647.html", "lat": 27.902446, "lon": -82.774269, "photos": ["photos/unit-0013/photo-1.jpg", "photos/unit-0013/photo-2.jpg", "photos/unit-0013/photo-3.jpg", "photos/unit-0013/photo-4.jpg", "photos/unit-0013/photo-5.jpg", "photos/unit-0013/photo-6.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["w/d in unit", "carport"], "age_restriction": 55, "quality_rating": 4, "quality_notes": "Modern kitchen, clean, well-maintained, and appears move-in ready.", "flooring_type": "tile", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nCome and enjoy this 2 bed 2 bath Villa in New Haven, a 55+ Community. Now Leasing a updated and modern Villa with ceramic tile floors throughout. Master Bedroom with Ensuite bathroom, walk in closet with access to the Patio. Over 1200 square feet of living space. Kitchen is open to living and dining room makes it a great place for entertaining. 42 Inch Cabinets in kitchen for plenty of storage space. Property includes new washer/dryer in Laundry room inside villa! Plenty of closet space throughout! 1 covered parking space included. Only Pay electric, all other amenities included in the Rent."}, {"id": "unit-0014", "title": "Relax at Lindru Gardens. Comfortable garden-style 2 bed, 1 bath!", "address": "711 S Lincoln Ave", "price": 1599, "beds": 2, "baths": 1.0, "sqft": 950, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-relax-at-lindru-gardens/7938535300.html", "lat": 27.958181, "lon": -82.785243, "photos": ["photos/unit-0014/photo-1.jpg", "photos/unit-0014/photo-2.jpg", "photos/unit-0014/photo-3.jpg", "photos/unit-0014/photo-4.jpg", "photos/unit-0014/photo-5.jpg", "photos/unit-0014/photo-6.jpg", "photos/unit-0014/photo-7.jpg", "photos/unit-0014/photo-8.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["$75", "cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "off-street parking", "wheelchair accessible"], "age_restriction": null, "quality_rating": 4, "quality_notes": "Fresh paint, updated kitchen/bathroom finishes, clean new-looking carpet.", "flooring_type": "carpet", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nLindru Gardens\n711 S Lincoln Ave\nClearwater, FL 33756\nA wonderful home in Clearwater is waiting for you! Phone Number:\nshow contact info\nWe currently have a gorgeous 2 bedroom 1 bathroom with 950 sq ft.\nMonthly Price: $1599 - $1798\n*Optional and usage-based charges not included. Contact office to confirm pricing details and included fees.\nLiving in South Clearwater provides easy access to Saint Petersburg-Clearwater International, located just 30 minutes from Lindru Gardens Apartments. Another nearby airport is Tampa International, located 18.3 miles away.\nCommunity Highlights:\n\u25fe Grill\n\u25fe Laundry Facilities\n\u25fe Laundry Facility\n\u25fe On Site Maintenance\n\u25fe On Site Management\n\u25fe On Site Patrol\n\u25fe On-Site Maintenance\n\u25fe Pet Friendly\n\u25fe Recycling\n\u25fe Swimming Pool\n\u25fe Access to 2 PSTA Bus Lines\n\u25fe Close to 3 Parks\n\u25fe Emergency Maintenance\n\u25fe Evening & Weekend Security Patrol\n\u25fe Located In The Heart Of Pinellas\n\u25fe Minutes To Shopping, Dining, & Beaches\n\u25fe Nominal Flat Rate for Water/Sewer/Trash\n\u25fe Pet Walking Stations\n\u25fe Public Transportation\n\u25fe Renters Insurance Program\nApartment Home Highlights:\n\u25fe Air Conditioner\n\u25fe Cable Ready\n\u25fe Ceiling Fan(s)\n\u25fe Dishwasher\n\u25fe Linen Closet\n\u25fe Refrigerator\n\u25fe Second Floor\n\u25fe Vinyl Flooring\n\u25fe WD Hookup\n\u25fe Built-In Bookcases in Select Units\n\u25fe Courtyard and Pool Views In Select Units\n\u25fe Garbage Disposal\n\u25fe High Speed Internet Access\n\u25fe Individual Climate Control\n\u25fe Oversized Closets\n\u25fe Range, Dishwasher and Refrigerator\n\u25fe Screened Lanais in Select Units\n\u25fe Window Coverings\nPhone Number:\nshow contact info\nWebsite:\nwww.leaseaptsnow.com?n=lindru_gardens&rp=gcyBV9oFJeJp&t=wb\nOnline Application:\nwww.leaseaptsnow.com?n=lindru_gardens&rp=gcyBV9oFJeJp&t=ap\nLeasing Options:\n7-Month, 8-Month, 9-Month, 10-Month, 11-Month, 12-Month\nPet Policy:\nAkita Alaskan Malamute, American Safford Terrier, Chow Chow, Dalmatian, Doberman Pinscher, German Sheppard, Great Dane, Perro De Presa, Canarios, Pit Bull, Rhodesian Ridgeback, Rottweiler, Siberian Huskies, Wolf-Hybrids, Cane Corso\nOur pet policy entails a one-time pet fee of $300 and a monthly pet rent of $15 per pet. We allow a maximum of two pets per home. However, certain breed restrictions apply.\n* Pricing and availability are subject to change. Rent is based on monthly frequency.\n** SQFT listed is an approximate value for each unit.\nAll pricing, availability, fees, and terms are subject to change without notice.\nEQUAL HOUSING OPPORTUNITY\nGZX9CM65096NO1KK"}, {"id": "unit-0015", "title": "Modern 2 Bed/2 Bath Villa in Pinellas Park FL - $1835/mo", "address": "10770 US Highway 19N", "price": 1835, "beds": 2, "baths": 2.0, "sqft": 1000, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/pinellas-park-modern-bed-bath-villa-in/7940195351.html", "lat": 27.8681, "lon": -82.7086, "photos": ["photos/unit-0015/photo-1.jpg", "photos/unit-0015/photo-2.jpg", "photos/unit-0015/photo-3.jpg", "photos/unit-0015/photo-4.jpg", "photos/unit-0015/photo-5.jpg", "photos/unit-0015/photo-6.jpg", "photos/unit-0015/photo-7.jpg", "photos/unit-0015/photo-8.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "laundry on site", "off-street parking", "air conditioning"], "age_restriction": null, "quality_rating": 4, "quality_notes": "Kitchen is very clean and updated with modern finishes and flooring. Looks move-in ready.", "flooring_type": "vinyl", "move_in_date": "2026-08-15", "move_in_sort": 20680, "notes": "QR Code Link to This Post\nModern 2 Bed/2 Bath Villa in Pinellas Park FL - $1835/mo\n10770 US Highway 19N, 12, Pinellas Park FL, FL 33782\n1835.00 / Month\n2 BEDROOMS | 2 BATHROOMS\nInterested? Fill out this form\n:\nhttps://renter.turbotenant.com/general-prescreener/T3duZXI6NjI5MTM5?property=2515924&source=cl\nHave questions? Contact the Landlord\n:\nhttps://rental.turbotenant.com/p/10770-us-highway-19n-pinellas-park-fl-fl-unit-12/21b0c2f3-300e-43e9-98f7-028664bfe9bf?source=craigslist\nProperty Description:\nWelcome to your new home in Pinellas Park, FL! This charming 2 bed/2 bath (1000 sq.ft) newly renovated one level villa home, features modern amenities including a granite counter tops, ceiling fans, central A/C, and washer/dryer hookups. Enjoy the convenience 2 reserved parking spots, on-site laundry, and a beautiful lawn. Don't miss out on this pet-friendly (cats) gem with vaulted ceilings and easy access to parks. Move-in ready on 8/15/2026. Book your showing today!\nProperty Type\n: Condo\nPets\n: Cats Allowed\nSmoking\n: NO\nLease Term\n:\n1835.00 / Month\n900.00 Deposit\nLease Length: One Year\nAvailable: 08/15/2026\nOccupancy Limit: 4 People\nUtilities Included\n:\nAppliances\n:\nDishwasher\nFreezer\nGarbage Disposal\nRange Oven\nRefrigerator\nAmenities\n:\nCable Ready\nWasher Dryer Hookups\nLawn\nNear Parks\nOn Site Laundry\nOff Street Parking\nVaulted Ceiling\nWired For Internet\nHeating & Cooling\n:\nForced Air\nCentral\nInterested?\nFill out this form\n:\nhttps://renter.turbotenant.com/general-prescreener/T3duZXI6NjI5MTM5?property=2515924&source=cl\nHave questions? Contact the Landlord\n:\nhttps://rental.turbotenant.com/p/10770-us-highway-19n-pinellas-park-fl-fl-unit-12/21b0c2f3-300e-43e9-98f7-028664bfe9bf?source=craigslist"}, {"id": "unit-0016", "title": "Discover This Great Modern One-Story Family-Friendly Warm 3 Bedroom Home", "address": "Madison Ave", "price": 1945, "beds": 3, "baths": 2.0, "sqft": 1429, "housing_type": "House", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/largo-discover-this-great-modern-one/7940189611.html", "lat": 27.88, "lon": -82.751, "photos": ["photos/unit-0016/photo-1.jpg", "photos/unit-0016/photo-2.jpg", "photos/unit-0016/photo-3.jpg", "photos/unit-0016/photo-4.jpg", "photos/unit-0016/photo-5.jpg", "photos/unit-0016/photo-6.jpg", "photos/unit-0016/photo-7.jpg", "photos/unit-0016/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "attached garage", "wheelchair accessible", "air conditioning", "EV charging"], "age_restriction": null, "quality_rating": 4, "quality_notes": "Clean, updated flooring and paint, well-maintained overall. Looks move-in ready.", "flooring_type": "vinyl", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nWelcome to the house you can make your home. All this place needs is a dose of your personality. The living space offers plenty of room for formal dining and a relaxed entertainment area. Prepare delicious meals in a great kitchen perfect for any occasion. Stainless steel appliances, granite countertops and roomy cabinets deliver a kitchen that makes every meal easier. Turn this fenced backyard into the ideal outdoor space. Here's your invitation to host dinner parties and backyard barbecues, or enjoy a little quiet time to do you. There's also a patio, and plenty of room for outdoor plants. Don't wait too long to lease!"}, {"id": "unit-0017", "title": "Brand New 2BR/2BA | Balcony | All Utilities Included | Best Value | Ba", "address": "15950 Bay Vista Drive", "price": 1950, "beds": 2, "baths": 2.0, "sqft": 800, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-brand-new-2br-2ba-balcony/7940142198.html", "lat": 27.917942, "lon": -82.710716, "photos": ["photos/unit-0017/photo-1.jpg", "photos/unit-0017/photo-2.jpg", "photos/unit-0017/photo-3.jpg", "photos/unit-0017/photo-4.jpg", "photos/unit-0017/photo-5.jpg", "photos/unit-0017/photo-6.jpg", "photos/unit-0017/photo-7.jpg", "photos/unit-0017/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "air conditioning"], "age_restriction": null, "quality_rating": 5, "quality_notes": "Modern, updated, very clean, and well-maintained with consistent finishes.", "flooring_type": "tile", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nBrand New 2BR/2BA | Balcony | All Utilities Included | Best Value | Bay Vista Apts\n15950 Bay Vista Drive, 206, Clearwater, FL 33760\n1950.00 / Month\n2 BEDROOMS | 2 BATHROOMS\nInterested? Fill out this form\n:\nhttps://renter.turbotenant.com/general-prescreener/T3duZXI6MTEyNDg3OA==?property=2513644&source=cl\nHave questions? Contact the Landlord\n:\nhttps://rental.turbotenant.com/p/15950-bay-vista-drive-clearwater-fl-unit-206/30dc59d8-e289-4bba-96bf-556ccce30dca?source=craigslist\nProperty Description:\nEverything is included in the rent. Electric, water, sewer, trash, and high-speed internet are all covered, saving most tenants $250\u2013$300 per month compared to a standard lease. What you see is what you pay.\nUnit 206 is a second-floor 2-bedroom, 2-bathroom home with a private balcony, priced as the most accessible 2-bedroom option in the building. At $1,995 per month with all utilities included, the effective cost compares favorably to most 2-bedroom units in the Clearwater area where tenants pay utilities separately. The kitchen features quartz countertops and stainless steel appliances. Designer lighting, tile flooring, and an in-unit washer/dryer are included. Sound-insulated construction throughout.\nBay Vista is a brand new mixed-use building completed in 2026, with elevator access, keyless entry, secured entry, EV charging, a fitness center, a package delivery room, and one assigned parking space per unit. One mile from St. Pete-Clearwater Airport, 12\u201315 minutes to Downtown St. Pete, and 20 minutes to Tampa. Jabil, Honeywell, Raymond James, and BayCare are all nearby.\nThis is the entry point into a brand new building at a competitive price. It won't stay available long.\n2 Bed | 2 Bath | 800 sq ft | 2nd Floor | Balcony | $1,995/mo | All Utilities Included. Virtually staged. Unit is unfurnished.\nProperty Type\n: Apartment\nPets\n: Cats, Small Dogs Allowed\nSmoking\n: OUTSIDE_ONLY\nLease Term\n:\n1950.00 / Month\n1950.00 Deposit\nLease Length: One Year\nAvailable: 05/17/2026\nOccupancy Limit: 4 People\nUtilities Included\n:\nElectricity\nGarbage\nSewage\nWater\nAppliances\n:\nDishwasher\nDryer\nFreezer\nMicrowave\nRange Oven\nRefrigerator\nWasher\nAmenities\n:\nEv Charging\nLawn\nFitness Center\nSecure Building\nSecurity Cameras\nVaulted Ceiling\nBalcony Or Deck\nHeating & Cooling\n:\nOther\nOther\nInterested?\nFill out this form\n:\nhttps://renter.turbotenant.com/general-prescreener/T3duZXI6MTEyNDg3OA==?property=2513644&source=cl\nHave questions? Contact the Landlord\n:\nhttps://rental.turbotenant.com/p/15950-bay-vista-drive-clearwater-fl-unit-206/30dc59d8-e289-4bba-96bf-556ccce30dca?source=craigslist"}, {"id": "unit-0018", "title": "Fabulous 950 sq ft, 2 bed, 1 bath. Access to bus and transportation", "address": "711 S Lincoln Ave", "price": 1599, "beds": 2, "baths": 1.0, "sqft": 950, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-fabulous-950-sq-ft-bed-bath/7940077378.html", "lat": 27.958181, "lon": -82.785243, "photos": ["photos/unit-0018/photo-1.jpg", "photos/unit-0018/photo-2.jpg", "photos/unit-0018/photo-3.jpg", "photos/unit-0018/photo-4.jpg", "photos/unit-0018/photo-5.jpg", "photos/unit-0018/photo-6.jpg", "photos/unit-0018/photo-7.jpg", "photos/unit-0018/photo-8.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["$75", "cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "off-street parking", "wheelchair accessible"], "age_restriction": null, "quality_rating": 4, "quality_notes": "Clean, well-maintained with fresh paint, good flooring, and updated bathroom finishes.", "flooring_type": "mixed", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nLindru Gardens, located at 711 S Lincoln Ave Clearwater, FL 33756.\nCall:\nshow contact info\nDescription\n........ Recreational activities near Lindru Gardens Apartments are plentiful. Discover 5 parks within 6.6 miles, including Crest Lake Park, Clearwater Marine Aquarium, and Caladesi Island State Park.\nBedrooms\n........... 2\nBathrooms\n......... 1\nSq Footage\n......... 950 sq ft\nMonthly Price: $1599 - $1819\n*Optional and usage-based charges not included. Contact office to confirm pricing details and included fees.\nLease Term\n........ 7-Month, 8-Month, 9-Month, 10-Month, 11-Month, 12-Month\nAmenity List\n......\n\u2713 Close to 3 Parks\n\u2713 Grill\n\u2713 Laundry Facilities\n\u2713 On Site Maintenance\n\u2713 On Site Management\n\u2713 On Site Patrol\n\u2713 On-Site Maintenance\n\u2713 Pet Friendly\n\u2713 Recycling\n\u2713 Swimming Pool\n\u2713 Accepts Credit Card Payments\n\u2713 Access to 2 PSTA Bus Lines\n\u2713 Close to 3 Parks\n\u2713 Evening & Weekend Security Patrol\n\u2713 Located In The Heart Of Pinellas\n\u2713 Minutes To Shopping, Dining, & Beaches\n\u2713 Nominal Flat Rate for Water/Sewer/Trash\n\u2713 Pet Walking Stations\n\u2713 Public Transportation\n\u2713 Renters Insurance Program\nApartment Home Features\n.....\n\u2713 Air Conditioner\n\u2713 Cable Ready\n\u2713 Ceiling Fan(s)\n\u2713 Dishwasher\n\u2713 Linen Closet\n\u2713 Refrigerator\n\u2713 Second Floor\n\u2713 Vinyl Flooring\n\u2713 WD Hookup\n\u2713 Built-In Bookcases in Select Units\n\u2713 Courtyard and Pool Views In Select Units\n\u2713 Garbage Disposal\n\u2713 High Speed Internet Access\n\u2713 Individual Climate Control\n\u2713 Oversized Closets\n\u2713 Range, Dishwasher and Refrigerator\n\u2713 Screened Lanais in Select Units\n\u2713 Window Coverings\nOur Pet Policy\n... Akita Alaskan Malamute, American Safford Terrier, Chow Chow, Dalmatian, Doberman Pinscher, German Sheppard, Great Dane, Perro De Presa, Canarios, Pit Bull, Rhodesian Ridgeback, Rottweiler, Siberian Huskies, Wolf-Hybrids, Cane Corso\nOur pet policy entails a one-time pet fee of $300 and a monthly pet rent of $15 per pet. We allow a maximum of two pets per home. However, certain breed restrictions apply.\nLeasing Hours\n...\nMon - Fri: 9:00 AM - 5:00 PM\nCall:\nshow contact info\nOur Location\n.....\n711 S Lincoln Ave\nClearwater, FL 33756\nWebsite:\nwww.apt-rental.com?n=lindru_gardens&rp=83Es8cjbafN2&t=wb\nOnline Application:\nwww.apt-rental.com?n=lindru_gardens&rp=83Es8cjbafN2&t=ap\n* Pricing and availability are subject to change. Rent is based on monthly frequency.\n** SQFT listed is an approximate value for each unit.\nAll pricing, availability, fees, and terms are subject to change without notice.\nEQUAL HOUSING OPPORTUNITY\nGZX9CM65096NO1KK"}, {"id": "unit-0019", "title": "APARTMENT FOR RENT NEAR CLEARWATER HIGH SCHOOL", "address": "1903 rainbow drive", "price": 1400, "beds": 2, "baths": 1.0, "sqft": 875, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-apartment-for-rent-near/7940022322.html", "lat": 27.962461, "lon": -82.759373, "photos": [], "has_washer_dryer": false, "is_gated": false, "amenities": ["50", "laundry in bldg", "off-street parking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nThis apartment is a second floor unit with 2 bedrooms and 1 bath. Tile flooring throughout unit. Central air. Trash included. Parking off street out front. No pets. Must have average credit , job with 2x rent, and there is a criminal background check."}, {"id": "unit-0020", "title": "Bright and beautiful 2 bed / 1 bath! Don't wait to call us home!", "address": "711 S Lincoln Ave", "price": 1525, "beds": 2, "baths": 1.0, "sqft": 950, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-bright-and-beautiful-bed/7935841231.html", "lat": 27.958181, "lon": -82.785243, "photos": ["photos/unit-0020/photo-1.jpg", "photos/unit-0020/photo-2.jpg", "photos/unit-0020/photo-3.jpg", "photos/unit-0020/photo-4.jpg", "photos/unit-0020/photo-5.jpg", "photos/unit-0020/photo-6.jpg", "photos/unit-0020/photo-7.jpg", "photos/unit-0020/photo-8.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["$75", "cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "off-street parking", "wheelchair accessible"], "age_restriction": null, "quality_rating": 5, "quality_notes": "Modern, clean, and well-maintained with updated kitchen and bathroom.", "flooring_type": "mixed", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nLindru Gardens\nLeasing Office:\n711 S Lincoln Ave\nClearwater, FL 33756\nCall for details:\nshow contact info\nTake a look at what Lindru Gardens has to offer!\nLiving in South Clearwater provides easy access to Saint Petersburg-Clearwater International, located just 30 minutes from Lindru Gardens Apartments. Another nearby airport is Tampa International, located 18.3 miles away.\nRental Information:\n2 Bedroom / 1 Bathroom / 950 sq ft\nMonthly Price: $1525\n*Optional and usage-based charges not included. Contact office to confirm pricing details and included fees.\nLease Terms:\n7-Month, 8-Month, 9-Month, 10-Month, 11-Month, 12-Month\nApartment Amenities:\n\u25fe Air Conditioner\n\u25fe Cable Ready\n\u25fe Ceiling Fan(s)\n\u25fe Dishwasher\n\u25fe Linen Closet\n\u25fe Refrigerator\n\u25fe Second Floor\n\u25fe Vinyl Flooring\n\u25fe WD Hookup\n\u25fe Built-In Bookcases in Select Units\n\u25fe Courtyard and Pool Views In Select Units\n\u25fe Garbage Disposal\n\u25fe High Speed Internet Access\n\u25fe Individual Climate Control\n\u25fe Oversized Closets\n\u25fe Range, Dishwasher and Refrigerator\n\u25fe Screened Lanais in Select Units\n\u25fe Window Coverings\nAdditional Information:\n\u25fe Close to 3 Parks\n\u25fe Grill\n\u25fe Laundry Facilities\n\u25fe Laundry Facility\n\u25fe On Site Management\n\u25fe On Site Patrol\n\u25fe On-Site Maintenance\n\u25fe Pet Friendly\n\u25fe Recycling\n\u25fe Swimming Pool\n\u25fe Accepts Credit Card Payments\n\u25fe Access to 2 PSTA Bus Lines\n\u25fe Close to 3 Parks\n\u25fe Emergency Maintenance\n\u25fe Located In The Heart Of Pinellas\n\u25fe Minutes To Shopping, Dining, & Beaches\n\u25fe Nominal Flat Rate for Water/Sewer/Trash\n\u25fe Pet Walking Stations\n\u25fe Public Transportation\n\u25fe Renters Insurance Program\nLeasing Hours:\nMon - FRI: 9:00 AM - 5:00 PM\nCall for details:\nshow contact info\nPet Policy:\nAkita Alaskan Malamute, American Safford Terrier, Chow Chow, Dalmatian, Doberman Pinscher, German Sheppard, Great Dane, Perro De Presa, Canarios, Pit Bull, Rhodesian Ridgeback, Rottweiler, Siberian Huskies, Wolf-Hybrids, Cane Corso\nOur pet policy entails a one-time pet fee of $300 and a monthly pet rent of $15 per pet. We allow a maximum of two pets per home. However, certain breed restrictions apply.\nWebsite:\nwww.lease-apts.com?n=lindru_gardens&rp=wZw9G76vNutD&t=wb\nOnline Application:\nwww.lease-apts.com?n=lindru_gardens&rp=wZw9G76vNutD&t=ap\n* Pricing and availability are subject to change. Rent is based on monthly frequency.\n** SQFT listed is an approximate value for each unit.\nAll pricing, availability, fees, and terms are subject to change without notice.\nEQUAL HOUSING OPPORTUNITY\nGZX9CM65096NO1KK"}, {"id": "unit-0021", "title": "Your dog or cat is welcome! Amazing pet-friendly 2 BR / 1 BA!", "address": "711 S Lincoln Ave", "price": 1527, "beds": 2, "baths": 1.0, "sqft": 870, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-your-dog-or-cat-is-welcome/7938758757.html", "lat": 27.958181, "lon": -82.785243, "photos": ["photos/unit-0021/photo-1.jpg", "photos/unit-0021/photo-2.jpg", "photos/unit-0021/photo-3.jpg", "photos/unit-0021/photo-4.jpg", "photos/unit-0021/photo-5.jpg", "photos/unit-0021/photo-6.jpg", "photos/unit-0021/photo-7.jpg", "photos/unit-0021/photo-8.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["$75", "cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "off-street parking", "wheelchair accessible"], "age_restriction": null, "quality_rating": 4, "quality_notes": "Clean, well-maintained with updated kitchen, but basic fixtures and popcorn ceilings.", "flooring_type": "mixed", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nLindru Gardens\n711 S Lincoln Ave Clearwater, FL 33756\nMonthly Price: $1527 - $1787\n*Optional and usage-based charges not included. Contact office to confirm pricing details and included fees.\nBedrooms:\n2\nBathrooms:\n1\nSquare Footage:\n870 sq ft\nContact Info:\nshow contact info\nFeatures in this apartment home:\n\u27a2 Air Conditioner\n\u27a2 Cable Ready\n\u27a2 Ceiling Fan(s)\n\u27a2 Dishwasher\n\u27a2 Linen Closet\n\u27a2 Refrigerator\n\u27a2 Second Floor\n\u27a2 Vinyl Flooring\n\u27a2 WD Hookup\n\u27a2 Built-In Bookcases in Select Units\n\u27a2 Courtyard and Pool Views In Select Units\n\u27a2 Garbage Disposal\n\u27a2 High Speed Internet Access\n\u27a2 Individual Climate Control\n\u27a2 Oversized Closets\n\u27a2 Range, Dishwasher and Refrigerator\n\u27a2 Screened Lanais in Select Units\n\u27a2 Window Coverings\nAbout the community:\nLiving in South Clearwater provides easy access to Saint Petersburg-Clearwater International, located just 30 minutes from Lindru Gardens Apartments. Another nearby airport is Tampa International, located 18.3 miles away.\nAmenities at our property:\n\u27a2 Close to 3 Parks\n\u27a2 Grill\n\u27a2 Laundry Facilities\n\u27a2 Laundry Facility\n\u27a2 On Site Maintenance\n\u27a2 On Site Management\n\u27a2 On Site Patrol\n\u27a2 On-Site Maintenance\n\u27a2 Pet Friendly\n\u27a2 Recycling\n\u27a2 Accepts Credit Card Payments\n\u27a2 Access to 2 PSTA Bus Lines\n\u27a2 Close to 3 Parks\n\u27a2 Emergency Maintenance\n\u27a2 Evening & Weekend Security Patrol\n\u27a2 Located In The Heart Of Pinellas\n\u27a2 Minutes To Shopping, Dining, & Beaches\n\u27a2 Nominal Flat Rate for Water/Sewer/Trash\n\u27a2 Pet Walking Stations\n\u27a2 Public Transportation\nAdditional information:\nContact Info:\nshow contact info\nTerms:\n7-Month, 8-Month, 9-Month, 10-Month, 11-Month, 12-Month\nPets:\nAkita Alaskan Malamute, American Safford Terrier, Chow Chow, Dalmatian, Doberman Pinscher, German Sheppard, Great Dane, Perro De Presa, Canarios, Pit Bull, Rhodesian Ridgeback, Rottweiler, Siberian Huskies, Wolf-Hybrids, Cane Corso\nOur pet policy entails a one-time pet fee of $300 and a monthly pet rent of $15 per pet. We allow a maximum of two pets per home. However, certain breed restrictions apply.\nWebsite:\nwww.lease-apts.com?n=lindru_gardens&rp=dWDYuQmakVPM&t=wb\nOnline Application:\nwww.lease-apts.com?n=lindru_gardens&rp=dWDYuQmakVPM&t=ap\n* Pricing and availability are subject to change. Rent is based on monthly frequency.\n** SQFT listed is an approximate value for each unit.\nAll pricing, availability, fees, and terms are subject to change without notice.\nEQUAL HOUSING OPPORTUNITY\nXC2RX5JKRRNE8ZK8"}, {"id": "unit-0022", "title": "Your journey to comfort begins: 2 BR, 1 BA, 950 Sq Ft.", "address": "711 S Lincoln Ave", "price": 1599, "beds": 2, "baths": 1.0, "sqft": 950, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-your-journey-to-comfort/7939848136.html", "lat": 27.958181, "lon": -82.785243, "photos": ["photos/unit-0022/photo-1.jpg", "photos/unit-0022/photo-2.jpg", "photos/unit-0022/photo-3.jpg", "photos/unit-0022/photo-4.jpg", "photos/unit-0022/photo-5.jpg", "photos/unit-0022/photo-6.jpg", "photos/unit-0022/photo-7.jpg", "photos/unit-0022/photo-8.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["$75", "cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "off-street parking", "wheelchair accessible"], "age_restriction": null, "quality_rating": 3, "quality_notes": "Some updated finishes, but dated flooring and a lack of overall warmth.", "flooring_type": "mixed", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nLindru Gardens, located at 711 S Lincoln Ave Clearwater, FL 33756.\nCall us for more information!\nshow contact info\nDescription\n........ Recreational activities near Lindru Gardens Apartments are plentiful. Discover 5 parks within 6.6 miles, including Crest Lake Park, Clearwater Marine Aquarium, and Caladesi Island State Park.\nBedrooms\n........... 2\nBathrooms\n......... 1\nSq Footage\n......... 950 sq ft\nMonthly Price: $1599 - $1819\n*Optional and usage-based charges not included. Contact office to confirm pricing details and included fees.\nLease Term\n........ 7-Month, 8-Month, 9-Month, 10-Month, 11-Month, 12-Month\nAmenity List\n......\n\u25cf Close to 3 Parks\n\u25cf Grill\n\u25cf Laundry Facility\n\u25cf On Site Maintenance\n\u25cf On Site Management\n\u25cf On Site Patrol\n\u25cf On-Site Maintenance\n\u25cf Pet Friendly\n\u25cf Recycling\n\u25cf Swimming Pool\n\u25cf Accepts Credit Card Payments\n\u25cf Access to 2 PSTA Bus Lines\n\u25cf Emergency Maintenance\n\u25cf Evening & Weekend Security Patrol\n\u25cf Located In The Heart Of Pinellas\n\u25cf Minutes To Shopping, Dining, & Beaches\n\u25cf Nominal Flat Rate for Water/Sewer/Trash\n\u25cf Pet Walking Stations\n\u25cf Public Transportation\n\u25cf Renters Insurance Program\nApartment Home Features\n.....\n\u25cf Air Conditioner\n\u25cf Cable Ready\n\u25cf Ceiling Fan(s)\n\u25cf Dishwasher\n\u25cf Linen Closet\n\u25cf Refrigerator\n\u25cf Second Floor\n\u25cf Vinyl Flooring\n\u25cf WD Hookup\n\u25cf Built-In Bookcases in Select Units\n\u25cf Courtyard and Pool Views In Select Units\n\u25cf Garbage Disposal\n\u25cf High Speed Internet Access\n\u25cf Individual Climate Control\n\u25cf Oversized Closets\n\u25cf Range, Dishwasher and Refrigerator\n\u25cf Screened Lanais in Select Units\n\u25cf Window Coverings\nOur Pet Policy\n... Akita Alaskan Malamute, American Safford Terrier, Chow Chow, Dalmatian, Doberman Pinscher, German Sheppard, Great Dane, Perro De Presa, Canarios, Pit Bull, Rhodesian Ridgeback, Rottweiler, Siberian Huskies, Wolf-Hybrids, Cane Corso\nOur pet policy entails a one-time pet fee of $300 and a monthly pet rent of $15 per pet. We allow a maximum of two pets per home. However, certain breed restrictions apply.\nLeasing Hours\n...\nMon - Fri: 9:00 AM - 5:00 PM\nCall us for more information!\nshow contact info\nOur Location\n.....\n711 S Lincoln Ave\nClearwater, FL 33756\nWebsite:\nwww.rentalsapts.com?n=lindru_gardens&rp=hkbtLrsgX28o&t=wb\nOnline Application:\nwww.rentalsapts.com?n=lindru_gardens&rp=hkbtLrsgX28o&t=ap\n* Pricing and availability are subject to change. Rent is based on monthly frequency.\n** SQFT listed is an approximate value for each unit.\nAll pricing, availability, fees, and terms are subject to change without notice.\nEQUAL HOUSING OPPORTUNITY\nGZX9CM65096NO1KK"}, {"id": "unit-0023", "title": "Spacious and elegant! You've found your ideal 3 bed / 1 bath!", "address": "711 S Lincoln Ave", "price": 1699, "beds": 3, "baths": 1.0, "sqft": 1070, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-spacious-and-elegant-youve/7936105222.html", "lat": 27.958181, "lon": -82.785243, "photos": ["photos/unit-0023/photo-1.jpg", "photos/unit-0023/photo-2.jpg", "photos/unit-0023/photo-3.jpg", "photos/unit-0023/photo-4.jpg", "photos/unit-0023/photo-5.jpg", "photos/unit-0023/photo-6.jpg", "photos/unit-0023/photo-7.jpg", "photos/unit-0023/photo-8.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["$75", "cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "off-street parking", "wheelchair accessible"], "age_restriction": null, "quality_rating": 1, "quality_notes": "No interior photos available to assess unit condition or finishes.", "flooring_type": "unknown", "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\n3 Bedroom  1 Bathroom | 1070 sq ft\nMonthly Price: $1699 - $1898\n*Optional and usage-based charges not included. Contact office to confirm pricing details and included fees.\nLindru Gardens\n711 S Lincoln Ave\nClearwater, FL 33756\nCall Today!\nshow contact info\nDescription:\nAt Lindru Gardens we make you feel right at home. With Tarpon Springs to the North, Saint Petersburg to the South, Tampa to the East, and the beautiful Gulf Beaches to the West, we are centrally located in the heart of Pinellas County. We are only minutes from shopping, dining, employers, schools, two parks, and the world-famous Clearwater Beach.\nApartment Amenities:\n\u25cf Air Conditioner\n\u25cf Cable Ready\n\u25cf Ceiling Fan(s)\n\u25cf Dishwasher\n\u25cf Linen Closet\n\u25cf Refrigerator\n\u25cf Second Floor\n\u25cf Vinyl Flooring\n\u25cf WD Hookup\n\u25cf Built-In Bookcases in Select Units\n\u25cf Courtyard and Pool Views In Select Units\n\u25cf Garbage Disposal\n\u25cf High Speed Internet Access\n\u25cf Individual Climate Control\n\u25cf Oversized Closets\n\u25cf Range, Dishwasher and Refrigerator\n\u25cf Screened Lanais in Select Units\n\u25cf Window Coverings\nOur Residents Enjoy:\n\u25cf Close to 3 Parks\n\u25cf Grill\n\u25cf Laundry Facilities\n\u25cf Laundry Facility\n\u25cf On Site Maintenance\n\u25cf On Site Management\n\u25cf On Site Patrol\n\u25cf On-Site Maintenance\n\u25cf Pet Friendly\n\u25cf Recycling\n\u25cf Accepts Credit Card Payments\n\u25cf Access to 2 PSTA Bus Lines\n\u25cf Close to 3 Parks\n\u25cf Emergency Maintenance\n\u25cf Evening & Weekend Security Patrol\n\u25cf Located In The Heart Of Pinellas\n\u25cf Minutes To Shopping, Dining, & Beaches\n\u25cf Nominal Flat Rate for Water/Sewer/Trash\n\u25cf Pet Walking Stations\n\u25cf Public Transportation\nAdditional Details:\nDeposit: Call\nTerms: 7-Month, 8-Month, 9-Month, 10-Month, 11-Month, 12-Month\nPets: Akita Alaskan Malamute, American Safford Terrier, Chow Chow, Dalmatian, Doberman Pinscher, German Sheppard, Great Dane, Perro De Presa, Canarios, Pit Bull, Rhodesian Ridgeback, Rottweiler, Siberian Huskies, Wolf-Hybrids, Cane Corso\nOur pet policy entails a one-time pet fee of $300 and a monthly pet rent of $15 per pet. We allow a maximum of two pets per home. However, certain breed restrictions apply.\nCall Today!\nshow contact info\nWebsite:\nwww.leaseaptsnow.com?n=lindru_gardens&rp=h9M52QvQSz5b&t=wb\nOnline Application:\nwww.leaseaptsnow.com?n=lindru_gardens&rp=h9M52QvQSz5b&t=ap\n* Pricing and availability are subject to change. Rent is based on monthly frequency.\n** SQFT listed is an approximate value for each unit.\nAll pricing, availability, fees, and terms are subject to change without notice.\nEQUAL HOUSING OPPORTUNITY\nOI68IRK1NB4D3GBT"}, {"id": "unit-0024", "title": "2/1.5 available in July", "address": "13333 Ridge Rd near Ulmerton & 113th", "price": 1690, "beds": 2, "baths": 1.5, "sqft": 970, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/largo-15-available-in-july/7941175468.html", "lat": 27.894165, "lon": -82.797425, "photos": ["photos/unit-0024/photo-1.jpg", "photos/unit-0024/photo-2.jpg", "photos/unit-0024/photo-3.jpg", "photos/unit-0024/photo-4.jpg", "photos/unit-0024/photo-5.jpg", "photos/unit-0024/photo-6.jpg", "photos/unit-0024/photo-7.jpg", "photos/unit-0024/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["$35 Application fee and waived admin fee", "cats are OK - purrr", "dogs are OK - wooof", "w/d hookups", "off-street parking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": "2026-07-10", "move_in_sort": 20644, "notes": "QR Code Link to This Post\n\ud83c\udfe1 Available in July at Oak Ridge Apartments! \ud83c\udfe1\nLooking for a spacious new place to call home? Our 2 Bedroom, 1.5 Bathroom Townhome will be available in July for just $1,690/month!\n\u2728 Townhome Features:\n\u2714 White Cabinets\n\u2714 Black Appliances\n\u2714 Washer/Dryer Connections (for a stackable unit)\n\u2714 Private Patio\n\u2714 Spacious Two-Story Floor Plan\n\u2714 Plenty of Natural Light\n\ud83c\udf3f Rent Includes:\n\u2714 Lawn Care\n\u2714 Pest Control\n\ud83d\udc3e Pet-Friendly Community (restrictions apply)\nDon't miss your chance to secure this beautiful townhome before it's gone! Contact our leasing office today to learn more or start your application.\n\ud83d\udccd Oak Ridge Apartments\n\ud83d\udcde\nshow contact info\n\ud83c\udf10 www.oakridgeapts-l.com\n\ud83d\udd11 Your new home is waiting for you this July! Apply today!"}, {"id": "unit-0025", "title": "2/2 Renovated and Beautiful! 2 Mo's Free! W/D Included  Clearwater", "address": "2175 62nd Street North", "price": 1350, "beds": 2, "baths": 2.0, "sqft": 900, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-2-renovated-and-beautiful/7936799406.html", "lat": 27.9004, "lon": -82.7152, "photos": ["photos/unit-0025/photo-1.jpg", "photos/unit-0025/photo-2.jpg", "photos/unit-0025/photo-3.jpg", "photos/unit-0025/photo-4.jpg", "photos/unit-0025/photo-5.jpg", "photos/unit-0025/photo-6.jpg", "photos/unit-0025/photo-7.jpg", "photos/unit-0025/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["$35 Per Person", "cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "street parking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nThe Apartments at Oak Creek\nEnjoy all the comforts & quaint tree lined setting right in the heart of Clearwater!\nTour our newly renovated two bedroom today"}, {"id": "unit-0026", "title": "2/2 Renovated and Beautiful! 2 Mo's Free! W/D Included  Clearwater", "address": "2175 62nd Street North", "price": 1350, "beds": 2, "baths": 2.0, "sqft": 900, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-2-renovated-and-beautiful/7937021203.html", "lat": 27.9004, "lon": -82.7152, "photos": ["photos/unit-0026/photo-1.jpg", "photos/unit-0026/photo-2.jpg", "photos/unit-0026/photo-3.jpg", "photos/unit-0026/photo-4.jpg", "photos/unit-0026/photo-5.jpg", "photos/unit-0026/photo-6.jpg", "photos/unit-0026/photo-7.jpg", "photos/unit-0026/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["$35 Per Person", "cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "street parking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nThe Apartments at Oak Creek\nEnjoy all the comforts & quaint tree lined setting right in the heart of Clearwater!\nTour our newly renovated two bedroom today"}, {"id": "unit-0027", "title": "2/2 Renovated.. 2 Mo's. Free!!! Great Clearwater Location..Secluded!!", "address": "2175 62nd Street North", "price": 1350, "beds": 2, "baths": 2.0, "sqft": 900, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-2-renovated-mos-free-great/7936799610.html", "lat": 27.9004, "lon": -82.7152, "photos": ["photos/unit-0027/photo-1.jpg", "photos/unit-0027/photo-2.jpg", "photos/unit-0027/photo-3.jpg", "photos/unit-0027/photo-4.jpg", "photos/unit-0027/photo-5.jpg", "photos/unit-0027/photo-6.jpg", "photos/unit-0027/photo-7.jpg", "photos/unit-0027/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["$35 Per Person", "cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "street parking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nWe are located right in heart of Clearwater!!\nWe are a small, quiet and quaint apartment community conveniently located Roosevelt Blvd. and a minutes away from great shopping, fantastic restaurants, and beautiful beaches. Fenced in patio's and back yards in select units\nPET FRIENDLY!!\ud83d\udc36\ud83d\udc31 Breed restrictions and fees apply. Reserved parking!"}, {"id": "unit-0028", "title": "2/2 Renovated.. 2 Mo's. Free!!!! Great Clearwater Location..Secluded!!", "address": "2175 62nd Street North", "price": 1350, "beds": 2, "baths": 2.0, "sqft": 900, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-2-renovated-mos-free-great/7937020156.html", "lat": 27.9004, "lon": -82.7152, "photos": ["photos/unit-0028/photo-1.jpg", "photos/unit-0028/photo-2.jpg", "photos/unit-0028/photo-3.jpg", "photos/unit-0028/photo-4.jpg", "photos/unit-0028/photo-5.jpg", "photos/unit-0028/photo-6.jpg", "photos/unit-0028/photo-7.jpg", "photos/unit-0028/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["$35 Per Person", "cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "street parking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nWe are located right in heart of Clearwater!!\nWe are a small, quiet and quaint apartment community conveniently located Roosevelt Blvd. and a minutes away from great shopping, fantastic restaurants, and beautiful beaches. Fenced in patio's and back yards in select units\nPET FRIENDLY!!\ud83d\udc36\ud83d\udc31 Breed restrictions and fees apply. Reserved parking!"}, {"id": "unit-0029", "title": "Great 2 bed / 1 bath! We Love Pets! Ask about our Pet Policy", "address": "711 S Lincoln Ave", "price": 1499, "beds": 2, "baths": 1.0, "sqft": 870, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-great-bed-bath-we-love-pets/7941141401.html", "lat": 27.958181, "lon": -82.785243, "photos": ["photos/unit-0029/photo-1.jpg", "photos/unit-0029/photo-2.jpg", "photos/unit-0029/photo-3.jpg", "photos/unit-0029/photo-4.jpg", "photos/unit-0029/photo-5.jpg", "photos/unit-0029/photo-6.jpg", "photos/unit-0029/photo-7.jpg", "photos/unit-0029/photo-8.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["$75", "cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "off-street parking", "wheelchair accessible"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nLindru Gardens\nLocated at: 711 S Lincoln Ave Clearwater, FL 33756\nFeatured apartment home: 2 bed | 1 bath | 870 sq ft\nMonthly Price: $1499 - $1788\n*Optional and usage-based charges not included. Contact office to confirm pricing details and included fees.\nCall for details:\nshow contact info\nAt Lindru Gardens we make you feel right at home. With Tarpon Springs to the North, Saint Petersburg to the South, Tampa to the East, and the beautiful Gulf Beaches to the West, we are centrally located in the heart of Pinellas County. We are only minutes from shopping, dining, employers, schools, two parks, and the world-famous Clearwater Beach.\nWonderful Amenities!\n\u2756 Close to 3 Parks\n\u2756 Grill\n\u2756 Laundry Facilities\n\u2756 On Site Maintenance\n\u2756 On Site Management\n\u2756 On Site Patrol\n\u2756 On-Site Maintenance\n\u2756 Pet Friendly\n\u2756 Recycling\n\u2756 Swimming Pool\n\u2756 Accepts Credit Card Payments\n\u2756 Access to 2 PSTA Bus Lines\n\u2756 Close to 3 Parks\n\u2756 Evening & Weekend Security Patrol\n\u2756 Located In The Heart Of Pinellas\n\u2756 Minutes To Shopping, Dining, & Beaches\n\u2756 Nominal Flat Rate for Water/Sewer/Trash\n\u2756 Pet Walking Stations\n\u2756 Public Transportation\n\u2756 Renters Insurance Program\nApartment Features!\n\u2756 Air Conditioner\n\u2756 Cable Ready\n\u2756 Ceiling Fan(s)\n\u2756 Dishwasher\n\u2756 Linen Closet\n\u2756 Refrigerator\n\u2756 Second Floor\n\u2756 Vinyl Flooring\n\u2756 WD Hookup\n\u2756 Built-In Bookcases in Select Units\n\u2756 Courtyard and Pool Views In Select Units\n\u2756 Garbage Disposal\n\u2756 High Speed Internet Access\n\u2756 Individual Climate Control\n\u2756 Oversized Closets\n\u2756 Range, Dishwasher and Refrigerator\n\u2756 Screened Lanais in Select Units\n\u2756 Window Coverings\nHours:\nMon - Fri: 9:00 AM - 5:00 PM\nCall for details:\nshow contact info\nWebsite:\nwww.apts-rental.com?n=lindru_gardens&rp=og4VTdxEFoYQ&t=wb\nOnline Application:\nwww.apts-rental.com?n=lindru_gardens&rp=og4VTdxEFoYQ&t=ap\nTerms:\n7-Month, 8-Month, 9-Month, 10-Month, 11-Month, 12-Month\nPet Policy:\nAkita Alaskan Malamute, American Safford Terrier, Chow Chow, Dalmatian, Doberman Pinscher, German Sheppard, Great Dane, Perro De Presa, Canarios, Pit Bull, Rhodesian Ridgeback, Rottweiler, Siberian Huskies, Wolf-Hybrids, Cane Corso\nOur pet policy entails a one-time pet fee of $300 and a monthly pet rent of $15 per pet. We allow a maximum of two pets per home. However, certain breed restrictions apply.\n* Pricing and availability are subject to change. Rent is based on monthly frequency.\n** SQFT listed is an approximate value for each unit.\nAll pricing, availability, fees, and terms are subject to change without notice.\nEQUAL HOUSING OPPORTUNITY\nXC2RX5JKRRNE8ZK8"}, {"id": "unit-0030", "title": "Hidden Gem! Stunning 2 BR/2 BA with Stainless Appliances", "address": "438 106th Ave N near 4th St N and 106th Ave N", "price": 1193, "beds": 2, "baths": 2.0, "sqft": 894, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/saint-petersburg-hidden-gem-stunning-br/7941141889.html", "lat": 27.8738, "lon": -82.64, "photos": ["photos/unit-0030/photo-1.jpg", "photos/unit-0030/photo-2.jpg", "photos/unit-0030/photo-3.jpg", "photos/unit-0030/photo-4.jpg", "photos/unit-0030/photo-5.jpg", "photos/unit-0030/photo-6.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry in bldg", "off-street parking", "no smoking", "wheelchair accessible", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nThis is a 2 Bedroom, 2 Bath, Approximately 894 Sq. Ft.\nWant more information? Follow this link:\nhttps://bryten.aptfeatures.com/1pd2s3\nCall Now -\nshow contact info\nx 165\nOR Text\n165\nto\nshow contact info\nto text with us.\nModern Living. Elevated, Affordable, Connected.\nCommunity Info:\nHome isn't just a place to live - it's a place to truly belong. Flats on 4th is a brand-new community of thoughtfully designed apartment homes built for seniors who deserve quality, comfort, and stability without compromise. Located in the heart of north St. Pete, this is affordable living done right.\nFeatures:\n\u2023 \u00a0Double Sink Vanity\n\u2023 \u00a0Laundry Facility\n\u2023 \u00a0Secured Entrance\n\u2023 \u00a0Stainless Steel Appliances\n\u2023 \u00a0Assigned parking space\n\u2023 \u00a0Private Patio/Balconies\n\u2023 \u00a0Soft Close Cabinetry\n\u2023 \u00a0High End Finishes\n\u2023 \u00a0Cable/Internet connections\n\u2023 \u00a0Air Conditioner\nCommunity Amenities:\n\u2023 \u00a0Carports\n\u2023 \u00a0Pet Friendly\n\u2023 \u00a0Resort Style Pool\n\u2023 \u00a0Poolside Pergola\n\u2023 \u00a0Poolside TV & Lounge\n\u2023 \u00a0Lounge Area With Fireplace\n\u2023 \u00a0Walking Trail\n\u2023 \u00a0Garages\n\u2023 \u00a0Hosted Social Events\nFlats on 4th\n438 106th Ave N, St. Petersburg, FL, 33716\nProfessionally Managed by Bryten Real Estate Partners\nEqual Housing Opportunity\nB2V2AyWCTBfZ"}, {"id": "unit-0031", "title": "Captivating 2 BR-Pet Friendly, Fireplace Lounge, Must-See!", "address": "438 106th Ave N near 4th St N and 106th Ave N", "price": 1193, "beds": 2, "baths": 2.0, "sqft": 894, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/saint-petersburg-captivating-br-pet/7941092496.html", "lat": 27.8738, "lon": -82.64, "photos": ["photos/unit-0031/photo-1.jpg", "photos/unit-0031/photo-2.jpg", "photos/unit-0031/photo-3.jpg", "photos/unit-0031/photo-4.jpg", "photos/unit-0031/photo-5.jpg", "photos/unit-0031/photo-6.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry in bldg", "off-street parking", "no smoking", "wheelchair accessible", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nFlats on 4th\n438 106th Ave N, St. Petersburg, FL, 33716\nCall Now -\nshow contact info\nx 161\nOR Text\n161\nto\nshow contact info\nto contact our team.\nUse the link below for more details:\nhttps://bryten.aptfeatures.com/s2crgp\nModern Living. Elevated, Affordable, Connected.\n2 bedroom | 2 bath | 894 square feet\nFeatures\n\u2713 \u00a0High End Finishes\n\u2713 \u00a0Assigned parking space\n\u2713 \u00a0Air Conditioner\n\u2713 \u00a0Laundry Facility\n\u2713 \u00a0Double Sink Vanity\n\u2713 \u00a0Stainless Steel Appliances\n\u2713 \u00a0Cable/Internet connections\n\u2713 \u00a0Secured Entrance\n\u2713 \u00a0Soft Close Cabinetry\n\u2713 \u00a0Private Patio/Balconies\nCommunity Features\n\u2713 \u00a0Carports\n\u2713 \u00a0Resort Style Pool\n\u2713 \u00a0Pet Friendly\n\u2713 \u00a0Poolside TV & Lounge\n\u2713 \u00a0Hosted Social Events\n\u2713 \u00a0Poolside Pergola\n\u2713 \u00a0Garages\n\u2713 \u00a0Lounge Area With Fireplace\n\u2713 \u00a0Walking Trail\nCommunity Info\nHome isn't just a place to live - it's a place to truly belong. Flats on 4th is a brand-new community of thoughtfully designed apartment homes built for seniors who deserve quality, comfort, and stability without compromise. Located in the heart of north St. Pete, this is affordable living done right.\nProfessionally Managed by Bryten Real Estate Partners\nEqual Housing Opportunity\nspcC1s4KdpQf"}, {"id": "unit-0032", "title": "FOR RENT B1", "address": "3601 30th Avenue N", "price": 1550, "beds": 2, "baths": 1.0, "sqft": null, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/saint-petersburg-for-rent-b1/7933857238.html", "lat": 27.790115, "lon": -82.678786, "photos": ["photos/unit-0032/photo-1.jpg", "photos/unit-0032/photo-2.jpg", "photos/unit-0032/photo-3.jpg", "photos/unit-0032/photo-4.jpg", "photos/unit-0032/photo-5.jpg", "photos/unit-0032/photo-6.jpg", "photos/unit-0032/photo-7.jpg", "photos/unit-0032/photo-8.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "off-street parking"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nLimited Time Spring Special $1550 per month!!!"}, {"id": "unit-0033", "title": "2/1 Apartment for Lease! $ 1,500/month! Available Now!", "address": "6417 146th Ave N", "price": 1500, "beds": 2, "baths": 1.0, "sqft": null, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-1-apartment-for-lease-month/7932779349.html", "lat": 27.905098, "lon": -82.725346, "photos": ["photos/unit-0033/photo-1.jpg", "photos/unit-0033/photo-2.jpg", "photos/unit-0033/photo-3.jpg", "photos/unit-0033/photo-4.jpg", "photos/unit-0033/photo-5.jpg", "photos/unit-0033/photo-6.jpg", "photos/unit-0033/photo-7.jpg", "photos/unit-0033/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "w/d hookups", "off-street parking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": "now", "move_in_sort": 0, "notes": "QR Code Link to This Post\n2/1 Apartment Tri-plex for Lease! $ 1,500/month! /Available Now!\nContact David Brown at\nshow contact info\nif interested.\nApplications being accepted. No application fee.\nCome take a look at our 2 bedroom and 1 bath apartment for rent that has been recently updated.\nThe apartment has tile throughout with a new galley kitchen, new refrigerator and stove with bar seating. Updated interior with new paint and no more popcorn ceilings. Bathroom has a toilet, sink and vanity, exhaust fan. Tiled shower. The utility room includes a washer/dryer connection. This property has a backyard. We are pet friendly with a non-refundable pet deposit, but (Pet must weigh less than 30 lbs.).\nLocated within a 10-minute commute to I-275 and is located between South Clearwater and St. Petersburg.\nThe monthly rent is $ 1,5000 with a $ 1,500 security deposit and 1 (one) year's lease.\nTenant is responsible for all utilities.\nNo Evictions or Felonies.\nProperty address is 6417 146th Ave N Apt # A Clearwater, FL 33760."}, {"id": "unit-0034", "title": "All bills paid and available now", "address": "", "price": 1060, "beds": 3, "baths": 1.0, "sqft": null, "housing_type": "House", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/largo-all-bills-paid-and-available-now/7941048509.html", "lat": 27.916, "lon": -82.803, "photos": ["photos/unit-0034/photo-1.jpg", "photos/unit-0034/photo-2.jpg", "photos/unit-0034/photo-3.jpg", "photos/unit-0034/photo-4.jpg", "photos/unit-0034/photo-5.jpg", "photos/unit-0034/photo-6.jpg", "photos/unit-0034/photo-7.jpg", "photos/unit-0034/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["$85/adult", "cats are OK - purrr", "dogs are OK - wooof", "w/d hookups", "off-street parking", "wheelchair accessible", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": "now", "move_in_sort": 0, "notes": "QR Code Link to This Post\n3bed/1bath ready for move in. All bills paid in a great location.\nFenced backyard and pet friendly.\nCall or text landlord to schedule a tour and apply Mr Mark 813- 32 5-1 40 8\nMonthly rent: $1,060\nSecurity deposit: $1,000\nTotal move in cost: $2,060"}, {"id": "unit-0035", "title": "INCREDIBLE NEWS-MOVE IN  JUNE - PAY NO RENT UNTIL JULY 1!", "address": "Palmetto Street near Drew Street", "price": 1195, "beds": 2, "baths": 1.0, "sqft": 800, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-incredible-news-move-in-june/7941048304.html", "lat": 27.9781, "lon": -82.7815, "photos": ["photos/unit-0035/photo-1.jpg", "photos/unit-0035/photo-2.jpg", "photos/unit-0035/photo-3.jpg", "photos/unit-0035/photo-4.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "street parking", "no smoking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!www.palmettoonwest.com\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screenings are required for those 18 yrs or older\n*Resident Selection Plan Criteria must be met\n*Specials, Rates & Availability are subject to change without notice*"}, {"id": "unit-0036", "title": "DELIGHTFUL MOVE IN INCENTIVES!  LIMITED TIME OFFER!", "address": "Palmetto Street near EDGEWATER DRIVE", "price": 1195, "beds": 2, "baths": 1.0, "sqft": 800, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-delightful-move-in/7941048230.html", "lat": 27.9781, "lon": -82.7815, "photos": ["photos/unit-0036/photo-1.jpg", "photos/unit-0036/photo-2.jpg", "photos/unit-0036/photo-3.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "street parking", "no smoking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nPlease call\nshow contact info\nto schedule your tour!  Apply on line today @ www.palmettoonwest.com.   MOVE IN JUNE -PAY NO RENT UNTIL JULY 1ST!\nIncome Guidelines are indicated below:\nIncome Guidelines are indicated below:\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screening Required for each applicant 18 yrs or older*\n*Resident Selection Plan Guideline terms must be met*\n*Location: 1003 West Ave Clearwater, Fl 33755"}, {"id": "unit-0037", "title": "MOVE IN SPECIAL SOON TO EXPIRE! MUST M-IN JUNE TO RECEIVE!", "address": "Palmetto Street near Drew Street", "price": 1195, "beds": 2, "baths": 1.0, "sqft": 800, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-move-in-special-soon-to/7941048175.html", "lat": 27.9781, "lon": -82.7815, "photos": ["photos/unit-0037/photo-1.jpg", "photos/unit-0037/photo-2.jpg", "photos/unit-0037/photo-3.jpg", "photos/unit-0037/photo-4.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "street parking", "no smoking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!  Location:   1003 West Ave, Clearwater Fl 33755.   Property Website: www.palmettoonwest.com /Office Hours 8am to 5pm/Monday-Friday.  Last Tour @ 4:30 pm.   *MUST MOVE IN JUNE TO RECEIVE MOVE IN SPECIAL:  PAY NO RENT UNTIL JULY 1ST!  *Limited Availability*\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nIncome Guidelines are indicated below:\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screening Required for each applicant 18 yrs or older*\n*Resident Selection Plan Guideline terms must be met*\n*Location: 1003 West Ave Clearwater, Fl 33755\nMove In Incentives Subject to Change Without Notice!"}, {"id": "unit-0038", "title": "SUMMER SAVINGS!  MOVE IN JUNE/PAY NO RENT UNTIL JULY 1!", "address": "Palmetto Street near Drew Street", "price": 1195, "beds": 2, "baths": 1.0, "sqft": 800, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-summer-savings-move-in-june/7941048087.html", "lat": 27.9781, "lon": -82.7815, "photos": ["photos/unit-0038/photo-1.jpg", "photos/unit-0038/photo-2.jpg", "photos/unit-0038/photo-3.jpg", "photos/unit-0038/photo-4.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "street parking", "no smoking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!  Location:   1003 West Ave, Clearwater Fl 33755.   Property Website: www.palmettoonwest.com /Office Hours 8am to 5pm/Monday-Friday.  Last Tour @ 4:30 pm.\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nIncome Guidelines are indicated below:\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screening Required for each applicant 18 yrs or older*\n*Resident Selection Plan Guideline terms must be met*\n*Location: 1003 West Ave Clearwater, Fl 33755"}, {"id": "unit-0039", "title": "INCREDIBLE NEWS-LIMITED TIME OFFER-M-IN JUNE- NO RENT TIL 7/1!", "address": "Palmetto Street near Drew Street", "price": 1195, "beds": 2, "baths": 1.0, "sqft": 800, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-incredible-news-limited-time/7941047505.html", "lat": 27.9781, "lon": -82.7815, "photos": ["photos/unit-0039/photo-1.jpg", "photos/unit-0039/photo-2.jpg", "photos/unit-0039/photo-3.jpg", "photos/unit-0039/photo-4.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "street parking", "no smoking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!www.palmettoonwest.com\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820"}, {"id": "unit-0040", "title": "MOVE IN SPECIAL SOON ENDING!   MOVE IN JUNE-NO RENT TIL JULY 1", "address": "Palmetto Street near Drew Street", "price": 1195, "beds": 2, "baths": 1.0, "sqft": 800, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-move-in-special-soon-ending/7941047457.html", "lat": 27.9781, "lon": -82.7815, "photos": ["photos/unit-0040/photo-1.jpg", "photos/unit-0040/photo-2.jpg", "photos/unit-0040/photo-3.jpg", "photos/unit-0040/photo-4.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "street parking", "no smoking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!  Location:   1003 West Ave, Clearwater Fl 33755.   Property Website: www.palmettoonwest.com /Office Hours 8am to 5pm/Monday-Friday.  Last Tour @ 4:30 pm.\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nIncome Guidelines are indicated below:\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screening Required for each applicant 18 yrs or older*\n*Resident Selection Plan Guideline terms must be met*\n*Location: 1003 West Ave Clearwater, Fl 33755\nMove In Incentives Subject to Change Without Notice!"}, {"id": "unit-0041", "title": "INCREDIBLE NEWS-MOVE IN  JUNE /PAY NO RENT UNTIL JULY 1!", "address": "Palmetto Street near Drew Street", "price": 1195, "beds": 2, "baths": 1.0, "sqft": 800, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-incredible-news-move-in-june/7941047396.html", "lat": 27.9781, "lon": -82.7815, "photos": ["photos/unit-0041/photo-1.jpg", "photos/unit-0041/photo-2.jpg", "photos/unit-0041/photo-3.jpg", "photos/unit-0041/photo-4.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "street parking", "no smoking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!www.palmettoonwest.com\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screenings are required for those 18 yrs or older\n*Resident Selection Plan Criteria must be met\n*Specials, Rates & Availability are subject to change without notice*"}, {"id": "unit-0042", "title": "MOVE IN SPECIAL SOON ENDING! M-IN JUNE/NO RENT TIL JULY 1!", "address": "Palmetto Street near Drew Street", "price": 1195, "beds": 2, "baths": 1.0, "sqft": 800, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-move-in-special-soon-ending/7941047371.html", "lat": 27.9781, "lon": -82.7815, "photos": ["photos/unit-0042/photo-1.jpg", "photos/unit-0042/photo-2.jpg", "photos/unit-0042/photo-3.jpg", "photos/unit-0042/photo-4.jpg"], "has_washer_dryer": false, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "laundry on site", "street parking", "no smoking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!  Location:   1003 West Ave, Clearwater Fl 33755.   Property Website: www.palmettoonwest.com /Office Hours 8am to 5pm/Monday-Friday.  Last Tour @ 4:30 pm.\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nIncome Guidelines are indicated below:\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screening Required for each applicant 18 yrs or older*\n*Resident Selection Plan Guideline terms must be met*\n*Location: 1003 West Ave Clearwater, Fl 33755\nMove In Incentives Subject to Change Without Notice!"}, {"id": "unit-0043", "title": "2 BEDROOM ONE BATH NICE CONDO", "address": "6200 near 58th", "price": 1499, "beds": 2, "baths": 1.0, "sqft": 785, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/pinellas-park-bedroom-one-bath-nice/7939978911.html", "lat": 27.8387, "lon": -82.7151, "photos": ["photos/unit-0043/photo-1.jpg", "photos/unit-0043/photo-2.jpg", "photos/unit-0043/photo-3.jpg", "photos/unit-0043/photo-4.jpg", "photos/unit-0043/photo-5.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "off-street parking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": "2026-07-15", "move_in_sort": 20649, "notes": "QR Code Link to This Post\n2 BEDROOM ONE BATH CONDO ASSIGNED PARKING NEAR ALL THE AIRPORTS. CLOSE TO BEACHES AND RESTAURANTS  1499 INCLUDES ALL UTILITIES EXCEPT ELECTRIC.  HIGH SPEED INTERNET IS AVAILABLE VERY CHEAP 29 DOLLARS AND IS ON THE BUILDING.  AVAILABLE JULY 15TH.  SECTION 8 APPROVED."}, {"id": "unit-0044", "title": "3-bedroom, 2-bath home in the heart of Pinellas Park.", "address": "", "price": 1300, "beds": 3, "baths": 2.0, "sqft": 1133, "housing_type": "House", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/pinellas-park-bedroom-bath-home-in-the/7940885694.html", "lat": 27.8387, "lon": -82.7151, "photos": ["photos/unit-0044/photo-1.jpg", "photos/unit-0044/photo-2.jpg", "photos/unit-0044/photo-3.jpg", "photos/unit-0044/photo-4.jpg", "photos/unit-0044/photo-5.jpg", "photos/unit-0044/photo-6.jpg", "photos/unit-0044/photo-7.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "attached garage"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nWelcome to this well-maintained 3-bedroom, 2-bath home in the heart of Pinellas Park. This spacious residence features a bright and open floor plan with plenty of natural light, creating a warm and inviting atmosphere. The living and dining areas flow seamlessly, perfect for everyday living and entertaining. The kitchen offers ample cabinet space and functionality, while the bedrooms are generously sized with great closet storage. Enjoy a private outdoor area ideal for relaxing or hosting guests. Conveniently located near shopping, dining, parks, and just a short drive to the beautiful Gulf beaches, this home offers comfort and convenience in a great location."}, {"id": "unit-0045", "title": "Move in ready", "address": "", "price": 1400, "beds": 2, "baths": 1.0, "sqft": 967, "housing_type": "House", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-move-in-ready/7939041329.html", "lat": 27.947, "lon": -82.7943, "photos": ["photos/unit-0045/photo-1.jpg", "photos/unit-0045/photo-2.jpg", "photos/unit-0045/photo-3.jpg", "photos/unit-0045/photo-4.jpg", "photos/unit-0045/photo-5.jpg", "photos/unit-0045/photo-6.jpg", "photos/unit-0045/photo-7.jpg", "photos/unit-0045/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "attached garage"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": "now", "move_in_sort": 0, "notes": "QR Code Link to This Post\n2bed/1bath ready for move in. All bills paid in a great location.\nFenced backyard and pet friendly.\nCall or text landlord to schedule a tour and apply Mr Robert 601 48 8 752 5\nMonthly rent: $1,400\nSecurity deposit: $1,400\nTotal move in cost: $2,800"}, {"id": "unit-0046", "title": "All bills paid and available now", "address": "", "price": 1400, "beds": 2, "baths": 1.0, "sqft": 967, "housing_type": "House", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-all-bills-paid-and-available/7939031922.html", "lat": 27.947, "lon": -82.7943, "photos": ["photos/unit-0046/photo-1.jpg", "photos/unit-0046/photo-2.jpg", "photos/unit-0046/photo-3.jpg", "photos/unit-0046/photo-4.jpg", "photos/unit-0046/photo-5.jpg", "photos/unit-0046/photo-6.jpg", "photos/unit-0046/photo-7.jpg", "photos/unit-0046/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["cats are OK - purrr", "dogs are OK - wooof", "w/d in unit", "attached garage"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": "now", "move_in_sort": 0, "notes": "QR Code Link to This Post\n2bed/1bath ready for move in. All bills paid in a great location.\nFenced backyard and pet friendly.\nCall or text landlord to schedule a tour and apply Mr Robert 601- 48 8-7 52 5\nMonthly rent: $1,400\nSecurity deposit: $1,400\nTotal move in cost: $2,800"}, {"id": "unit-0047", "title": "3br/1ba  Clearwater FL", "address": "407 ENGMAN ST near Ft Harisson", "price": 1750, "beds": 3, "baths": 1.0, "sqft": 950, "housing_type": "Apartment", "source": "Craigslist", "source_url": "https://tampa.craigslist.org/pnl/apa/d/3br-1ba-clearwater-fl/7940837616.html", "lat": 27.978816, "lon": -82.79785, "photos": ["photos/unit-0047/photo-1.jpg", "photos/unit-0047/photo-2.jpg", "photos/unit-0047/photo-3.jpg", "photos/unit-0047/photo-4.jpg", "photos/unit-0047/photo-5.jpg", "photos/unit-0047/photo-6.jpg", "photos/unit-0047/photo-7.jpg", "photos/unit-0047/photo-8.jpg"], "has_washer_dryer": true, "is_gated": false, "amenities": ["$49", "w/d hookups", "off-street parking", "no smoking", "air conditioning"], "age_restriction": null, "quality_rating": null, "quality_notes": null, "flooring_type": null, "move_in_date": null, "move_in_sort": null, "notes": "QR Code Link to This Post\nNice 3Bd/1Ba apartment on a second floor in 2 story house.  Nice  Large living room w/fireplace, linens and guest closets.  Kitchen w/two big windows and a lot of extra spaces.  All NEW Appliances! Kitchen also has pantry. Bathroom with tube and shower.\nOwn water heather, electric stove, large R/F, and washer/dryer stackable machine  hook up inside the apartment. Hardwood floor in a rooms,  tiles in the kitchen and bath.  Each room has own A/C unit. Large A/C with heat in living room.  Nice fenced back yard. Apartment has own water and electric meters.  12 months Lease.\nAvailable for rent NOW.  First month $500 off for immediate occupancy.\nQuiet neighborhood, safe area, convenient location -close to Downtown, Library, Clearwater Beach, banks, shopping, bus line, etc.......... Just one blook away from the Bay. You can go fishing every day.\nOne month security deposit.  Tenant is paying own bills.\nFor showing, more info and pictures - call\nshow contact info\nVal.\nYou will not be disappoint !!!!!!!"}], "total_units": 42, "last_updated": "2026-06-15T16:43:54"};
+
+    // ---- Load any saved criteria overrides (address, lease end, radius, price, beds, baths, sqft) ----
+    const OVERRIDE_KEYS = ['target_location', 'target_name', 'current_lease_end', 'search_radius_miles',
+      'min_price', 'max_price', 'min_beds', 'max_beds', 'min_baths', 'min_sqft'];
+
+    function saveOverrides() {
+      const overrides = {};
+      OVERRIDE_KEYS.forEach(k => { overrides[k] = CONFIG[k]; });
+      try { localStorage.setItem('configOverrides', JSON.stringify(overrides)); } catch (e) {}
+    }
+
+    try {
+      const saved = JSON.parse(localStorage.getItem('configOverrides') || 'null');
+      if (saved) {
+        OVERRIDE_KEYS.forEach(k => {
+          if (Object.prototype.hasOwnProperty.call(saved, k)) CONFIG[k] = saved[k];
+        });
+      }
+    } catch (e) { /* localStorage unavailable */ }
+
+    // ---- Map setup ----
+    let targetMarker = null;
+    let radiusCircle = null;
+    const defaultCenter = [27.9468822, -82.725352];
+    const center = CONFIG.target_location ? [CONFIG.target_location.lat, CONFIG.target_location.lon] : defaultCenter;
+    const map = L.map('map').setView(center, 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+    // Default maxClusterRadius (80px) groups units that are several blocks
+    // apart into one blob - shrink it so only markers that would visually
+    // overlap (e.g. multiple floorplans at the same address) get clustered
+    const markers = L.markerClusterGroup({ maxClusterRadius: 20 });
+    map.addLayer(markers);
+    const workLocationMarkers = L.layerGroup();
+    map.addLayer(workLocationMarkers);
+    // Maps unit id -> its Leaflet marker, so list rows can highlight the
+    // matching dot on hover
+    let unitMarkers = {};
+
+    // Leaflet caches the container size at init time, before the flex layout
+    // has settled into its final dimensions - without this, tiles outside
+    // that initial (often too-small) viewport never render until something
+    // (e.g. a zoom change) forces Leaflet to recompute its size.
+    const mapEl = document.getElementById('map');
+    if (window.ResizeObserver) {
+      new ResizeObserver(() => map.invalidateSize()).observe(mapEl);
+    }
+    window.addEventListener('load', () => map.invalidateSize());
+    requestAnimationFrame(() => map.invalidateSize());
+
+    // (Re)draws the search-center marker and radius circle for CONFIG.target_location
+    function updateMapCenter() {
+      const t = CONFIG.target_location;
+      if (!t) return;
+      map.setView([t.lat, t.lon], map.getZoom());
+      if (targetMarker) map.removeLayer(targetMarker);
+      targetMarker = L.marker([t.lat, t.lon]).addTo(map)
+        .bindPopup(`<b>${escapeHtml(t.name || 'Search center')}</b><br>${escapeHtml(t.address || '')}`);
+      if (radiusCircle) map.removeLayer(radiusCircle);
+      if (CONFIG.search_radius_miles) {
+        radiusCircle = L.circle([t.lat, t.lon], {
+          radius: CONFIG.search_radius_miles * 1609.34,
+          color: '#4fd1c5',
+          weight: 1,
+          fillOpacity: 0.05
+        }).addTo(map);
+      }
+    }
+    updateMapCenter();
+
+    // ---- Helpers ----
+    function haversineMiles(lat1, lon1, lat2, lon2) {
+      const R = 3959;
+      const toRad = d => d * Math.PI / 180;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+      return R * 2 * Math.asin(Math.sqrt(a));
+    }
+
+    function photoPath(p) {
+      return p.replace(/^outputs\//, '');
+    }
+
+    function dashOr(v, def) {
+      def = (def === undefined) ? '\u2014' : def;
+      return (v === null || v === undefined) ? def : v;
+    }
+
+    function formatNumber(n) {
+      if (n == null || n === '' || isNaN(n)) return n;
+      return Number(n).toLocaleString('en-US');
+    }
+
+    // Map marker color by housing type - keep in sync with the .map-marker.* CSS rules
+    function markerClassForType(housingType) {
+      const type = (housingType || '').toLowerCase();
+      if (type === 'apartment') return 'marker-apartment';
+      if (type === 'house') return 'marker-house';
+      return 'marker-other';
+    }
+
+    function markerIcon(housingType) {
+      return L.divIcon({
+        className: `map-marker ${markerClassForType(housingType)}`,
+        iconSize: [14, 14]
+      });
+    }
+
+    function workLocationIcon() {
+      return L.divIcon({
+        className: 'map-marker-work',
+        html: '\ud83d\udcbc',
+        iconSize: [22, 22]
+      });
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // ---- Personal favorites & notes (stored locally per-browser) ----
+    function loadUnitOverrides() {
+      try { return JSON.parse(localStorage.getItem('unitOverrides') || '{}'); } catch (e) { return {}; }
+    }
+
+    let unitOverrides = loadUnitOverrides();
+
+    function saveUnitOverrides() {
+      try { localStorage.setItem('unitOverrides', JSON.stringify(unitOverrides)); } catch (e) {}
+    }
+
+    function isFavorite(id) {
+      return !!(unitOverrides[id] && unitOverrides[id].favorite);
+    }
+
+    function getUnitNotes(id) {
+      return (unitOverrides[id] && unitOverrides[id].notes) || '';
+    }
+
+    function getUnitTimeline(id) {
+      return (unitOverrides[id] && unitOverrides[id].timeline) || [];
+    }
+
+    function toggleFavorite(id) {
+      const entry = unitOverrides[id] || {};
+      entry.favorite = !entry.favorite;
+      unitOverrides[id] = entry;
+      saveUnitOverrides();
+      renderAll(lastData);
+    }
+
+    let notesModalUnitId = null;
+
+    function openNotesModal(id) {
+      notesModalUnitId = id;
+      document.getElementById('notes-modal-textarea').value = getUnitNotes(id);
+      document.getElementById('notes-modal-overlay').style.display = 'flex';
+    }
+
+    function closeNotesModal(e) {
+      if (e && e.target.id !== 'notes-modal-overlay') return;
+      document.getElementById('notes-modal-overlay').style.display = 'none';
+      notesModalUnitId = null;
+    }
+
+    function saveNotes() {
+      if (!notesModalUnitId) return;
+      const entry = unitOverrides[notesModalUnitId] || {};
+      entry.notes = document.getElementById('notes-modal-textarea').value;
+      unitOverrides[notesModalUnitId] = entry;
+      saveUnitOverrides();
+      closeNotesModal();
+      renderAll(lastData);
+    }
+
+    let timelineModalUnitId = null;
+
+    function formatTimelineDate(dateStr) {
+      const d = new Date(dateStr + 'T00:00:00');
+      if (isNaN(d.getTime())) return dateStr;
+      return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function renderTimelineEntries() {
+      const list = document.getElementById('timeline-entries');
+      const entries = getUnitTimeline(timelineModalUnitId);
+      if (!entries.length) {
+        list.innerHTML = '<div class="timeline-empty">No interactions logged yet.</div>';
+        return;
+      }
+      const sorted = entries.map((e, i) => ({ ...e, i })).sort((a, b) => b.date.localeCompare(a.date));
+      list.innerHTML = sorted.map(entry => `<div class="timeline-entry">` +
+        `<div class="timeline-entry-date">${formatTimelineDate(entry.date)}</div>` +
+        `<div class="timeline-entry-text">${escapeHtml(entry.text)}</div>` +
+        `<button class="timeline-entry-remove" title="Remove" onclick="removeTimelineEntry(${entry.i})">\u2715</button>` +
+      `</div>`).join('');
+    }
+
+    function openTimelineModal(id) {
+      timelineModalUnitId = id;
+      document.getElementById('timeline-add-date').value = new Date().toISOString().slice(0, 10);
+      document.getElementById('timeline-add-text').value = '';
+      renderTimelineEntries();
+      document.getElementById('timeline-modal-overlay').style.display = 'flex';
+    }
+
+    function closeTimelineModal(e) {
+      if (e && e.target.id !== 'timeline-modal-overlay') return;
+      document.getElementById('timeline-modal-overlay').style.display = 'none';
+      timelineModalUnitId = null;
+    }
+
+    function addTimelineEntry() {
+      if (!timelineModalUnitId) return;
+      const date = document.getElementById('timeline-add-date').value;
+      const text = document.getElementById('timeline-add-text').value.trim();
+      if (!date || !text) return;
+      const entry = unitOverrides[timelineModalUnitId] || {};
+      const timeline = entry.timeline || [];
+      timeline.push({ date, text });
+      entry.timeline = timeline;
+      unitOverrides[timelineModalUnitId] = entry;
+      saveUnitOverrides();
+      document.getElementById('timeline-add-text').value = '';
+      renderTimelineEntries();
+      renderAll(lastData);
+    }
+
+    function removeTimelineEntry(index) {
+      if (!timelineModalUnitId) return;
+      const entry = unitOverrides[timelineModalUnitId] || {};
+      const timeline = entry.timeline || [];
+      timeline.splice(index, 1);
+      entry.timeline = timeline;
+      unitOverrides[timelineModalUnitId] = entry;
+      saveUnitOverrides();
+      renderTimelineEntries();
+      renderAll(lastData);
+    }
+
+    // Renders a 1-5 quality rating from the AI photo scan as a number, or a dash if unrated
+    function qualityStarsHtml(u) {
+      const rating = u.quality_rating;
+      if (rating == null) return '<span title="Not yet scanned">\u2014</span>';
+      const notes = u.quality_notes ? escapeHtml(u.quality_notes) : `${rating}/5`;
+      return `<span title="${notes}">${rating.toFixed(1)} \u2605</span>`;
+    }
+
+    // Renders the AI-detected primary flooring type, or a dash if unscanned/unknown
+    function flooringHtml(u) {
+      const flooring = u.flooring_type;
+      if (!flooring || flooring === 'unknown') return '<span title="Not detected">\u2014</span>';
+      return escapeHtml(flooring.charAt(0).toUpperCase() + flooring.slice(1));
+    }
+
+    // Renders the move-in/availability date: "Now", a formatted date, or a dash if not listed
+    function moveInHtml(u) {
+      const moveIn = u.move_in_date;
+      if (!moveIn) return '<span title="Not listed">\u2014</span>';
+      if (moveIn === 'now') return 'Now';
+      const d = new Date(moveIn + 'T00:00:00');
+      if (isNaN(d.getTime())) return escapeHtml(moveIn);
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // Units sharing an address (e.g. multiple floorplans/listings at the same
+    // apartment complex) are otherwise indistinguishable in the table and map
+    function findDuplicateAddresses(units) {
+      const counts = {};
+      units.forEach(u => {
+        if (!u.address) return;
+        counts[u.address] = (counts[u.address] || 0) + 1;
+      });
+      return new Set(Object.keys(counts).filter(a => counts[a] > 1));
+    }
+
+    // Reorders units so multiple listings at the same address (e.g. different
+    // floorplans in one building) sit next to each other in the list,
+    // regardless of the active sort - each group's position is determined by
+    // where its first unit falls in the sorted order
+    function groupByAddress(units) {
+      const groups = new Map();
+      const order = [];
+      units.forEach(u => {
+        const key = u.address || `__unit_${u.id}`;
+        if (!groups.has(key)) {
+          groups.set(key, []);
+          order.push(key);
+        }
+        groups.get(key).push(u);
+      });
+      const out = [];
+      order.forEach(key => out.push(...groups.get(key)));
+      return out;
+    }
+
+    // ---- Filtering (mirrors filter_units_by_distance in generate-html.py) ----
+    let currentMinQuality = CONFIG.min_quality;
+    let currentFavoritesOnly = false;
+    let currentTypeFilter = '';
+    let lastData = INITIAL_DATA;
+
+    // List filters narrow what's displayed without changing the search
+    // criteria (CONFIG / configOverrides), which represents what gets fetched
+    let listFilters = {
+      maxDistance: null,
+      minPrice: null,
+      maxPrice: null,
+      minBeds: null,
+      minBaths: null,
+      minSqft: null,
+      flooring: null,
+      availableBy: null,
+      washerDryer: false,
+      gated: false,
+      hideAgeRestricted: false,
+      workMaxDistance: [],
+    };
+
+    // Free-text search (top-left of sidebar) - narrows the list/map by
+    // substring match against a blob of each unit's text fields
+    let searchFilters = {
+      contains: '',
+      excludes: '',
+    };
+
+    function searchableText(u) {
+      const parts = [u.title, u.address, u.notes, u.housing_type, u.source, u.flooring_type, u.move_in_date]
+        .concat(u.amenities || [])
+        .filter(Boolean);
+      if (u.age_restriction) parts.push(`${u.age_restriction}+`);
+      return parts.join(' ').toLowerCase();
+    }
+
+    function applySearchFilters() {
+      searchFilters.contains = document.getElementById('search-contains').value.trim();
+      searchFilters.excludes = document.getElementById('search-excludes').value.trim();
+      renderAll(lastData);
+    }
+
+    function filterUnits(units) {
+      const target = CONFIG.target_location;
+      const radius = CONFIG.search_radius_miles;
+      const out = [];
+      units.forEach(raw => {
+        const u = Object.assign({}, raw);
+        u.favorite = isFavorite(u.id);
+        u.notes_text = getUnitNotes(u.id);
+        u.timeline = getUnitTimeline(u.id);
+        if (currentFavoritesOnly && !u.favorite) return;
+
+        let distance = null;
+        if (target && u.lat != null && u.lon != null) {
+          distance = haversineMiles(target.lat, target.lon, u.lat, u.lon);
+          u.distance_miles = Math.round(distance * 10) / 10;
+        }
+        if (radius != null && distance != null && distance > radius) return;
+
+        workLocations.forEach((loc, i) => {
+          u['work_dist_' + i] = (u.lat != null && u.lon != null)
+            ? Math.round(haversineMiles(loc.lat, loc.lon, u.lat, u.lon) * 10) / 10
+            : null;
+        });
+
+        const beds = Number(u.beds || 0);
+        if (CONFIG.min_beds != null && beds < CONFIG.min_beds) return;
+
+        const baths = Number(u.baths || 0);
+        if (CONFIG.min_baths != null && baths < CONFIG.min_baths) return;
+
+        if (CONFIG.min_sqft != null && u.sqft) {
+          if (Number(u.sqft || 0) < CONFIG.min_sqft) return;
+        }
+
+        const price = Number(u.price || 0);
+        if (CONFIG.min_price != null && price < CONFIG.min_price) return;
+        if (CONFIG.max_price != null && price > CONFIG.max_price) return;
+
+        if (currentMinQuality != null) {
+          if (u.quality_rating == null || u.quality_rating < currentMinQuality) return;
+        }
+
+        // ---- List filters (narrow the displayed list only - doesn't affect criteria) ----
+        if (listFilters.maxDistance != null) {
+          if (distance == null || distance > listFilters.maxDistance) return;
+        }
+        if (listFilters.minPrice != null && price < listFilters.minPrice) return;
+        if (listFilters.maxPrice != null && price > listFilters.maxPrice) return;
+        if (listFilters.minBeds != null && beds < listFilters.minBeds) return;
+        if (listFilters.minBaths != null && baths < listFilters.minBaths) return;
+        if (listFilters.minSqft != null) {
+          if (!u.sqft || Number(u.sqft) < listFilters.minSqft) return;
+        }
+        if (listFilters.flooring) {
+          if ((u.flooring_type || 'unknown') !== listFilters.flooring) return;
+        }
+        if (listFilters.availableBy) {
+          if (!u.move_in_date) return;
+          if (u.move_in_date !== 'now' && u.move_in_date > listFilters.availableBy) return;
+        }
+        if (listFilters.washerDryer && !u.has_washer_dryer) return;
+        if (listFilters.gated && !u.is_gated) return;
+        if (listFilters.hideAgeRestricted && u.age_restriction) return;
+        if (workLocations.some((loc, i) => {
+          const maxD = listFilters.workMaxDistance[i];
+          if (maxD == null) return false;
+          const d = u['work_dist_' + i];
+          return (d == null || d > maxD);
+        })) return;
+
+        // ---- Free-text search ----
+        if (searchFilters.contains || searchFilters.excludes) {
+          const text = searchableText(u);
+          if (searchFilters.contains) {
+            const terms = searchFilters.contains.toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+            if (terms.length && !terms.some(t => text.includes(t))) return;
+          }
+          if (searchFilters.excludes) {
+            const terms = searchFilters.excludes.toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+            if (terms.some(t => text.includes(t))) return;
+          }
+        }
+
+        out.push(u);
+      });
+      return out;
+    }
+
+    function applyQualityFilter() {
+      const val = document.getElementById('quality-select').value;
+      currentMinQuality = val ? Number(val) : null;
+      renderAll(lastData);
+    }
+
+    function applyFavoritesFilter() {
+      currentFavoritesOnly = document.getElementById('favorites-select').value === '1';
+      renderAll(lastData);
+    }
+
+    function applyListFilters() {
+      listFilters.maxDistance = numOrNull(document.getElementById('lf-max-distance').value);
+      listFilters.minPrice = numOrNull(document.getElementById('lf-min-price').value);
+      listFilters.maxPrice = numOrNull(document.getElementById('lf-max-price').value);
+      listFilters.minBeds = numOrNull(document.getElementById('lf-min-beds').value);
+      listFilters.minBaths = numOrNull(document.getElementById('lf-min-baths').value);
+      listFilters.minSqft = numOrNull(document.getElementById('lf-min-sqft').value);
+      listFilters.flooring = document.getElementById('lf-flooring').value || null;
+      listFilters.availableBy = document.getElementById('lf-available-by').value || null;
+      listFilters.washerDryer = document.getElementById('lf-washer-dryer').checked;
+      listFilters.gated = document.getElementById('lf-gated').checked;
+      listFilters.hideAgeRestricted = document.getElementById('lf-hide-age-restricted').checked;
+      listFilters.workMaxDistance = workLocations.map((loc, i) => numOrNull(document.getElementById(`lf-work-distance-${i}`).value));
+      renderListFiltersSummary();
+      renderAll(lastData);
+    }
+
+    function clearListFilters() {
+      ['lf-max-distance', 'lf-min-price', 'lf-max-price', 'lf-min-beds', 'lf-min-baths', 'lf-min-sqft', 'lf-flooring', 'lf-available-by'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      ['lf-washer-dryer', 'lf-gated', 'lf-hide-age-restricted'].forEach(id => {
+        document.getElementById(id).checked = false;
+      });
+      workLocations.forEach((loc, i) => {
+        document.getElementById(`lf-work-distance-${i}`).value = '';
+      });
+      applyListFilters();
+    }
+
+    function renderListFiltersSummary() {
+      const parts = [];
+      if (listFilters.maxDistance != null) parts.push(`\u2264${listFilters.maxDistance} mi`);
+      if (listFilters.minPrice != null || listFilters.maxPrice != null) {
+        const lo = (listFilters.minPrice != null) ? `$${listFilters.minPrice}` : '$0';
+        const hi = (listFilters.maxPrice != null) ? `$${listFilters.maxPrice}` : '+';
+        parts.push(`${lo}\u2013${hi}/mo`);
+      }
+      if (listFilters.minBeds != null) parts.push(`${listFilters.minBeds}+ bd`);
+      if (listFilters.minBaths != null) parts.push(`${listFilters.minBaths}+ ba`);
+      if (listFilters.minSqft != null) parts.push(`${listFilters.minSqft}+ sqft`);
+      if (listFilters.flooring) parts.push(`${listFilters.flooring.charAt(0).toUpperCase()}${listFilters.flooring.slice(1)} flooring`);
+      if (listFilters.availableBy) parts.push(`available by ${listFilters.availableBy}`);
+      if (listFilters.washerDryer) parts.push('washer/dryer');
+      if (listFilters.gated) parts.push('gated');
+      if (listFilters.hideAgeRestricted) parts.push('hide 55+');
+      workLocations.forEach((loc, i) => {
+        const maxD = listFilters.workMaxDistance[i];
+        if (maxD != null) parts.push(`\u2264${maxD} mi to ${loc.name}`);
+      });
+      document.getElementById('list-filters-summary').textContent = parts.length ? parts.join(' \u00b7 ') : 'None';
+      const badge = document.getElementById('list-filters-badge');
+      badge.style.display = parts.length ? '' : 'none';
+      badge.textContent = parts.length;
+      document.getElementById('list-filters-btn').title = parts.length
+        ? `List filters: ${parts.join(' \u00b7 ')}`
+        : 'Narrow the displayed list without changing your search criteria';
+    }
+
+    // ---- Column visibility (persisted across reloads) ----
+    const ALL_COLUMNS = ['mine', 'photo', 'distance', 'price', 'beds', 'baths', 'sqft', 'type', 'movein', 'amenities', 'flooring', 'source', 'quality', 'details'];
+
+    function loadColumnPrefs() {
+      try { return JSON.parse(localStorage.getItem('columnPrefs') || '{}'); } catch (e) { return {}; }
+    }
+
+    function saveColumnPrefs() {
+      try { localStorage.setItem('columnPrefs', JSON.stringify(columnPrefs)); } catch (e) {}
+    }
+
+    let columnPrefs = loadColumnPrefs();
+
+    function isColumnVisible(col) {
+      return columnPrefs[col] !== false;
+    }
+
+    function applyColumnPrefs() {
+      const table = document.querySelector('.units-table');
+      ALL_COLUMNS.forEach(col => {
+        table.classList.toggle('hide-' + col, !isColumnVisible(col));
+      });
+      renderColumnsSummary();
+    }
+
+    function renderColumnsSummary() {
+      const hidden = ALL_COLUMNS.filter(col => !isColumnVisible(col));
+      const badge = document.getElementById('columns-badge');
+      badge.style.display = hidden.length ? '' : 'none';
+      badge.textContent = hidden.length;
+      document.getElementById('columns-btn').title = hidden.length
+        ? `Columns: ${hidden.length} hidden`
+        : 'Choose which table columns are displayed';
+    }
+
+    function onColumnToggle(checkbox) {
+      columnPrefs[checkbox.dataset.col] = checkbox.checked;
+      saveColumnPrefs();
+      applyColumnPrefs();
+    }
+
+    function resetColumnPrefs() {
+      columnPrefs = {};
+      saveColumnPrefs();
+      document.querySelectorAll('#columns-panel input[type="checkbox"]').forEach(cb => { cb.checked = true; });
+      applyColumnPrefs();
+    }
+
+    // ---- Work locations (named places to show a per-unit distance column for) ----
+    function loadWorkLocations() {
+      try { return JSON.parse(localStorage.getItem('workLocations') || '[]'); } catch (e) { return []; }
+    }
+
+    function saveWorkLocations() {
+      try { localStorage.setItem('workLocations', JSON.stringify(workLocations)); } catch (e) {}
+    }
+
+    let workLocations = loadWorkLocations();
+
+    async function geocodeAddress(address) {
+      const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(address)}`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const results = await resp.json();
+      if (!results.length) throw new Error('Address not found');
+      return { lat: parseFloat(results[0].lat), lon: parseFloat(results[0].lon) };
+    }
+
+    function renderWorkLocationsList() {
+      const list = document.getElementById('work-locations-list');
+      list.innerHTML = workLocations.map((loc, i) => `
+        <div class="work-location-item">
+          <span class="work-location-name">${escapeHtml(loc.name)}</span>
+          <span class="work-location-address">${escapeHtml(loc.address)}</span>
+          <button class="work-location-remove" onclick="removeWorkLocation(${i})" title="Remove">&times;</button>
+        </div>
+      `).join('');
+
+      const badge = document.getElementById('work-locations-badge');
+      badge.style.display = workLocations.length ? '' : 'none';
+      badge.textContent = workLocations.length;
+      document.getElementById('work-locations-btn').title = workLocations.length
+        ? `Work locations: ${workLocations.map(l => l.name).join(', ')}`
+        : 'Add work locations to show distance columns';
+    }
+
+    // Plots a marker for each saved work location on the map
+    function renderWorkLocationMarkers() {
+      workLocationMarkers.clearLayers();
+      workLocations.forEach(loc => {
+        if (loc.lat == null || loc.lon == null) return;
+        L.marker([loc.lat, loc.lon], { icon: workLocationIcon() })
+          .bindPopup(`<b>\ud83d\udcbc ${escapeHtml(loc.name)}</b><br>${escapeHtml(loc.address)}`)
+          .addTo(workLocationMarkers);
+      });
+    }
+
+    // Rebuilds the per-work-location "Max distance to <name>" list-filter
+    // inputs, keeping listFilters.workMaxDistance in sync by index
+    function renderWorkDistanceFilters() {
+      const grid = document.getElementById('list-filters-grid');
+      grid.querySelectorAll('.lf-work-distance').forEach(el => el.remove());
+      listFilters.workMaxDistance = workLocations.map(() => null);
+      workLocations.forEach((loc, i) => {
+        const div = document.createElement('div');
+        div.className = 'lf-work-distance';
+        const label = document.createElement('label');
+        label.setAttribute('for', `lf-work-distance-${i}`);
+        label.textContent = `Max dist. to ${loc.name} (mi)`;
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.id = `lf-work-distance-${i}`;
+        input.min = '0';
+        input.step = '0.5';
+        input.placeholder = 'Any';
+        input.addEventListener('input', applyListFilters);
+        div.appendChild(label);
+        div.appendChild(input);
+        grid.appendChild(div);
+      });
+    }
+
+    // Rebuilds the dynamic per-work-location <th> columns, inserted just before "Details"
+    function renderWorkLocationHeaders() {
+      document.querySelectorAll('.units-table .work-loc-th').forEach(th => th.remove());
+      const detailsTh = document.getElementById('details-th');
+      workLocations.forEach((loc, i) => {
+        const th = document.createElement('th');
+        th.className = 'work-loc-col work-loc-th sortable';
+        th.dataset.sort = `work_dist_${i}`;
+        th.textContent = loc.name;
+        th.addEventListener('click', () => applySort(`work_dist_${i}`));
+        detailsTh.parentNode.insertBefore(th, detailsTh);
+      });
+      updateSortIndicators();
+    }
+
+    function removeWorkLocation(index) {
+      workLocations.splice(index, 1);
+      saveWorkLocations();
+      renderWorkLocationsList();
+      renderWorkLocationHeaders();
+      renderWorkLocationMarkers();
+      renderWorkDistanceFilters();
+      renderListFiltersSummary();
+      renderAll(lastData);
+    }
+
+    // ---- Sorting ----
+    let currentSort = { field: null, dir: 'asc' };
+
+    function sortUnits(units) {
+      const { field, dir } = currentSort;
+      if (!field) return units;
+
+      return units.slice().sort((a, b) => {
+        let va = a[field];
+        let vb = b[field];
+        if (field === 'favorite') {
+          va = va ? 1 : 0;
+          vb = vb ? 1 : 0;
+        }
+
+        const aNull = (va == null || va === '');
+        const bNull = (vb == null || vb === '');
+        if (aNull && bNull) return 0;
+        if (aNull) return 1;
+        if (bNull) return -1;
+
+        if (typeof va === 'string' || typeof vb === 'string') {
+          va = String(va).toLowerCase();
+          vb = String(vb).toLowerCase();
+          if (va < vb) return dir === 'asc' ? -1 : 1;
+          if (va > vb) return dir === 'asc' ? 1 : -1;
+          return 0;
+        }
+
+        return dir === 'asc' ? (va - vb) : (vb - va);
+      });
+    }
+
+    function applySort(field) {
+      if (currentSort.field === field) {
+        currentSort.dir = (currentSort.dir === 'asc') ? 'desc' : 'asc';
+      } else {
+        currentSort.field = field;
+        currentSort.dir = 'asc';
+      }
+      renderAll(lastData);
+    }
+
+    function updateSortIndicators() {
+      document.querySelectorAll('.units-table th.sortable').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        if (th.dataset.sort === currentSort.field) {
+          th.classList.add(currentSort.dir === 'asc' ? 'sort-asc' : 'sort-desc');
+        }
+      });
+    }
+
+    // ---- Rendering ----
+    // Maps raw amenity strings (and the normalized washer/dryer + gated
+    // flags) to a small set of icons - ordered roughly by how often renters
+    // care about them, so the first couple shown are the most useful.
+    const AMENITY_ICON_MAP = [
+      { match: /w\/d|washer|dryer|laundry|stackable/i, icon: '\ud83e\uddfa', label: 'Laundry / washer-dryer' },
+      { match: /gated/i, icon: '\ud83d\udd10', label: 'Gated' },
+      { match: /garage|carport|parking/i, icon: '\ud83d\ude97', label: 'Parking' },
+      { match: /cats? (are )?ok|dogs? (are )?ok|pet/i, icon: '\ud83d\udc3e', label: 'Pets OK' },
+      { match: /air condition|a\/c/i, icon: '\u2744\ufe0f', label: 'A/C' },
+      { match: /\bpool\b/i, icon: '\ud83c\udfca', label: 'Pool' },
+      { match: /wheelchair|accessible/i, icon: '\u267f', label: 'Wheelchair accessible' },
+      { match: /ev charging|electric vehicle/i, icon: '\ud83d\udd0c', label: 'EV charging' },
+      { match: /furnished/i, icon: '\ud83d\udecb\ufe0f', label: 'Furnished' },
+    ];
+
+    function amenitiesCellHtml(u) {
+      const amenities = u.amenities || [];
+      const matched = [];
+      AMENITY_ICON_MAP.forEach(({ match, icon, label }) => {
+        const hit = amenities.some(a => match.test(a)) ||
+          (label === 'Gated' && u.is_gated) ||
+          (label === 'Laundry / washer-dryer' && u.has_washer_dryer);
+        if (hit) matched.push({ icon, label });
+      });
+
+      const title = amenities.length ? amenities.join(', ') : (matched.length ? matched.map(m => m.label).join(', ') : 'No amenities listed');
+      if (!matched.length) return `<span title="${escapeHtml(title)}">\u2014</span>`;
+
+      const shown = matched.slice(0, 2);
+      const extra = matched.length - shown.length;
+      let html = shown.map(m => m.icon).join(' ');
+      if (extra > 0) html += ` <span class="amenity-more">+${extra}</span>`;
+      return `<span title="${escapeHtml(title)}">${html}</span>`;
+    }
+
+    function unitRowHtml(u, dupAddresses, continuesGroup) {
+      const price = dashOr(u.price, 'N/A');
+      const beds = dashOr(u.beds);
+      const baths = dashOr(u.baths);
+      const sqft = dashOr(u.sqft);
+      const address = u.address || 'Address unknown';
+      const source = u.source || 'Unknown source';
+      const sourceUrl = u.source_url || '#';
+      const housingType = u.housing_type || 'Unknown';
+      const ageBadge = u.age_restriction
+        ? ` <span class="age-badge" title="Age-restricted: ${u.age_restriction}+ community">${u.age_restriction}+</span>`
+        : '';
+
+      // Multiple listings at the same address (e.g. different floorplans in
+      // one apartment complex) are otherwise indistinguishable - tag with title
+      let addressExtra = '';
+      if (u.address && dupAddresses.has(u.address)) {
+        const fullTitle = u.title || '';
+        const tag = fullTitle.length > 60 ? fullTitle.slice(0, 57) + '\u2026' : fullTitle;
+        addressExtra = `<div class="dup-tag" title="${escapeHtml(fullTitle)}">${escapeHtml(tag)}</div>`;
+      }
+
+      // Always show the unit's id so otherwise-identical rows can be told apart
+      const idTag = `<div class="unit-id-tag">${escapeHtml(u.id || '')}</div>`;
+
+      const photoPaths = (u.photos || []).map(photoPath);
+      const photosAttr = JSON.stringify(photoPaths).replace(/'/g, '&#39;');
+      let thumbHtml;
+      if (photoPaths.length === 0) {
+        thumbHtml = '<div class="unit-thumb-empty">\u2014</div>';
+      } else if (photoPaths.length === 1) {
+        thumbHtml = `<img src="${photoPaths[0]}" alt="Thumbnail" class="unit-thumb" data-photos='${photosAttr}' data-index="0" onclick="openGallery(this)">`;
+      } else {
+        const gridImgs = photoPaths.slice(0, 4).map((p, i) =>
+          `<img src="${p}" alt="Thumbnail" data-photos='${photosAttr}' data-index="${i}" onclick="openGallery(this)">`
+        ).join('');
+        thumbHtml = `<div class="thumb-grid">${gridImgs}</div>`;
+      }
+
+      const distanceHtml = (u.distance_miles != null) ? `${u.distance_miles} mi` : '\u2014';
+      const detailsHref = `apartments/${u.id}/index.html`;
+
+      const favActive = u.favorite ? 'active' : '';
+      const favIcon = u.favorite ? '\u2605' : '\u2606';
+      const favTitle = u.favorite ? 'Remove from favorites' : 'Add to favorites';
+      const noteActive = u.notes_text ? 'active' : '';
+      const noteTitle = u.notes_text ? 'Edit notes' : 'Add notes';
+      const timelineActive = (u.timeline && u.timeline.length) ? 'active' : '';
+      const timelineTitle = (u.timeline && u.timeline.length) ? 'View timeline' : 'Add timeline entry';
+      const mineHtml = `<button class="icon-btn fav-btn ${favActive}" title="${favTitle}" onclick="toggleFavorite('${u.id}')">${favIcon}</button>` +
+        `<button class="icon-btn note-btn ${noteActive}" title="${noteTitle}" onclick="openNotesModal('${u.id}')">\u270e</button>` +
+        `<button class="icon-btn timeline-btn ${timelineActive}" title="${timelineTitle}" onclick="openTimelineModal('${u.id}')">\u{1F551}</button>`;
+
+      const workCells = workLocations.map((loc, i) => {
+        const d = u['work_dist_' + i];
+        return `<td class="work-loc-col">${(d != null) ? d + ' mi' : '\u2014'}</td>`;
+      }).join('');
+
+      let groupClass = '';
+      if (u.address && dupAddresses.has(u.address)) {
+        groupClass = continuesGroup ? ' same-property group-continues' : ' same-property';
+      }
+
+      return `<tr class="unit-row${groupClass}" data-price="${price}" data-beds="${beds}" data-baths="${baths}" onmouseenter="highlightMapMarker('${u.id}')" onmouseleave="clearMapMarkerHighlight()">
+        <td class="mine-col">${mineHtml}</td>
+        <td class="unit-thumb-col">${thumbHtml}</td>
+        <td class="unit-distance-col">${distanceHtml}</td>
+        <td class="unit-address-col"><a href="${sourceUrl}" target="_blank" class="unit-link">${address}</a>${idTag}${addressExtra}</td>
+        <td class="unit-price-col">$${formatNumber(price)}</td>
+        <td class="unit-spec-col beds-col">${beds} bd</td>
+        <td class="unit-spec-col baths-col">${baths} ba</td>
+        <td class="unit-spec-col sqft-col">${formatNumber(sqft)}</td>
+        <td class="unit-type-col">${housingType}${ageBadge}</td>
+        <td class="movein-col">${moveInHtml(u)}</td>
+        <td class="unit-amenity-col">${amenitiesCellHtml(u)}</td>
+        <td class="flooring-col">${flooringHtml(u)}</td>
+        <td class="unit-source-col">${source}</td>
+        <td class="quality-col">${qualityStarsHtml(u)}</td>
+        ${workCells}
+        <td class="details-col"><a href="${detailsHref}" target="_blank" class="details-link">Details</a></td>
+      </tr>`;
+    }
+
+    function renderTable(units, totalCount, dupAddresses) {
+      const tbody = document.getElementById('units-tbody');
+      const table = document.querySelector('.units-table');
+      const emptyState = document.getElementById('empty-state');
+
+      if (units.length === 0) {
+        table.style.display = 'none';
+        emptyState.style.display = 'block';
+        if (totalCount === 0) {
+          emptyState.innerHTML = '<div class="icon">\ud83d\udd0d</div><h2>No Units Found Yet</h2>' +
+            '<p>Run the crawler to fetch listings from your sources.<br><code>python scripts/crawl_all.py</code></p>';
+        } else {
+          emptyState.innerHTML = '<div class="icon">\ud83d\udd0d</div><h2>No Units Match Your Filters</h2>' +
+            `<p>${totalCount} unit(s) are in the database, but all were excluded by the current<br>` +
+            'filters in <code>config.json</code> (distance, beds, baths, sqft, or price).<br>' +
+            'Try widening <code>search_radius_miles</code> or lowering <code>min_beds</code>.</p>';
+        }
+        tbody.innerHTML = '';
+        return;
+      }
+
+      table.style.display = '';
+      emptyState.style.display = 'none';
+      tbody.innerHTML = units.map((u, i) => {
+        const next = units[i + 1];
+        const continuesGroup = !!(u.address && next && next.address === u.address);
+        return unitRowHtml(u, dupAddresses, continuesGroup);
+      }).join('');
+    }
+
+    function renderMap(units, dupAddresses) {
+      markers.clearLayers();
+      unitMarkers = {};
+      units.forEach(u => {
+        if (u.lat == null || u.lon == null) return;
+        const m = L.marker([u.lat, u.lon], { icon: markerIcon(u.housing_type) });
+        const photoPaths = (u.photos || []).map(photoPath);
+        const photo = photoPaths.length ? photoPaths[0] : null;
+        const photosAttr = JSON.stringify(photoPaths).replace(/'/g, '&#39;');
+
+        // Show up to 4 photos in a grid (like the list's thumbnail grid) so
+        // clicking a marker gives a real look at the unit, not just one photo
+        let photoHtml = '';
+        if (photoPaths.length === 1) {
+          photoHtml = `<img class="popup-photo" src="${photoPaths[0]}" alt="" data-photos='${photosAttr}' data-index="0" onclick="openGallery(this)">`;
+        } else if (photoPaths.length > 1) {
+          const gridImgs = photoPaths.slice(0, 4).map((p, i) =>
+            `<img src="${p}" alt="" data-photos='${photosAttr}' data-index="${i}" onclick="openGallery(this)">`
+          ).join('');
+          photoHtml = `<div class="popup-photo-grid">${gridImgs}</div>`;
+        }
+
+        const href = `apartments/${u.id}/index.html`;
+        const typeLabel = escapeHtml(u.housing_type || 'Unknown');
+        const typeDot = `<span class="map-marker ${markerClassForType(u.housing_type)}"></span>`;
+        const address = u.address || 'Address unknown';
+        const addressLine = `<div class="popup-address">${escapeHtml(address)}</div>`;
+
+        // Show specs in the popup so units sharing an address (same building,
+        // different floorplans) can be told apart after clustering/spiderfying
+        const specs = [];
+        if (u.beds != null) specs.push(`${u.beds} bd`);
+        if (u.baths != null) specs.push(`${u.baths} ba`);
+        if (u.sqft != null) specs.push(`${formatNumber(u.sqft)} sqft`);
+        const specsLine = specs.length ? `${specs.join(' / ')}<br>` : '';
+        const qualityLine = (u.quality_rating != null) ? `${qualityStarsHtml(u)}<br>` : '';
+        const favStar = u.favorite ? '\u2605 ' : '';
+        const notesLine = u.notes_text ? `<div class="popup-notes">${escapeHtml(u.notes_text)}</div>` : '';
+        const typeLine = `<div class="popup-type">${typeDot}${typeLabel}</div>`;
+
+        m.bindPopup(`<b>${favStar}${escapeHtml(u.title || '')}</b>${addressLine}${typeLine}${photoHtml}$${formatNumber(u.price)}/mo<br>${specsLine}${qualityLine}${notesLine}<a href="${href}" target="_blank">Details</a>`);
+
+        // Hover tooltip: compact title + address (no photo — photo is in popup)
+        m.bindTooltip(
+          `<div class="unit-tooltip">${typeDot}<div><b>${escapeHtml(u.title || '')}</b><div class="tooltip-header-address">${escapeHtml(address)}</div></div></div>`,
+          { direction: 'top', offset: [0, -10], className: 'unit-tooltip-wrapper' }
+        );
+        markers.addLayer(m);
+        unitMarkers[u.id] = m;
+      });
+    }
+
+    // Highlight the marker for `id` and dim all others, so hovering a row in
+    // the list shows which dot on the map it corresponds to. Does NOT open the
+    // tooltip — that fires naturally on map-hover and closes on map-mouseout.
+    function highlightMapMarker(id) {
+      Object.entries(unitMarkers).forEach(([uid, m]) => {
+        m.closeTooltip();
+        if (uid === id) {
+          m.setOpacity(1);
+          m.setZIndexOffset(1000);
+        } else {
+          m.setOpacity(0.25);
+          m.setZIndexOffset(0);
+        }
+      });
+    }
+
+    function clearMapMarkerHighlight() {
+      Object.values(unitMarkers).forEach(m => {
+        m.closeTooltip();
+        m.setOpacity(1);
+        m.setZIndexOffset(0);
+      });
+    }
+
+    function renderTypeFilter(units) {
+      const select = document.getElementById('type-select');
+      const types = Array.from(new Set(units.map(u => u.housing_type || 'Unknown'))).sort();
+      const current = select.value;
+      select.innerHTML = '<option value="">All types</option>' +
+        types.map(t => `<option value="${t}">${t}</option>`).join('');
+      if (types.includes(current)) select.value = current;
+    }
+
+    function renderMapLegend(units) {
+      const legend = document.getElementById('map-legend');
+      const types = Array.from(new Set(units.map(u => u.housing_type || 'Unknown'))).sort();
+      let html = types.map(t =>
+        `<span class="map-legend-item"><span class="map-legend-dot ${markerClassForType(t)}"></span>${escapeHtml(t)}</span>`
+      ).join('');
+      if (workLocations.length) {
+        html += `<span class="map-legend-item"><span class="map-legend-dot marker-work"></span>Work location</span>`;
+      }
+      legend.innerHTML = html;
+    }
+
+    function applyTypeFilter() {
+      currentTypeFilter = document.getElementById('type-select').value;
+      renderAll(lastData);
+    }
+
+    function renderStats(filteredCount, data) {
+      document.getElementById('stat-total').textContent = filteredCount;
+      document.getElementById('stat-scraped').textContent = (data.total_units != null) ? data.total_units : data.units.length;
+      document.getElementById('stat-updated').textContent = (data.last_updated || 'N/A').split('T')[0];
+    }
+
+    function renderFilterNote(filteredCount, totalCount) {
+      const note = document.getElementById('filter-note');
+      const excluded = totalCount - filteredCount;
+      if (excluded > 0) {
+        note.textContent = `\u2139\ufe0f Showing ${filteredCount} of ${totalCount} units matching criteria (${CONFIG.target_name}). ${excluded} unit(s) filtered out.`;
+        note.style.display = 'block';
+      } else {
+        note.style.display = 'none';
+      }
+    }
+
+    function renderAll(data) {
+      lastData = data;
+      let filtered = filterUnits(data.units || []);
+      filtered = sortUnits(filtered);
+      renderTypeFilter(filtered);
+      if (currentTypeFilter) {
+        filtered = filtered.filter(u => (u.housing_type || 'Unknown') === currentTypeFilter);
+      }
+      filtered = groupByAddress(filtered);
+      const dupAddresses = findDuplicateAddresses(filtered);
+      renderStats(filtered.length, data);
+      renderFilterNote(filtered.length, (data.units || []).length);
+      renderMapLegend(filtered);
+      renderTable(filtered, (data.units || []).length, dupAddresses);
+      renderMap(filtered, dupAddresses);
+      updateSortIndicators();
+    }
+
+    // ---- Refresh controls ----
+    document.getElementById('reload-btn').addEventListener('click', () => location.reload());
+
+    document.getElementById('howto-btn').addEventListener('click', () => {
+      const panel = document.getElementById('howto-panel');
+      panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+    });
+
+    document.getElementById('refetch-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('refetch-btn');
+      const original = btn.textContent;
+      btn.textContent = '\u23f3 Fetching\u2026';
+      btn.disabled = true;
+      try {
+        const resp = await fetch('units.json', { cache: 'no-store' });
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        const data = await resp.json();
+        renderAll(data);
+        btn.textContent = '\u2713 Updated';
+      } catch (e) {
+        console.error('Re-fetch failed:', e);
+        btn.textContent = '\u2717 Failed (see \u24d8)';
+      } finally {
+        setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 2000);
+      }
+    });
+
+    // ---- Resizable divider between the sidebar (map) and the list panel ----
+    (function () {
+      const resizer = document.getElementById('resizer');
+      const sidebar = document.querySelector('.sidebar');
+      const layout = document.querySelector('.layout');
+
+      const savedWidth = localStorage.getItem('sidebarWidth');
+      if (savedWidth) sidebar.style.flexBasis = savedWidth + 'px';
+
+      let dragging = false;
+
+      resizer.addEventListener('mousedown', (e) => {
+        dragging = true;
+        resizer.classList.add('resizing');
+        document.body.style.cursor = 'col-resize';
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!dragging) return;
+        const rect = layout.getBoundingClientRect();
+        let width = e.clientX - rect.left;
+        width = Math.max(240, Math.min(width, rect.width - 300));
+        sidebar.style.flexBasis = width + 'px';
+        requestAnimationFrame(() => map.invalidateSize());
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (!dragging) return;
+        dragging = false;
+        resizer.classList.remove('resizing');
+        document.body.style.cursor = '';
+        localStorage.setItem('sidebarWidth', parseInt(sidebar.style.flexBasis, 10));
+        map.invalidateSize();
+      });
+    })();
+
+    // ---- Editable "your address" + lease end date ----
+    function renderCriteriaText() {
+      const parts = [];
+      if (CONFIG.search_radius_miles != null) {
+        parts.push(`within ${CONFIG.search_radius_miles} mi of ${CONFIG.target_name}`);
+      }
+      if (CONFIG.min_price != null || CONFIG.max_price != null) {
+        const lo = (CONFIG.min_price != null) ? `$${CONFIG.min_price}` : '$0';
+        const hi = (CONFIG.max_price != null) ? `$${CONFIG.max_price}` : '+';
+        parts.push(`${lo}\u2013${hi}/mo`);
+      }
+      if (CONFIG.min_beds != null) {
+        let bedsPart = `${CONFIG.min_beds}+`;
+        if (CONFIG.max_beds != null && CONFIG.max_beds !== CONFIG.min_beds) {
+          bedsPart = `${CONFIG.min_beds}\u2013${CONFIG.max_beds}`;
+        }
+        parts.push(`${bedsPart} bd`);
+      }
+      document.getElementById('criteria-text-value').textContent = parts.length ? parts.join(' \u00b7 ') : 'No filters configured';
+    }
+
+    function renderLeaseStat() {
+      const valueEl = document.getElementById('stat-lease-value');
+      const labelEl = document.getElementById('stat-lease-label');
+      if (!CONFIG.current_lease_end) {
+        valueEl.textContent = 'N/A';
+        labelEl.textContent = 'Your Lease Ends';
+        return;
+      }
+      const end = new Date(CONFIG.current_lease_end + 'T00:00:00');
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const days = Math.round((end - today) / 86400000);
+      valueEl.textContent = end.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+      labelEl.textContent = `Your Lease Ends (${days}d)`;
+    }
+
+    const editBtn = document.getElementById('edit-criteria-btn');
+    const editPanel = document.getElementById('criteria-edit');
+    const addressInput = document.getElementById('address-input');
+    const leaseInput = document.getElementById('lease-end-input');
+    const radiusInput = document.getElementById('radius-input');
+    const minPriceInput = document.getElementById('min-price-input');
+    const maxPriceInput = document.getElementById('max-price-input');
+    const minBedsInput = document.getElementById('min-beds-input');
+    const maxBedsInput = document.getElementById('max-beds-input');
+    const minBathsInput = document.getElementById('min-baths-input');
+    const minSqftInput = document.getElementById('min-sqft-input');
+    const editStatus = document.getElementById('criteria-edit-status');
+
+    function numOrNull(val) {
+      if (val === '' || val == null) return null;
+      const n = Number(val);
+      return Number.isNaN(n) ? null : n;
+    }
+
+    function populateEditInputs() {
+      addressInput.value = (CONFIG.target_location && CONFIG.target_location.address) || '';
+      leaseInput.value = CONFIG.current_lease_end || '';
+      radiusInput.value = (CONFIG.search_radius_miles != null) ? CONFIG.search_radius_miles : '';
+      minPriceInput.value = (CONFIG.min_price != null) ? CONFIG.min_price : '';
+      maxPriceInput.value = (CONFIG.max_price != null) ? CONFIG.max_price : '';
+      minBedsInput.value = (CONFIG.min_beds != null) ? CONFIG.min_beds : '';
+      maxBedsInput.value = (CONFIG.max_beds != null) ? CONFIG.max_beds : '';
+      minBathsInput.value = (CONFIG.min_baths != null) ? CONFIG.min_baths : '';
+      minSqftInput.value = (CONFIG.min_sqft != null) ? CONFIG.min_sqft : '';
+    }
+    populateEditInputs();
+
+    editBtn.addEventListener('click', () => {
+      editPanel.classList.toggle('open');
+    });
+
+    function toggleToolPanel(panelId, btnId) {
+      const panel = document.getElementById(panelId);
+      const btn = document.getElementById(btnId);
+      const willOpen = !panel.classList.contains('open');
+      document.querySelectorAll('.tools-panel.open').forEach(p => p.classList.remove('open'));
+      document.querySelectorAll('.tool-btn.open').forEach(b => b.classList.remove('open'));
+      if (willOpen) {
+        panel.classList.add('open');
+        btn.classList.add('open');
+      }
+    }
+
+    document.getElementById('list-filters-btn').addEventListener('click', () => {
+      toggleToolPanel('list-filters-panel', 'list-filters-btn');
+    });
+
+    document.getElementById('clear-list-filters-btn').addEventListener('click', () => {
+      clearListFilters();
+    });
+
+    document.getElementById('columns-btn').addEventListener('click', () => {
+      toggleToolPanel('columns-panel', 'columns-btn');
+    });
+
+    document.getElementById('reset-columns-btn').addEventListener('click', () => {
+      resetColumnPrefs();
+    });
+
+    document.getElementById('work-locations-btn').addEventListener('click', () => {
+      toggleToolPanel('work-locations-panel', 'work-locations-btn');
+    });
+
+    document.getElementById('add-work-location-btn').addEventListener('click', async () => {
+      const nameInput = document.getElementById('work-loc-name-input');
+      const addressInput = document.getElementById('work-loc-address-input');
+      const status = document.getElementById('work-location-status');
+      const addBtn = document.getElementById('add-work-location-btn');
+
+      const name = nameInput.value.trim();
+      const address = addressInput.value.trim();
+      if (!name || !address) {
+        status.textContent = 'Enter a name and address.';
+        return;
+      }
+
+      addBtn.disabled = true;
+      status.textContent = 'Looking up address\u2026';
+      try {
+        const coords = await geocodeAddress(address);
+        workLocations.push({ name, address, lat: coords.lat, lon: coords.lon });
+        saveWorkLocations();
+        renderWorkLocationsList();
+        renderWorkLocationHeaders();
+        renderWorkLocationMarkers();
+        renderWorkDistanceFilters();
+        renderListFiltersSummary();
+        nameInput.value = '';
+        addressInput.value = '';
+        status.textContent = '\u2713 Added';
+        renderAll(lastData);
+        setTimeout(() => { status.textContent = ''; }, 1200);
+      } catch (e) {
+        console.error('Geocoding failed:', e);
+        status.textContent = '\u2717 ' + e.message;
+      }
+      addBtn.disabled = false;
+    });
+
+    document.getElementById('cancel-criteria-btn').addEventListener('click', () => {
+      populateEditInputs();
+      editStatus.textContent = '';
+      editPanel.classList.remove('open');
+    });
+
+    document.getElementById('reset-criteria-btn').addEventListener('click', () => {
+      try { localStorage.removeItem('configOverrides'); } catch (e) {}
+      location.reload();
+    });
+
+    document.getElementById('save-criteria-btn').addEventListener('click', async () => {
+      const saveBtn = document.getElementById('save-criteria-btn');
+      const newAddress = addressInput.value.trim();
+
+      CONFIG.current_lease_end = leaseInput.value || null;
+      CONFIG.search_radius_miles = numOrNull(radiusInput.value);
+      CONFIG.min_price = numOrNull(minPriceInput.value);
+      CONFIG.max_price = numOrNull(maxPriceInput.value);
+      CONFIG.min_beds = numOrNull(minBedsInput.value);
+      CONFIG.max_beds = numOrNull(maxBedsInput.value);
+      CONFIG.min_baths = numOrNull(minBathsInput.value);
+      CONFIG.min_sqft = numOrNull(minSqftInput.value);
+      renderLeaseStat();
+
+      const currentAddress = (CONFIG.target_location && CONFIG.target_location.address) || '';
+      let geocodeFailed = false;
+      if (newAddress && newAddress !== currentAddress) {
+        saveBtn.disabled = true;
+        editStatus.textContent = 'Looking up address\u2026';
+        try {
+          const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(newAddress)}`;
+          const resp = await fetch(url);
+          if (!resp.ok) throw new Error('HTTP ' + resp.status);
+          const results = await resp.json();
+          if (!results.length) throw new Error('Address not found');
+          CONFIG.target_location = {
+            name: newAddress,
+            address: newAddress,
+            lat: parseFloat(results[0].lat),
+            lon: parseFloat(results[0].lon)
+          };
+          CONFIG.target_name = newAddress;
+        } catch (e) {
+          console.error('Geocoding failed:', e);
+          editStatus.textContent = '\u2717 ' + e.message;
+          geocodeFailed = true;
+        }
+        saveBtn.disabled = false;
+      }
+
+      updateMapCenter();
+      renderCriteriaText();
+      saveOverrides();
+      renderAll(lastData);
+
+      if (!geocodeFailed) {
+        editStatus.textContent = '\u2713 Saved';
+        setTimeout(() => {
+          editStatus.textContent = '';
+          editPanel.classList.remove('open');
+        }, 1200);
+      }
+    });
+
+    // ---- Lightbox / gallery ----
+    var currentPhotos = [];
+    var currentIndex = 0;
+
+    function openGallery(el) {
+      currentPhotos = JSON.parse(el.dataset.photos);
+      currentIndex = parseInt(el.dataset.index, 10);
+      showLightboxImage();
+      document.getElementById('lightbox-overlay').style.display = 'flex';
+    }
+
+    function showLightboxImage() {
+      document.getElementById('lightbox-img').src = currentPhotos[currentIndex];
+      var multi = currentPhotos.length > 1;
+      var counter = document.getElementById('lightbox-counter');
+      counter.style.display = multi ? 'block' : 'none';
+      counter.textContent = (currentIndex + 1) + ' / ' + currentPhotos.length;
+      document.querySelectorAll('.lightbox-nav').forEach(function (btn) {
+        btn.style.display = multi ? 'flex' : 'none';
+      });
+    }
+
+    function lightboxPrev(e) {
+      e.stopPropagation();
+      currentIndex = (currentIndex - 1 + currentPhotos.length) % currentPhotos.length;
+      showLightboxImage();
+    }
+
+    function lightboxNext(e) {
+      e.stopPropagation();
+      currentIndex = (currentIndex + 1) % currentPhotos.length;
+      showLightboxImage();
+    }
+
+    function closeLightbox(e) {
+      if (e && e.target.id !== 'lightbox-overlay') return;
+      document.getElementById('lightbox-overlay').style.display = 'none';
+    }
+
+    document.addEventListener('keydown', function (e) {
+      var overlay = document.getElementById('lightbox-overlay');
+      if (overlay.style.display !== 'flex') return;
+      if (e.key === 'Escape') closeLightbox();
+      else if (e.key === 'ArrowLeft') lightboxPrev(e);
+      else if (e.key === 'ArrowRight') lightboxNext(e);
+    });
+
+    // ---- Initial render ----
+    if (currentMinQuality != null) {
+      document.getElementById('quality-select').value = String(currentMinQuality);
+    }
+    renderCriteriaText();
+    renderLeaseStat();
+    document.querySelectorAll('#columns-panel input[type="checkbox"]').forEach(cb => {
+      cb.checked = isColumnVisible(cb.dataset.col);
+    });
+    applyColumnPrefs();
+    renderWorkLocationsList();
+    renderWorkLocationHeaders();
+    renderWorkLocationMarkers();
+    renderWorkDistanceFilters();
+    renderListFiltersSummary();
+    renderAll(INITIAL_DATA);
+  </script>
+</body>
+</html>
