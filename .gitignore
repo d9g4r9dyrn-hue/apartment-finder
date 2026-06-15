@@ -1,0 +1,14 @@
+# Python runtime
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Local Claude Code config (contains permission allow-list with API keys)
+.claude/
+
+# Real personal data — never commit (sanitized copy lives in docs/)
+outputs/
+
+# Real config with precise target address — use config.example.json as template
+config.json

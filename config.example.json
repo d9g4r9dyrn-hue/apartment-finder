@@ -1,0 +1,16 @@
+{
+  "target_location": {
+    "name": "Your Destination",
+    "address": "City, ST ZIP",
+    "lat": 0.0,
+    "lon": 0.0
+  },
+  "search_radius_miles": 5,
+  "min_price": 1000,
+  "max_price": 1999,
+  "min_beds": 2,
+  "max_beds": 3,
+  "min_quality": null,
+  "current_lease_end": "YYYY-MM-DD",
+  "enabled_sources": ["craigslist", "zillow", "apartments_com", "trulia", "hotpads"]
+}
