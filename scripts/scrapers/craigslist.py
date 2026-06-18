@@ -223,30 +223,204 @@ def extract_age_restriction(text):
     return int(next(g for g in m.groups() if g))
 
 
-# Matches formatted US phone numbers, e.g. "(727) 555-1234", "727-555-1234",
-# "727.555.1234" - requires separators/parens to avoid false-positives on
-# bare 10-digit numbers (prices, sqft, etc.) in free text
-PHONE_RE = re.compile(r'\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}')
+# Broad phone regex: matches 10-digit numbers with flexible separators/grouping.
+# Strategy: find any sequence that strips down to exactly 10 (or 11 starting with 1) digits.
+# We accept non-standard grouping like "601 488 752 5" (poster obfuscation).
+_PHONE_BROAD_RE = re.compile(
+    r'\(?\d{3}\)?[\s.\-]{0,2}\d{3}[\s.\-]{0,2}\d{2,4}[\s.\-]{0,2}\d{0,4}'
+)
 
 EMAIL_RE = re.compile(r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+')
 
 
+def _format_phone(digits):
+    """Format 10 clean digits as (NXX) NXX-XXXX."""
+    return f"({digits[:3]}) {digits[3:6]}-{digits[6:]}"
+
+
 def extract_contact_info(text):
-    """Best-effort extraction of a phone number and/or email address from a
-    listing's free-text description, for following up with the poster.
-    Craigslist's own reply-relay addresses are anonymized via JS/CAPTCHA and
-    aren't recoverable from static HTML, so this only picks up contact info
-    the poster included directly in the listing text."""
+    """Scan free-text description for phone/email the poster typed inline."""
     info = {}
     if not text:
         return info
-    phone_match = PHONE_RE.search(text)
-    if phone_match:
-        info['contact_phone'] = phone_match.group(0).strip()
+    for m in _PHONE_BROAD_RE.finditer(text):
+        digits = re.sub(r'\D', '', m.group(0))
+        if len(digits) == 10:
+            info['contact_phone'] = _format_phone(digits)
+            break
+        elif len(digits) == 11 and digits[0] == '1':
+            info['contact_phone'] = _format_phone(digits[1:])
+            break
     email_match = EMAIL_RE.search(text)
-    if email_match and 'craigslist.org' not in email_match.group(0).lower():
+    if email_match:
         info['contact_email'] = email_match.group(0).strip()
     return info
+
+
+def extract_contact_from_soup(soup, desc_text=''):
+    """Extract phone and email from Craigslist's structured reply section first
+    (tel:/mailto: href links), falling back to free-text search of the description.
+    The reply sidebar always has the authoritative contact info; description text
+    is a secondary source for posters who typed it inline."""
+    info = {}
+
+    # Phone: Craigslist renders the number as <a href="tel:7277355941">
+    for a in soup.find_all('a', href=True):
+        href = a['href']
+        if href.startswith('tel:'):
+            digits = re.sub(r'\D', '', href[4:])
+            if len(digits) >= 10:
+                d = digits[-10:]
+                info['contact_phone'] = f"({d[:3]}) {d[3:6]}-{d[6:]}"
+                break
+
+    # Email: Craigslist relay addresses appear as <a href="mailto:xxx@hous.craigslist.org">
+    for a in soup.find_all('a', href=True):
+        href = a['href']
+        if href.startswith('mailto:'):
+            email = href[7:].split('?')[0].strip()
+            if email and '@' in email:
+                info['contact_email'] = email
+                break
+
+    # Fallback: free-text scan of the description
+    fallback = extract_contact_info(desc_text)
+    if 'contact_phone' not in info and 'contact_phone' in fallback:
+        info['contact_phone'] = fallback['contact_phone']
+    if 'contact_email' not in info and 'contact_email' in fallback:
+        info['contact_email'] = fallback['contact_email']
+
+    return info
+
+
+def fetch_cl_contact_via_2captcha(listing_url, twocaptcha_api_key, session=None, delay_between=3):
+    """Fetch Craigslist contact info using 2captcha to solve the hCaptcha gate.
+
+    Returns dict with zero or more of: contact_phone, contact_email, contact_name.
+    Raises on network/API errors. Returns {} if the listing has no contact options.
+
+    Flow:
+      GET listing_url → extract reply base URL from data-href on reply button
+      POST /init        → {nonce, siteKey_hCaptcha}
+      [2captcha solve]  → captcha_token
+      POST /captcha     → {nonce}
+      POST /popup       → {options: {emailOk, phoneOk, textOk}, contactName, ...}
+      POST /mailto      → {email}   (if emailOk)
+      POST /tel         → {phone}   (if phoneOk or textOk)
+    """
+    import requests as _req
+
+    sess = session or _req.Session()
+    sess.headers.update({
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120',
+        'Accept': 'application/json, text/html, */*',
+    })
+
+    # Step 0: fetch listing page and extract reply base URL
+    r = sess.get(listing_url, timeout=15)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    reply_btn = soup.find('button', class_='reply-button')
+    if not reply_btn or not reply_btn.get('data-href'):
+        return {}
+    # data-href = "https://tampa.craigslist.org/reply/tpa/apa/7939048315/__SERVICE_ID__"
+    base_url = reply_btn['data-href']  # still has __SERVICE_ID__ placeholder
+
+    def cl_post(step, data=None):
+        url = base_url.replace('__SERVICE_ID__', step)
+        resp = sess.post(url, data=data or {}, timeout=15)
+        resp.raise_for_status()
+        return resp.json()
+
+    # Step 1: init
+    init_data = cl_post('init', {'browserinfo3': '{}'})
+    nonce = init_data.get('nonce')
+    site_key = init_data.get('siteKey_hCaptcha')
+    if not nonce:
+        return {}
+
+    # Step 2: solve hCaptcha via 2captcha if required
+    if site_key:
+        # Submit task
+        submit_resp = _req.post('https://2captcha.com/in.php', data={
+            'key': twocaptcha_api_key,
+            'method': 'hcaptcha',
+            'sitekey': site_key,
+            'pageurl': listing_url,
+        }, timeout=15)
+        submit_resp.raise_for_status()
+        text = submit_resp.text.strip()
+        if not text.startswith('OK|'):
+            raise RuntimeError(f'2captcha submit failed: {text}')
+        task_id = text.split('|', 1)[1]
+
+        # Poll for result (up to 120s)
+        captcha_token = None
+        for _ in range(24):
+            time.sleep(5)
+            poll_resp = _req.get('https://2captcha.com/res.php', params={
+                'key': twocaptcha_api_key,
+                'action': 'get',
+                'id': task_id,
+            }, timeout=15)
+            poll_resp.raise_for_status()
+            poll_text = poll_resp.text.strip()
+            if poll_text.startswith('OK|'):
+                captcha_token = poll_text.split('|', 1)[1]
+                break
+            elif poll_text != 'CAPCHA_NOT_READY':
+                raise RuntimeError(f'2captcha error: {poll_text}')
+        if not captcha_token:
+            raise RuntimeError('2captcha timed out after 120s')
+
+        # Step 3: submit captcha to CL
+        captcha_resp = cl_post('captcha', {'h-captcha-response': captcha_token, 'n': nonce})
+        if captcha_resp.get('error'):
+            raise RuntimeError(f'CL captcha error: {captcha_resp["error"]}')
+        nonce = captcha_resp.get('nonce') or nonce
+
+    # Step 4: get popup (available contact methods)
+    popup = cl_post('popup', {'n': nonce})
+    if popup.get('error'):
+        raise RuntimeError(f'CL popup error: {popup["error"]}')
+
+    result = {}
+    contact_name = popup.get('contactName')
+    if contact_name:
+        result['contact_name'] = contact_name
+
+    options = popup.get('options') or {}
+    nonce = popup.get('nonce') or nonce  # popup may refresh the nonce
+
+    # Step 5a: fetch email if available
+    if options.get('emailOk'):
+        try:
+            time.sleep(delay_between)
+            mailto_resp = cl_post('mailto', {'n': nonce})
+            email = mailto_resp.get('email')
+            if email:
+                result['contact_email'] = email
+                nonce = mailto_resp.get('nonce') or nonce
+        except Exception:
+            pass
+
+    # Step 5b: fetch phone if available
+    if options.get('phoneOk') or options.get('textOk'):
+        try:
+            time.sleep(delay_between)
+            tel_resp = cl_post('tel', {'n': nonce})
+            phone = tel_resp.get('phone')
+            if phone:
+                digits = re.sub(r'\D', '', phone)
+                if len(digits) == 10:
+                    result['contact_phone'] = _format_phone(digits)
+                elif len(digits) == 11 and digits[0] == '1':
+                    result['contact_phone'] = _format_phone(digits[1:])
+                else:
+                    result['contact_phone'] = phone
+        except Exception:
+            pass
+
+    return result
 
 
 def parse_listing_page(html, url):
@@ -298,7 +472,7 @@ def parse_listing_page(html, url):
 
     age_restriction = extract_age_restriction(f"{title} {desc}")
 
-    contact = extract_contact_info(desc)
+    contact = extract_contact_from_soup(soup, desc)
 
     amenities = extract_amenities(soup)
 
@@ -340,8 +514,18 @@ def parse_listing_page(html, url):
 
 
 def crawl_craigslist(search_url, max_listings=24):
+    from scripts.scrape_tracker import ScrapeTracker
+    tracker = ScrapeTracker()
+    run = tracker.start_run('craigslist')
+
     print(f"Fetching Craigslist search: {search_url}")
-    html, sess = fetch_html(search_url)
+    try:
+        html, sess = fetch_html(search_url)
+    except Exception as e:
+        print(f"Failed to fetch search page: {e}")
+        run.error(str(e))
+        run.finish('failed')
+        return
     soup = BeautifulSoup(html, 'html.parser')
     # Adapt to new Craigslist markup: look for legacy 'result-row' or new 'cl-static-search-result'
     results = []
@@ -354,9 +538,11 @@ def crawl_craigslist(search_url, max_listings=24):
         a = li.find('a', href=True)
         if a and '/apa/d/' in a['href']:
             results.append(li)
+    run.found(len(results))
     units_data = load_or_create_units()
 
     count = 0
+    skipped = 0
     for r in results:
         if count >= max_listings:
             break
@@ -375,6 +561,7 @@ def crawl_craigslist(search_url, max_listings=24):
         existing_urls = {u.get('source_url') for u in units_data.get('units', [])}
         if info.get('source_url') in existing_urls:
             print(f"Skipping duplicate: {info.get('source_url')}")
+            skipped += 1
             continue
 
         # prefer explicit address if available
@@ -444,8 +631,10 @@ def crawl_craigslist(search_url, max_listings=24):
                 rel = (Path('outputs') / 'photos' / unit_id / dest.name).as_posix()
                 unit['photos'].append(rel)
                 unit['photo_sources'].append(img_url)
+                run.photo()
             except Exception as e:
                 print(f"  image download failed: {e}")
+                run.error(f'Photo download: {e}')
 
         # generate id and add
         uid = make_unit_id(units_data.get('units', []))
@@ -454,10 +643,13 @@ def crawl_craigslist(search_url, max_listings=24):
         units_data.setdefault('units', []).append(unit)
         print(f"Added {uid}: {unit['title']} — ${unit['price']}")
         count += 1
+        run.added()
         time.sleep(1)
 
+    run.skipped(skipped)
     save_units(units_data)
     print(f"Saved {len(units_data.get('units', []))} units to {UNITS_JSON}")
+    run.finish()
 
 
 if __name__ == '__main__':

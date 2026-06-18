@@ -188,6 +188,60 @@ Queued requests, in order received:
       `quality_rating` but no `flooring_type` from an earlier scan;
       unit-0020-0023 still unscanned). Regenerated
       `units-summary.html` + detail pages again.
+### Notes / decisions
+- `extract_contact_from_soup` looks for `tel:`/`mailto:` href links first (structured CL sidebar),
+  then falls back to free-text regex in description. Relay emails (`@hous.craigslist.org`) are
+  now included (old exclusion removed).
+
+## Active task batch 10 (2026-06-16) - DONE
+
+Queued requests, in order received:
+1. Description formatting — clean up "Call Now" block, section headers, implicit lists,
+   contact links extracted from description body
+2. Detail page image lightbox (same scroller as summary 4×4 grid)
+3. Cluster highlight on map when hovering a list row
+4. 5 new Gemini vision attributes + rescan (needs GEMINI_API_KEY)
+5. Commute score column (avg distance to all work locations, shown when ≥2 locations set)
+6. Move filters above map; reload/refetch below map
+7. All attributes in list filters + column visibility
+
+### Status
+- [x] `generate-html.py`: `extract_description_extras(notes)` strips: "QR Code Link to This Post",
+      "show contact info", "Equal Housing Opportunity", bare tracking codes (B2V2...), "Call Now"
+      block (through "to text with us."), and standalone URL lines (extracted as links).
+      `format_description(text)` improved: section headers (lines ending `:`, < 60 chars, no
+      mid-sentence punct) → `<h3 class="desc-heading">`, implicit list items (short lines after
+      a header with no terminal period/!?) → `<ul class="desc-list"><li>`, sentences after
+      headers (ending `.`) stay as `<p>`. Extracted links shown as teal `<a class="desc-link-btn">`
+      chips in the Contact section.
+- [x] Detail page lightbox: `<div id="detail-lightbox">` overlay + `openDetailGallery()`,
+      `detailLbPrev/Next()`, `closeDetailLightbox()`, keyboard nav (Escape/Arrow).
+      Photo `<img>` tags now have `data-photos` JSON + `onclick="openDetailGallery(this)"`.
+      CSS: `.detail-lightbox`, `.detail-lb-nav`, `.detail-lb-counter`, `.detail-lb-close`.
+- [x] Cluster highlight: `_highlightedClusterEl` state variable; `highlightMapMarker(id)` now
+      calls `.classList.add('cluster-highlighted')` on the cluster's DOM element, and also calls
+      `target.openTooltip()` so a label appears on the map at the exact location. CSS:
+      `.marker-cluster.cluster-highlighted` gives teal outline + brighter background + bold count.
+- [x] `scan_photos.py`: extended `QUALITY_PROMPT` to extract 5 new fields in the same JSON
+      response (no extra API calls): `natural_light` (high/medium/low), `kitchen_style`
+      (modern/updated/dated), `outdoor_space` (balcony/patio/yard/none), `size_impression`
+      (spacious/average/cramped), `view_quality` (great/good/limited/none). `rate_unit_quality()`
+      returns a dict; `scan_quality()` uses `unit.update(result)`. Todo trigger now also fires
+      for units missing any of the 5 new attrs. Run:
+      `python scripts/scan_photos.py --skip-backfill --skip-descriptions --rescan`
+- [x] Commute score: `u.commute_score` = avg haversine to all work locations, computed in
+      `filterUnits`. Column "Commute avg" appears in header + row only when ≥2 work locations
+      are configured (`renderWorkLocationHeaders()` / `commuteCell` JS). Sortable.
+- [x] Sidebar layout: Type/Quality/Favorites/tool buttons moved ABOVE the map (after stats);
+      Criteria editor moved below the tool panels; Reload/Re-fetch moved BELOW the map (out of
+      criteria bar).
+- [x] 5 new vision attribute dropdowns in List filters (natural light, kitchen, outdoor, size feel,
+      view quality). 5 new columns in table + column visibility panel (hidden by default via
+      `DEFAULT_HIDDEN_COLS` — activate after rescan). `filterUnits` / `applyListFilters` /
+      `clearListFilters` / `renderListFiltersSummary` / `ALL_COLUMNS` all updated. Row template
+      gets 5 new `<td>` cells. CSS hide rules added.
+- [x] Regenerated `units-summary.html` + detail pages.
+
 - [x] User provided 2 more keys. Original first key (from earlier today)
       had regained 2 requests - picked up unit-0016 (4/5, vinyl) and
       unit-0017 (5/5, tile) before hitting its daily quota again on
@@ -426,3 +480,201 @@ applied as a hard filter in either `filter_units_by_distance` (Python) or
 `max_beds` is editable in the same panel as filters that DO apply, this could
 read as inconsistent. Left as-is for now since it mirrors existing behavior;
 worth revisiting if/when the scrape-vs-display split above is tackled.
+
+## Active task batch 9 (2026-06-16) - DONE
+
+Queued requests, in order received:
+1. Scrape phone + email from Craigslist listing pages
+2. Hide age-restricted listings by default
+
+### Status
+- [x] `scrapers/craigslist.py`: added `extract_contact_from_soup(soup, desc_text)` —
+      looks for `tel:` href links (structured phone) and `mailto:` href links
+      (structured email, including `@hous.craigslist.org` relay addresses) first,
+      then falls back to free-text regex scan of the description. `parse_listing_page`
+      now calls this instead of the old `extract_contact_info(desc)`. The old
+      `extract_contact_info` is retained as the fallback helper; its craigslist.org
+      email exclusion was removed (relay addresses are now included).
+- [x] `generate-html.py`: `hideAgeRestricted` default changed from `false` to `true`;
+      "Hide age-restricted (55+)" checkbox now renders with `checked` attribute so it
+      is active on page load without any user interaction. Regenerated
+      `units-summary.html` + detail pages.
+
+## Active task batch 11 (2026-06-16) - DONE
+
+Queued requests:
+1. Contact info investigation + contact column
+2. Gemini scan completed (was running in background from last session)
+3. Regenerate HTML with scan results
+
+### Status
+- [x] **Gemini scan complete**: all 64/64 units with photos scanned (job from previous
+      session finished). Regenerated `units-summary.html` with new quality/vision data.
+- [x] **Contact info investigation**: Craigslist hides all contact info behind hCaptcha.
+      The reply button triggers `GET /reply/tpa/apa/{post_id}/init` → returns
+      `{nonce, siteKey_hCaptcha}`. Solving the captcha requires a paid service (2captcha,
+      anticaptcha) or headful browser with user interaction. NOT automatable without
+      paying ~$1-2/1000 captchas.
+      - Static listing page has zero `tel:` or `mailto:` links
+      - Only 2/66 listings had phone numbers embedded in description text (with
+        non-standard spacing like "601 488 752 5" to defeat simple regexes)
+- [x] **`scrapers/craigslist.py`**: improved `extract_contact_info()` with a broader
+      phone regex (`_PHONE_BROAD_RE`) that handles non-standard digit grouping (3+3+3+1
+      etc). Any 10-digit sequence with flexible separators is now matched; digits are
+      normalized and formatted `(NXX) NXX-XXXX`.
+- [x] **Backfilled** 2 units from existing notes: unit-0000 `(601) 488-7525`,
+      unit-0055 `(786) 537-5971`. Both stored in `outputs/units.json`.
+- [x] **Contact column** added to the list table:
+      - `contact_phone` / `contact_email` fields passed through `unit_to_js()`
+      - `contactCellHtml(u)` renders `tel:` and `mailto:` links in the table cell
+      - CSS: `.contact-col`, `.contact-link`; hide rule `.units-table.hide-contact`
+      - Column toggled via "Contact" checkbox in the Columns panel (hidden by default)
+      - Sortable by `contact_phone`
+      - **"Has contact info"** checkbox added to List filters panel (`lf-has-contact`)
+        so user can show only units with any contact info
+- [x] Regenerated `units-summary.html`.
+
+### Notes
+- Contact column is hidden by default (most units have none). Enable in Columns panel.
+- 2captcha integration implemented — see below for how to run it.
+
+## Active task batch 12 (2026-06-16) - DONE
+
+Queued requests:
+1. Add 2captcha integration to fetch CL contact info through hCaptcha gate
+
+### Status
+- [x] **`scrapers/craigslist.py`**: new `fetch_cl_contact_via_2captcha(listing_url, api_key, ...)`.
+      Full reverse-engineered flow from CL's browsePostings JS bundle:
+      1. Re-fetch listing page → extract reply base URL from `data-href` on reply button
+      2. `POST /init` with `{browserinfo3: '{}'}` → `{nonce, siteKey_hCaptcha}`
+      3. Submit hCaptcha to 2captcha API → poll until solved → get token
+      4. `POST /captcha` with `{h-captcha-response: token, n: nonce}` → new nonce
+      5. `POST /popup` with `{n: nonce}` → `{options: {emailOk, phoneOk}, contactName}`
+      6. `POST /mailto` → `{email}` (if emailOk)
+      7. `POST /tel` → `{phone}` (if phoneOk)
+- [x] **`scan_photos.py`**: new `scan_contacts(units_data, api_key, rescan=False)` function
+      + `--scan-contacts` / `--rescan-contacts` CLI flags.
+- [x] **`generate-html.py`**: `contact_name` field added to `unit_to_js()`, detail page
+      renders it as a Name chip in the Contact section.
+
+### Results (2 runs, 2026-06-16)
+- **36/66 units** now have contact info (28 phone, 34 email, 9 name)
+- 12 units: genuinely "no contact info" on listing (property mgmt companies that don't share contact)
+- 12 units: persistent failures — 4 with "CL captcha error" (likely expired/deleted listings),
+  8 with 2captcha timeout (solver busy; retry later)
+- Retry: `python scripts/scan_photos.py --skip-backfill --skip-descriptions --skip-quality --scan-contacts`
+  (already-resolved units are skipped automatically)
+
+## Active task batch 13 (2026-06-16) - DONE
+
+Queued requests:
+1. Scam tracking field
+2. Realtor.com source + scraper
+3. Invitation Homes source
+
+### Status
+- [x] **Scam field**: client-side-only, stored in `unitOverrides` localStorage (same mechanism
+      as favorites/notes). `isScam(id)` / `toggleScam(id)` in `generate-html.py`. UI:
+      - ⚠ toggle button in Mine column (`scam-btn`; turns red + `scam-active` when ON)
+      - `scam-row` class on the row → red-tinted cells via `rgba(220,60,60,0.08)` background
+      - "Hide scams" checkbox in List filters panel (default checked/ON)
+      - "Has contact info" filter also added to List filters panel
+      - `contact_name` shown as Name chip on detail pages
+- [x] **`scripts/scrapers/realtor_com.py`**: new scraper. Realtor.com is Next.js;
+      listing data is embedded in `<script id="__NEXT_DATA__">`. Extraction approach:
+      - Tries known pageProps keys (`searchResults`, `properties`, `listingsProps`)
+      - Falls back to recursive scan for any list containing `list_price`/`property_id`
+      - Parses: address, price, beds, baths, sqft, lat/lon, housing_type, photos, contact info
+      - Downloads up to 8 photos per unit
+      - `--url` flag to override search URL; `--max` flag for max listings
+      - Run: `python -m scripts.scrapers.realtor_com`
+      - URL: `https://www.realtor.com/apartments/Clearwater_FL/beds-2-price-min-1000-price-max-2000`
+        (built from config.json min_price/max_price/min_beds at runtime)
+- [x] **`scripts/crawl_all.py`**: added `realtor_com` to SCRAPERS dict
+- [x] **`outputs/sources.json`**: added Realtor.com (`status: active`) and Invitation Homes
+      (`status: new`, `type: management`, `url: https://www.invitationhomes.com`).
+      Invitation Homes scraper not yet built.
+
+### Notes
+- Realtor.com may block plain `requests` scraping (anti-bot detection). If `--scan` produces
+  "Could not find __NEXT_DATA__", try adding a `Referer` / `Cookie` header or use Playwright.
+  The `--url` flag accepts any realtor.com search page URL as a fallback.
+- Invitation Homes: large SFR operator. Their site may require Playwright for JS rendering.
+- Apartments.com: Akamai blocks all automated access (headless, non-headless, requests, curl).
+  IP-level block. Needs router restart / VPN for fresh IP, or residential proxy.
+
+## Active task batch 14 (2026-06-17) - DONE
+
+Queued requests:
+1. Apartments.com scraper (Playwright rewrite)
+2. Scam prediction system
+
+### Status
+- [x] **`scripts/scrapers/apartments_com.py`**: full rewrite using Playwright.
+      - Launches real Chrome (non-headless) with stealth JS patches
+      - Intercepts JSON API responses via `page.on('response')` for clean data
+      - Falls back to DOM scraping (article.placard, data-listingid) if no API hit
+      - Akamai challenge detection + wait
+      - **Currently blocked**: Akamai IP-level 403 on all approaches (headless,
+        non-headless, requests, curl). Needs fresh IP via router restart or VPN.
+      - `playwright>=1.44.0` added to requirements.txt
+- [x] **`outputs/interactions.json`**: new file for storing contacts + interactions
+      per unit. Schema: `units → {unitId} → { contacts: [...], interactions: [...] }`.
+      Claude Code reads/writes this file directly when the user logs interactions.
+- [x] **`scripts/check_scam.py`**: standalone heuristic scam risk analyzer.
+      Scores each unit (0–100+) based on 20+ factors across 5 categories:
+      - **Price**: comparison to median for same bed count (>25% below = high risk)
+      - **Contact**: no phone, relay-only email, out-of-area code, missing/generic name
+      - **Cross-listing**: same phone/email on multiple different units
+      - **Listing quality**: few/no photos, no sqft, short description, no coordinates
+      - **Interaction patterns**: keyword scanning for wire/Zelle/deposit/SSN/pressure/
+        absent-owner/mail-keys language in logged interactions
+      - **Positive signals**: in-person showing, standard process, local area code,
+        many photos, managed platform source (reduce score)
+      Run: `python -m scripts.check_scam --all` or `python -m scripts.check_scam unit-0042`
+      Result on 66 units: 3 high risk, 54 moderate, 9 low.
+- [x] **`generate-html.py`**: scam analysis integration at generation time:
+      - Imports and runs `check_scam.analyze_unit()` on every unit
+      - **Risk column** in summary table: colored dot + label (Low/Med/High/V.High),
+        sortable by `scam_score`. Hidden by default in Columns panel.
+      - `riskCellHtml(u)` renders the dot. `scam_score`/`scam_level` in `unit_to_js()`.
+      - CSS: `.risk-col`, `.risk-dot`, `.units-table.hide-risk .risk-col`
+      - **Detail page — Scam Risk Analysis section**: score bar (0–100), color-coded
+        level label, list of risk factors with severity icons (‼/⚠/•/✓) and color
+        bars (red/yellow/gray/green).
+      - **Detail page — People section**: CRUD for contacts associated with the unit.
+        Name, phone, email, role (owner/manager/agent/tenant). Stored in localStorage
+        `unitOverrides[unitId].people`. Renders as cards with clickable phone/email.
+        Person select feeds into the timeline's "Person" dropdown.
+      - **Detail page — Interaction Timeline expanded**: new structured fields —
+        type (call/text/email/visit/app/note), direction (out/in), person (dropdown
+        from People list). Rendered with type emoji icons and person tags.
+      - `EMBEDDED_CONTACTS` / `EMBEDDED_INTERACTIONS` JS constants baked into
+        detail pages from `interactions.json`.
+- [x] Regenerated `units-summary.html` + all detail pages.
+
+## Active task batch (2026-06-17)
+
+Queued requests:
+1. Persist list filters to localStorage (currently reset on reload)
+2. Comprehensive scoring/ranking system with target-value data entry
+
+### Status
+- [x] **List filter persistence**: `saveListFilters()` / `loadSavedListFilters()` /
+      `populateListFilterDom()` — saves both `listFilters` and `searchFilters` (contains/
+      excludes) to localStorage. Loaded and applied on page init. Filters now survive
+      page reloads.
+- [x] **Scoring/Ranking system**: New "Rank" tool button + collapsible panel with
+      three sections:
+      - **Targets**: target price ($/mo), max commute (mi), target sqft, min quality —
+        each with an importance slider (0–10).
+      - **Preferences**: preferred flooring, kitchen style, outdoor space — each with
+        importance slider.
+      - **Bonuses**: low scam risk, washer/dryer, spacious feel, good natural light —
+        importance sliders only (binary/ordinal, no target value needed).
+      `computeScore(u)` produces a 0–100 weighted average across all active dimensions.
+      Score shown in a new sortable "Score" column with a color-coded bar (red→green HSL
+      gradient). All scoring criteria persisted to `localStorage('scoringCriteria')`.
+      Reset button restores defaults. Badge shows checkmark when scoring is active.
+- [x] Regenerated `units-summary.html`.

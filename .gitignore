@@ -12,3 +12,6 @@ outputs/
 
 # Real config with precise target address — use config.example.json as template
 config.json
+
+# Chrome browser profiles (session data)
+_chrome_profile*/

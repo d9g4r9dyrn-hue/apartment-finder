@@ -25,6 +25,8 @@ SCRAPERS = {
     'zillow': 'scripts/scrapers/zillow.py',
     'apartments_com': 'scripts/scrapers/apartments_com.py',
     'trulia': 'scripts/scrapers/trulia.py',
+    'realtor_com': 'scripts/scrapers/realtor_com.py',
+    'zumper': 'scripts/scrapers/zumper.py',
 }
 
 
@@ -77,6 +79,14 @@ def run_all_scrapers():
     print(f"\n✓ All scrapers completed!")
     print(f"📁 Results saved to: outputs/units.json")
     print(f"📸 Photos saved to: outputs/photos/")
+
+    # Show scrape tracker status
+    try:
+        from scripts.scrape_tracker import ScrapeTracker
+        print()
+        ScrapeTracker().print_status()
+    except Exception:
+        pass
 
     # Regenerate the HTML dashboard
     print(f"\n{'='*60}")

@@ -10,7 +10,13 @@ Usage:
   python scripts/scan_photos.py --skip-backfill
   python scripts/scan_photos.py --skip-descriptions
   python scripts/scan_photos.py --skip-quality
-  python scripts/scan_photos.py --rescan   (re-rate units that already have a quality_rating)
+  python scripts/scan_photos.py --rescan        (re-rate units that already have a quality_rating)
+  python scripts/scan_photos.py --skip-backfill --skip-descriptions --skip-quality --scan-contacts
+  python scripts/scan_photos.py --scan-contacts --rescan-contacts   (re-fetch all)
+
+Contact scan requires TWOCAPTCHA_API_KEY env var:
+  $env:TWOCAPTCHA_API_KEY="your_key_here"
+  python scripts/scan_photos.py --skip-backfill --skip-descriptions --skip-quality --scan-contacts
 """
 import argparse
 import json
@@ -29,6 +35,8 @@ sys.stdout.reconfigure(encoding='utf-8')
 sys.stderr.reconfigure(encoding='utf-8')
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 OUTPUTS_DIR = PROJECT_ROOT / 'outputs'
 PHOTOS_DIR = OUTPUTS_DIR / 'photos'
 UNITS_JSON = OUTPUTS_DIR / 'units.json'
@@ -41,27 +49,25 @@ QUALITY_MODEL = 'gemini-2.5-flash'
 QUALITY_REQUEST_DELAY = 13
 
 FLOORING_TYPES = ['hardwood', 'tile', 'carpet', 'vinyl', 'concrete', 'mixed', 'unknown']
+KITCHEN_STYLE_VALUES = ['modern', 'updated', 'dated', 'unknown']
+OUTDOOR_SPACE_VALUES = ['balcony', 'patio', 'yard', 'none', 'unknown']
+SIZE_IMPRESSION_VALUES = ['spacious', 'average', 'cramped', 'unknown']
 
 QUALITY_PROMPT = (
-    "You are assessing rental apartment listing photos to judge how nice the unit looks - "
-    "not its size or location. Look specifically at: paint condition (fresh vs. "
-    "scuffed/dated), ceiling condition (clean vs. stained/damaged), flooring condition and "
-    "quality, overall cleanliness, how new/updated the finishes look, and whether the space "
-    "looks neat, orderly, and well cared-for. If the photos are too dark, blurry, staged "
-    "from misleading angles, or too sparse to judge these things well, factor that into "
-    "your rating and mention it briefly in the notes. Rate the unit from 1 to 5 stars, where "
-    "1 means run-down or poorly maintained and 5 means modern, well-maintained, and "
-    "move-in ready. Inspect every photo individually, not just the overall impression: if "
-    "ANY single photo shows clear damage or disrepair - a stained, cracked, or "
-    "water-damaged ceiling, mold, large wall cracks, broken fixtures, etc. - cap the rating "
-    "at 3 even if the rest of the unit looks updated, and briefly note the issue and which "
-    "room it's in. Second, identify the primary flooring type visible in the unit's main "
-    "living areas - choose exactly one of "
-    '"hardwood", "tile", "carpet", "vinyl", "concrete", "mixed" (if multiple types are '
-    'clearly visible in different rooms), or "unknown" (if flooring isn\'t visible in any '
-    "photo). "
-    'Respond with ONLY a JSON object like '
-    '{"rating": 3, "notes": "short reason, under 15 words", "flooring": "tile"}.'
+    "Assess these rental apartment listing photos. Extract all fields in ONE pass — "
+    "no re-reading needed.\n\n"
+    "FIELDS TO RETURN (JSON only, no other text):\n"
+    '{"rating": 1-5, "notes": "under 15 words", "flooring": "...", '
+    '"kitchen_style": "...", "outdoor_space": "...", "size_impression": "..."}\n\n'
+    "RULES:\n"
+    "rating: 1=run-down, 5=modern/move-in-ready. Cap at 3 if ANY photo shows "
+    "stained/cracked ceiling, mold, wall cracks, or broken fixtures (note room in 'notes'). "
+    "Factor in dark/blurry/sparse photos.\n"
+    "flooring: primary type in living areas — "
+    "hardwood|tile|carpet|vinyl|concrete|mixed|unknown\n"
+    "kitchen_style: new appliances/counters=modern, refreshed=updated, old=dated|unknown\n"
+    "outdoor_space: visible from photos — balcony|patio|yard|none|unknown\n"
+    "size_impression: how spacious photos feel — spacious|average|cramped|unknown"
 )
 
 
@@ -294,6 +300,80 @@ def backfill_amenities(units_data, session):
     return changed
 
 
+import re as _re
+
+_TEL_RE = _re.compile(r'tel:(\+?[\d\s\-().]+)')
+_EMAIL_RE = _re.compile(r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+')
+_PHONE_TEXT_RE = _re.compile(r'\(?\d{3}\)?[\s.\-]\d{3}[\s.\-]\d{4}')
+
+
+def extract_contact_from_html(html):
+    """Pull phone (tel: href) and email (mailto: href) from a Craigslist listing page."""
+    soup = BeautifulSoup(html, 'html.parser')
+    info = {}
+    for a in soup.find_all('a', href=True):
+        href = a['href']
+        if href.startswith('tel:') and 'contact_phone' not in info:
+            digits = _re.sub(r'\D', '', href[4:])
+            if len(digits) >= 10:
+                d = digits[-10:]
+                info['contact_phone'] = f"({d[:3]}) {d[3:6]}-{d[6:]}"
+        elif href.startswith('mailto:') and 'contact_email' not in info:
+            email = href[7:].split('?')[0].strip()
+            if email and '@' in email:
+                info['contact_email'] = email
+    # Fallback: regex in description text
+    desc_el = soup.find('section', {'id': 'postingbody'})
+    desc = desc_el.get_text('\n', strip=True) if desc_el else ''
+    if 'contact_phone' not in info:
+        m = _PHONE_TEXT_RE.search(desc)
+        if m:
+            info['contact_phone'] = m.group(0).strip()
+    if 'contact_email' not in info:
+        m = _EMAIL_RE.search(desc)
+        if m:
+            info['contact_email'] = m.group(0).strip()
+    return info
+
+
+def backfill_contact_info(units_data, session):
+    """Re-fetch Craigslist listings for units missing contact phone/email and extract them
+    from structured tel:/mailto: href links (more reliable than text-only regex)."""
+    changed = False
+    for unit in units_data.get('units', []):
+        if unit.get('contact_phone') and unit.get('contact_email'):
+            continue
+        if unit.get('source') != 'Craigslist' or not unit.get('source_url'):
+            continue
+
+        print(f"Backfilling contact info for {unit['id']}...")
+        try:
+            html = fetch_html(unit['source_url'], session)
+        except Exception as e:
+            print(f"  failed to fetch: {e}")
+            time.sleep(2)
+            continue
+
+        info = extract_contact_from_html(html)
+        updated = False
+        if info.get('contact_phone') and not unit.get('contact_phone'):
+            unit['contact_phone'] = info['contact_phone']
+            print(f"  phone: {info['contact_phone']}")
+            updated = True
+        if info.get('contact_email') and not unit.get('contact_email'):
+            unit['contact_email'] = info['contact_email']
+            print(f"  email: {info['contact_email']}")
+            updated = True
+        if not updated:
+            print("  no contact info found")
+        else:
+            changed = True
+
+        time.sleep(2)
+
+    return changed
+
+
 def backfill_photos(units_data, session):
     """Re-fetch the source listing for units with fewer than MIN_PHOTOS photos
     and download any photos we're missing."""
@@ -434,11 +514,23 @@ def rate_unit_quality(client, unit):
         return None
     rating = max(1, min(5, rating))
 
-    flooring = str(result.get('flooring', '')).strip().lower()
-    if flooring not in FLOORING_TYPES:
-        flooring = 'unknown'
+    def pick(val, valid):
+        v = str(val or '').strip().lower()
+        return v if v in valid else 'unknown'
 
-    return rating, str(result.get('notes', '')).strip(), flooring
+    flooring = pick(result.get('flooring'), FLOORING_TYPES)
+    kitchen_style = pick(result.get('kitchen_style'), KITCHEN_STYLE_VALUES)
+    outdoor_space = pick(result.get('outdoor_space'), OUTDOOR_SPACE_VALUES)
+    size_impression = pick(result.get('size_impression'), SIZE_IMPRESSION_VALUES)
+
+    return {
+        'quality_rating': rating,
+        'quality_notes': str(result.get('notes', '')).strip(),
+        'flooring_type': flooring,
+        'kitchen_style': kitchen_style,
+        'outdoor_space': outdoor_space,
+        'size_impression': size_impression,
+    }
 
 
 def scan_quality(units_data, rescan=False):
@@ -447,10 +539,14 @@ def scan_quality(units_data, rescan=False):
         print(f"\nSkipping quality scan: {error}")
         return False
 
+    NEW_ATTRS = ['kitchen_style', 'outdoor_space', 'size_impression']
     todo = [
         unit for unit in units_data.get('units', [])
         if unit.get('photos') and (
-            rescan or unit.get('quality_rating') is None or unit.get('flooring_type') is None
+            rescan
+            or unit.get('quality_rating') is None
+            or unit.get('flooring_type') is None
+            or any(unit.get(a) is None for a in NEW_ATTRS)
         )
     ]
     total = len(todo)
@@ -476,13 +572,70 @@ def scan_quality(units_data, rescan=False):
             time.sleep(QUALITY_REQUEST_DELAY)
             continue
 
-        rating, notes, flooring = result
-        unit['quality_rating'] = rating
-        unit['quality_notes'] = notes
-        unit['flooring_type'] = flooring
-        print(f"  {rating}/5 stars, {flooring} flooring - {notes}")
+        unit.update(result)
+        rating = result['quality_rating']
+        flooring = result['flooring_type']
+        extras = ', '.join(f"{k}={result[k]}" for k in NEW_ATTRS if result.get(k) not in (None, 'unknown'))
+        print(f"  {rating}/5, {flooring}" + (f", {extras}" if extras else '') + f" — {result['quality_notes']}")
         changed = True
         time.sleep(QUALITY_REQUEST_DELAY)
+
+    return changed
+
+
+def scan_contacts(units_data, twocaptcha_api_key, rescan=False, delay_between_units=5):
+    """Use 2captcha to solve Craigslist's hCaptcha and fetch authoritative contact info.
+
+    Skips units that already have contact_phone or contact_email unless rescan=True.
+    Costs ~$1-2 per 1000 captchas (~$0.10 for a full run of 66 units).
+    Set TWOCAPTCHA_API_KEY env var or pass key directly.
+    """
+    from scripts.scrapers.craigslist import fetch_cl_contact_via_2captcha
+
+    session = requests.Session()
+    todo = [
+        u for u in units_data.get('units', [])
+        if u.get('source') == 'Craigslist' and u.get('source_url')
+        and (rescan or (not u.get('contact_phone') and not u.get('contact_email')))
+    ]
+    if not todo:
+        print('No Craigslist units need contact scanning.')
+        return False
+
+    print(f'Scanning contact info for {len(todo)} units via 2captcha...')
+    changed = False
+    for i, unit in enumerate(todo, 1):
+        uid = unit['id']
+        print(f'[{i}/{len(todo)}] {uid} ...', end=' ', flush=True)
+        try:
+            info = fetch_cl_contact_via_2captcha(
+                unit['source_url'], twocaptcha_api_key,
+                session=session, delay_between=3
+            )
+        except Exception as e:
+            print(f'ERROR: {e}')
+            time.sleep(delay_between_units)
+            continue
+
+        updates = []
+        if info.get('contact_phone') and (rescan or not unit.get('contact_phone')):
+            unit['contact_phone'] = info['contact_phone']
+            updates.append(f"phone={info['contact_phone']}")
+        if info.get('contact_email') and (rescan or not unit.get('contact_email')):
+            unit['contact_email'] = info['contact_email']
+            updates.append(f"email={info['contact_email']}")
+        if info.get('contact_name') and not unit.get('contact_name'):
+            unit['contact_name'] = info['contact_name']
+            updates.append(f"name={info['contact_name']}")
+
+        if updates:
+            print(', '.join(updates))
+            changed = True
+        else:
+            print('no contact info')
+
+        if i < len(todo):
+            time.sleep(delay_between_units)
 
     return changed
 
@@ -493,6 +646,10 @@ def main():
     parser.add_argument('--skip-descriptions', action='store_true', help='Skip the description backfill step')
     parser.add_argument('--skip-quality', action='store_true', help='Skip the Claude vision quality scan')
     parser.add_argument('--rescan', action='store_true', help='Re-rate units that already have a quality_rating')
+    parser.add_argument('--scan-contacts', action='store_true',
+                        help='Fetch Craigslist contact info via 2captcha (requires TWOCAPTCHA_API_KEY env var)')
+    parser.add_argument('--rescan-contacts', action='store_true',
+                        help='Re-fetch contact info even for units that already have it')
     args = parser.parse_args()
 
     units_data = load_units()
@@ -504,11 +661,21 @@ def main():
             changed = backfill_photos(units_data, session) or changed
             changed = backfill_specs(units_data, session) or changed
             changed = backfill_amenities(units_data, session) or changed
+            changed = backfill_contact_info(units_data, session) or changed
         if not args.skip_descriptions:
             changed = backfill_descriptions(units_data, session) or changed
 
     if not args.skip_quality:
         changed = scan_quality(units_data, rescan=args.rescan) or changed
+
+    if args.scan_contacts or args.rescan_contacts:
+        api_key = os.environ.get('TWOCAPTCHA_API_KEY', '')
+        if not api_key:
+            print('ERROR: TWOCAPTCHA_API_KEY environment variable not set.')
+            print('  Get an API key at https://2captcha.com and set:')
+            print('  $env:TWOCAPTCHA_API_KEY="your_key_here"')
+        else:
+            changed = scan_contacts(units_data, api_key, rescan=args.rescan_contacts) or changed
 
     if changed:
         save_units(units_data)
