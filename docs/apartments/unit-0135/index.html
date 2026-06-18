@@ -760,6 +760,46 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
@@ -873,7 +913,7 @@
     const UNIT_ADDRESS = "1550 S Belcher Rd, Clearwater, FL";
     const TARGET_LAT = 27.95;
     const TARGET_LON = -82.73;
-    const TARGET_NAME = "Clearwater, FL";
+    const TARGET_NAME = "Clearwater, FL area";
     const CONTACT_PHONE = null;
     const CONTACT_EMAIL = null;
     const CONTACT_NAME = null;

@@ -760,13 +760,53 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>Treehouse Apartments</h1>
   <div class="address">1100 Turner St, Clearwater, FL 33756</div>
-  <div class="badges"><div class="badge price">$1,800/mo</div><div class="badge">1 bd</div><div class="badge">1.5 ba</div><div class="badge">880 sqft</div><div class="badge">Apartment</div><div class="badge">4.0 mi away</div><div class="badge">All new appliances</div><div class="badge">Availability 24 Hours</div><div class="badge">Barbecue Area</div><div class="badge">Building-wide Wireless</div><div class="badge">Deck</div><div class="badge">Dining Room</div><div class="badge">Freezer</div><div class="badge">Gated Entry</div><div class="badge">Heating: Electric</div><div class="badge">High-ceilings</div><div class="badge">High-speed Internet Ready</div><div class="badge">Laundry</div><div class="badge">On-Site Management</div><div class="badge">Online Maintenance Portal</div><div class="badge">Online Rent Payment</div><div class="badge">Open plan living room/dining room/ kitchen</div><div class="badge">Picnic Area</div><div class="badge">Plush carpeting</div><div class="badge">Pool</div><div class="badge">Private Terrace</div><div class="badge">Quartz countertops</div><div class="badge">Sewer Included</div><div class="badge">Soft-close high end cabinetry</div><div class="badge">Trash Included</div><div class="badge">Water Included</div><div class="badge">soft-close high-end cabinetry</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dishwasher</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
+  <div class="badges"><div class="badge price">$1,800/mo</div><div class="badge">1 bd</div><div class="badge">1.5 ba</div><div class="badge">880 sqft</div><div class="badge">Apartment</div><div class="badge">3.8 mi away</div><div class="badge">All new appliances</div><div class="badge">Availability 24 Hours</div><div class="badge">Barbecue Area</div><div class="badge">Building-wide Wireless</div><div class="badge">Deck</div><div class="badge">Dining Room</div><div class="badge">Freezer</div><div class="badge">Gated Entry</div><div class="badge">Heating: Electric</div><div class="badge">High-ceilings</div><div class="badge">High-speed Internet Ready</div><div class="badge">Laundry</div><div class="badge">On-Site Management</div><div class="badge">Online Maintenance Portal</div><div class="badge">Online Rent Payment</div><div class="badge">Open plan living room/dining room/ kitchen</div><div class="badge">Picnic Area</div><div class="badge">Plush carpeting</div><div class="badge">Pool</div><div class="badge">Private Terrace</div><div class="badge">Quartz countertops</div><div class="badge">Sewer Included</div><div class="badge">Soft-close high end cabinetry</div><div class="badge">Trash Included</div><div class="badge">Water Included</div><div class="badge">soft-close high-end cabinetry</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dishwasher</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://www.realtor.com/realestateandhomes-detail/1100-Turner-St_Clearwater_FL_33756_M93780-34010" target="_blank">Realtor.com &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-17</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0205</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
@@ -873,7 +913,7 @@
     const UNIT_ADDRESS = "1100 Turner St, Clearwater, FL 33756";
     const TARGET_LAT = 27.95;
     const TARGET_LON = -82.73;
-    const TARGET_NAME = "Clearwater, FL";
+    const TARGET_NAME = "Clearwater, FL area";
     const CONTACT_PHONE = null;
     const CONTACT_EMAIL = null;
     const CONTACT_NAME = null;

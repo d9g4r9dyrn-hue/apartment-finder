@@ -760,13 +760,53 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>🏡 Manufactured Homes for Sale – New, Used &amp; Handyman Specials! 🛠️</h1>
   <div class="address">Address unknown</div>
-  <div class="badges"><div class="badge price">$1,500/mo</div><div class="badge">2 bd</div><div class="badge">1.0 ba</div><div class="badge">— sqft</div><div class="badge">House</div><div class="badge">2.2 mi away</div><div class="badge">Move-in: Now</div><div class="badge">laundry on site</div><div class="badge">off-street parking</div></div>
+  <div class="badges"><div class="badge price">$1,500/mo</div><div class="badge">2 bd</div><div class="badge">1.0 ba</div><div class="badge">— sqft</div><div class="badge">House</div><div class="badge">2.4 mi away</div><div class="badge">Move-in: Now</div><div class="badge">laundry on site</div><div class="badge">off-street parking</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://tampa.craigslist.org/pnl/apa/d/clearwater-manufactured-homes-for-sale/7932967398.html" target="_blank">Craigslist &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-17</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0199</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
@@ -782,11 +822,11 @@
     <h2>Scam Risk Analysis</h2>
     <div class="scam-report">
       <div class="scam-score-header">
-        <span class="scam-score-value" style="color: #fc8181">43</span>
+        <span class="scam-score-value" style="color: #fc8181">35</span>
         <span class="scam-score-label">High risk — likely scam</span>
       </div>
-      <div class="scam-score-bar-bg"><div class="scam-score-bar" style="width: 43%; background: #fc8181"></div></div>
-      <div class="scam-factors"><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>Price is somewhat below market median for 2bd</span></div><div class="scam-factor" style="border-left-color: #ecc94b"><span class="scam-factor-icon" style="color: #ecc94b">⚠</span><span>No contact information available at all</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>No contact name provided</span></div><div class="scam-factor" style="border-left-color: #ecc94b"><span class="scam-factor-icon" style="color: #ecc94b">⚠</span><span>No photos at all</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>No square footage listed</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>Listed on Craigslist (higher scam rate than managed platforms)</span></div></div>
+      <div class="scam-score-bar-bg"><div class="scam-score-bar" style="width: 35%; background: #fc8181"></div></div>
+      <div class="scam-factors"><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>Price is somewhat below market median for 2bd</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>Only has Craigslist relay email (no direct email)</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>No contact name provided</span></div><div class="scam-factor" style="border-left-color: #ecc94b"><span class="scam-factor-icon" style="color: #ecc94b">⚠</span><span>No photos at all</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>No square footage listed</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>Listed on Craigslist (higher scam rate than managed platforms)</span></div><div class="scam-factor" style="border-left-color: #48bb78"><span class="scam-factor-icon" style="color: #48bb78">✓</span><span>Local area code (727)</span></div></div>
     </div>
   </div>
   <div class="section">
@@ -873,9 +913,9 @@
     const UNIT_ADDRESS = "Address unknown";
     const TARGET_LAT = 27.95;
     const TARGET_LON = -82.73;
-    const TARGET_NAME = "Clearwater, FL";
-    const CONTACT_PHONE = null;
-    const CONTACT_EMAIL = null;
+    const TARGET_NAME = "Clearwater, FL area";
+    const CONTACT_PHONE = "(727) 946-3806";
+    const CONTACT_EMAIL = "a51b3a9e0d6031d59c86fcc4d508ac3d@hous.craigslist.org";
     const CONTACT_NAME = null;
     const CONTACT_MESSAGE = "Hi, I'm interested in your listing \"\ud83c\udfe1 Manufactured Homes for Sale \u2013 New, Used & Handyman Specials! \ud83d\udee0\ufe0f\" at Address unknown.\n\nIs it still available? Our lease ends Aug 21, 2026 and we're looking for a $1,500/month apartment and would love to schedule a viewing.\n\nPlease let us know if available and what the next steps are.\n\nThank you!";
     const EMBEDDED_CONTACTS = [];

@@ -760,13 +760,53 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>The Indigo</h1>
   <div class="address">801 Chestnut St, Clearwater, FL 33756</div>
-  <div class="badges"><div class="badge price">$1,460/mo</div><div class="badge">1 bd</div><div class="badge">1.0 ba</div><div class="badge">530 sqft</div><div class="badge">Apartment</div><div class="badge">4.2 mi away</div><div class="badge">Downtown Clearwater Location</div><div class="badge">Fitness Center</div><div class="badge">Fully-Equipped Kitchens</div><div class="badge">Minutes Away From Clearwater Beach</div><div class="badge">Pet Park</div><div class="badge">Shuffleboard Table</div><div class="badge">Spacious Studios &amp; 1 Bedrooms</div><div class="badge">TV Lounge</div><div class="badge">Updated Countertops</div><div class="badge">Updated Light Fixtures</div><div class="badge">Upgraded Appliances</div><div class="badge">Walking Distance to Shops &amp; Restaurants</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
+  <div class="badges"><div class="badge price">$1,460/mo</div><div class="badge">1 bd</div><div class="badge">1.0 ba</div><div class="badge">530 sqft</div><div class="badge">Apartment</div><div class="badge">4.0 mi away</div><div class="badge">Downtown Clearwater Location</div><div class="badge">Fitness Center</div><div class="badge">Fully-Equipped Kitchens</div><div class="badge">Minutes Away From Clearwater Beach</div><div class="badge">Pet Park</div><div class="badge">Shuffleboard Table</div><div class="badge">Spacious Studios &amp; 1 Bedrooms</div><div class="badge">TV Lounge</div><div class="badge">Updated Countertops</div><div class="badge">Updated Light Fixtures</div><div class="badge">Upgraded Appliances</div><div class="badge">Walking Distance to Shops &amp; Restaurants</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://www.realtor.com/realestateandhomes-detail/801-Chestnut-St_Clearwater_FL_33756_M58930-32583" target="_blank">Realtor.com &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-17</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0203</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
@@ -873,7 +913,7 @@
     const UNIT_ADDRESS = "801 Chestnut St, Clearwater, FL 33756";
     const TARGET_LAT = 27.95;
     const TARGET_LON = -82.73;
-    const TARGET_NAME = "Clearwater, FL";
+    const TARGET_NAME = "Clearwater, FL area";
     const CONTACT_PHONE = null;
     const CONTACT_EMAIL = null;
     const CONTACT_NAME = null;

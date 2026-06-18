@@ -760,13 +760,53 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>Prices Just Dropped – Move In This Month!</h1>
   <div class="address">3595 New Jersey Rd</div>
-  <div class="badges"><div class="badge price">$1,925/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,515 sqft</div><div class="badge">Apartment</div><div class="badge">47.5 mi away</div><div class="badge quality" title="Well-maintained community with modern clubhouse, pool, gym, and lake views.">5.0 ★ quality</div><div class="badge">🪴 Patio</div><div class="badge">📐 Spacious</div><div class="badge">laundry on site</div><div class="badge">street parking</div></div>
+  <div class="badges"><div class="badge price">$1,925/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,515 sqft</div><div class="badge">Apartment</div><div class="badge">47.7 mi away</div><div class="badge quality" title="Well-maintained community with modern clubhouse, pool, gym, and lake views.">5.0 ★ quality</div><div class="badge">🪴 Patio</div><div class="badge">📐 Spacious</div><div class="badge">laundry on site</div><div class="badge">street parking</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://lakeland.craigslist.org/apa/d/lakeland-prices-just-dropped-move-in/7941223437.html" target="_blank">Craigslist &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-15</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0060</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
@@ -808,6 +848,11 @@
         <button onclick="addPerson()">Add</button>
       </div>
     </div>
+  </div>
+  <div class="section">
+    <h2>🔗 Linked Listings (4 total)</h2>
+    <p style="color:var(--subtext);font-size:13px;margin:0 0 8px;">These appear to be the same rental listed multiple times.</p>
+    <div class="linked-units-list"><a href="../unit-0050/index.html" class="linked-unit-card"><span class="linked-unit-id">unit-0050 <span style="color:var(--accent);font-size:11px;">(primary)</span></span><span class="linked-unit-title">Look &amp; Lease Special Won’t Last!</span><span class="linked-unit-meta">$1,925 &middot; Craigslist</span></a><a href="../unit-0066/index.html" class="linked-unit-card"><span class="linked-unit-id">unit-0066</span><span class="linked-unit-title">Prices Just Dropped – Move In This Month!</span><span class="linked-unit-meta">$1,564 &middot; Craigslist</span></a><a href="../unit-0068/index.html" class="linked-unit-card"><span class="linked-unit-id">unit-0068</span><span class="linked-unit-title">🔥 Only a Few Apartments Left – Move In Today!</span><span class="linked-unit-meta">$1,564 &middot; Craigslist</span></a></div>
   </div>
   <div class="section">
     <h2>Location</h2>
@@ -877,7 +922,7 @@
     const UNIT_ADDRESS = "3595 New Jersey Rd";
     const TARGET_LAT = 27.95;
     const TARGET_LON = -82.73;
-    const TARGET_NAME = "Clearwater, FL";
+    const TARGET_NAME = "Clearwater, FL area";
     const CONTACT_PHONE = null;
     const CONTACT_EMAIL = "d0259459659d322e96dca7e42edcb0eb@hous.craigslist.org";
     const CONTACT_NAME = null;

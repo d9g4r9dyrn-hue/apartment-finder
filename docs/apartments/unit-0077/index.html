@@ -760,13 +760,53 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>1938 Summit Dr, Clearwater, FL 33763</h1>
   <div class="address">1938 Summit Dr, Clearwater, FL 33763</div>
-  <div class="badges"><div class="badge price">$2,695/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,958 sqft</div><div class="badge">House</div><div class="badge">3.2 mi away</div><div class="badge">Bedrooms: 3</div><div class="badge">Full Bathrooms: 2</div><div class="badge">Cats Allowed: Yes</div><div class="badge">Dogs Allowed: Yes</div><div class="badge">Large Dogs Allowed: Yes</div><div class="badge">Small Dogs Allowed: Yes</div><div class="badge">Rent Frequency: MONTH</div><div class="badge">Monthly Fees: Air Filter Delivery Fee: $10, Internet &amp; Media: $85, Smart Home with video doorbell: $40, Utility Billing Service Fee: $10</div><div class="badge">Availability Date: 2026-05-29</div><div class="badge">Source Property Type: HOUSE</div><div class="badge">Management Company: Invitation Homes</div><div class="badge">Property Subtype: HOUSE</div><div class="badge">Landlord Full Name: Invitation Homes</div><div class="badge">Floor Plan Name: 1938 Summit Dr, Clearwater, FL 33763</div><div class="badge">SqFt Minimum: 1958</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
+  <div class="badges"><div class="badge price">$2,695/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,958 sqft</div><div class="badge">House</div><div class="badge">2.9 mi away</div><div class="badge">Bedrooms: 3</div><div class="badge">Full Bathrooms: 2</div><div class="badge">Cats Allowed: Yes</div><div class="badge">Dogs Allowed: Yes</div><div class="badge">Large Dogs Allowed: Yes</div><div class="badge">Small Dogs Allowed: Yes</div><div class="badge">Rent Frequency: MONTH</div><div class="badge">Monthly Fees: Air Filter Delivery Fee: $10, Internet &amp; Media: $85, Smart Home with video doorbell: $40, Utility Billing Service Fee: $10</div><div class="badge">Availability Date: 2026-05-29</div><div class="badge">Source Property Type: HOUSE</div><div class="badge">Management Company: Invitation Homes</div><div class="badge">Property Subtype: HOUSE</div><div class="badge">Landlord Full Name: Invitation Homes</div><div class="badge">Floor Plan Name: 1938 Summit Dr, Clearwater, FL 33763</div><div class="badge">SqFt Minimum: 1958</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://www.realtor.com/realestateandhomes-detail/1938-Summit-Dr_Clearwater_FL_33763_M51814-44884" target="_blank">Realtor.com &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-17</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0077</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
@@ -808,6 +848,11 @@
         <button onclick="addPerson()">Add</button>
       </div>
     </div>
+  </div>
+  <div class="section">
+    <h2>🔗 Linked Listings (2 total)</h2>
+    <p style="color:var(--subtext);font-size:13px;margin:0 0 8px;">These appear to be the same rental listed multiple times.</p>
+    <div class="linked-units-list"><a href="../unit-0121/index.html" class="linked-unit-card"><span class="linked-unit-id">unit-0121 <span style="color:var(--accent);font-size:11px;">(primary)</span></span><span class="linked-unit-title">1938 Summit Dr</span><span class="linked-unit-meta">$2,695 &middot; Zumper</span></a></div>
   </div>
   <div class="section">
     <h2>Location</h2>
@@ -873,7 +918,7 @@
     const UNIT_ADDRESS = "1938 Summit Dr, Clearwater, FL 33763";
     const TARGET_LAT = 27.95;
     const TARGET_LON = -82.73;
-    const TARGET_NAME = "Clearwater, FL";
+    const TARGET_NAME = "Clearwater, FL area";
     const CONTACT_PHONE = null;
     const CONTACT_EMAIL = null;
     const CONTACT_NAME = null;
