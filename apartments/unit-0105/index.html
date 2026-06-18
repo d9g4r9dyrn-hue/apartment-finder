@@ -760,13 +760,53 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>Fairways at Feather Sound</h1>
   <div class="address">13621 Feather Sound Cir E, Clearwater, FL 33762</div>
-  <div class="badges"><div class="badge price">$1,990/mo</div><div class="badge">2 bd</div><div class="badge">2.0 ba</div><div class="badge">1,046 sqft</div><div class="badge">Apartment</div><div class="badge">4.9 mi away</div><div class="badge">2 Private Community Lakes</div><div class="badge">American Landmark 360 Resident Program</div><div class="badge">Business Center</div><div class="badge">Clubroom w/Beverage Bar</div><div class="badge">Convenient 24/7 Online Resident Services</div><div class="badge">First Floor</div><div class="badge">Fitness Center</div><div class="badge">Hottub Spa</div><div class="badge">Jogging Walking Trails</div><div class="badge">Pet Park</div><div class="badge">Picnic Area</div><div class="badge">Pool</div><div class="badge">Second Floor</div><div class="badge">Sundeck</div><div class="badge">Tennis Court</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
+  <div class="badges"><div class="badge price">$1,990/mo</div><div class="badge">2 bd</div><div class="badge">2.0 ba</div><div class="badge">1,046 sqft</div><div class="badge">Apartment</div><div class="badge">5.2 mi away</div><div class="badge">2 Private Community Lakes</div><div class="badge">American Landmark 360 Resident Program</div><div class="badge">Business Center</div><div class="badge">Clubroom w/Beverage Bar</div><div class="badge">Convenient 24/7 Online Resident Services</div><div class="badge">First Floor</div><div class="badge">Fitness Center</div><div class="badge">Hottub Spa</div><div class="badge">Jogging Walking Trails</div><div class="badge">Pet Park</div><div class="badge">Picnic Area</div><div class="badge">Pool</div><div class="badge">Second Floor</div><div class="badge">Sundeck</div><div class="badge">Tennis Court</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://www.realtor.com/realestateandhomes-detail/13621-Feather-Sound-Cir-E_Clearwater_FL_33762_M54595-13931" target="_blank">Realtor.com &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-17</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0105</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
@@ -871,9 +911,9 @@
     const UNIT_LAT = 27.895696;
     const UNIT_LON = -82.672007;
     const UNIT_ADDRESS = "13621 Feather Sound Cir E, Clearwater, FL 33762";
-    const TARGET_LAT = 27.946713;
-    const TARGET_LON = -82.7268793;
-    const TARGET_NAME = "Bluestone on the Bay";
+    const TARGET_LAT = 27.95;
+    const TARGET_LON = -82.73;
+    const TARGET_NAME = "Clearwater, FL";
     const CONTACT_PHONE = null;
     const CONTACT_EMAIL = null;
     const CONTACT_NAME = null;

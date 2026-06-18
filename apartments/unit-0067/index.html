@@ -760,13 +760,53 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>Ceiling Fans, Linen Closet, Pantry</h1>
   <div class="address">3451 Queens Street</div>
-  <div class="badges"><div class="badge price">$1,849/mo</div><div class="badge">2 bd</div><div class="badge">2.0 ba</div><div class="badge">1,000 sqft</div><div class="badge">Apartment</div><div class="badge">48.7 mi away</div><div class="badge quality" title="Well-maintained complex with updated interior and extensive amenities.">4.0 ★ quality</div><div class="badge">Mixed flooring</div><div class="badge">🍳 Updated kitchen</div><div class="badge">🪴 Yard</div><div class="badge">Move-in: Jun 30, 2026</div><div class="badge">🧺 Washer/Dryer</div><div class="badge">cats are OK - purrr</div><div class="badge">dogs are OK - wooof</div><div class="badge">w/d in unit</div><div class="badge">off-street parking</div><div class="badge">air conditioning</div></div>
+  <div class="badges"><div class="badge price">$1,849/mo</div><div class="badge">2 bd</div><div class="badge">2.0 ba</div><div class="badge">1,000 sqft</div><div class="badge">Apartment</div><div class="badge">49.0 mi away</div><div class="badge quality" title="Well-maintained complex with updated interior and extensive amenities.">4.0 ★ quality</div><div class="badge">Mixed flooring</div><div class="badge">🍳 Updated kitchen</div><div class="badge">🪴 Yard</div><div class="badge">Move-in: Jun 30, 2026</div><div class="badge">🧺 Washer/Dryer</div><div class="badge">cats are OK - purrr</div><div class="badge">dogs are OK - wooof</div><div class="badge">w/d in unit</div><div class="badge">off-street parking</div><div class="badge">air conditioning</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://sarasota.craigslist.org/apa/d/sarasota-ceiling-fans-linen-closet/7941212767.html" target="_blank">Craigslist &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-15</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0067</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
@@ -808,6 +848,11 @@
         <button onclick="addPerson()">Add</button>
       </div>
     </div>
+  </div>
+  <div class="section">
+    <h2>🔗 Linked Listings (4 total)</h2>
+    <p style="color:var(--subtext);font-size:13px;margin:0 0 8px;">These appear to be the same rental listed multiple times.</p>
+    <div class="linked-units-list"><a href="../unit-0049/index.html" class="linked-unit-card"><span class="linked-unit-id">unit-0049 <span style="color:var(--accent);font-size:11px;">(primary)</span></span><span class="linked-unit-title">Washer/Dryer, Located in Sarasota, 2 bedroom</span><span class="linked-unit-meta">$1,849 &middot; Craigslist</span></a><a href="../unit-0057/index.html" class="linked-unit-card"><span class="linked-unit-id">unit-0057</span><span class="linked-unit-title">2B/2B, Vaulted Ceilings, Fireplaces</span><span class="linked-unit-meta">$1,849 &middot; Craigslist</span></a><a href="../unit-0058/index.html" class="linked-unit-card"><span class="linked-unit-id">unit-0058</span><span class="linked-unit-title">Linen Closet, Vaulted Ceilings, Private Entrance</span><span class="linked-unit-meta">$1,849 &middot; Craigslist</span></a></div>
   </div>
   <div class="section">
     <h2>Location</h2>
@@ -875,9 +920,9 @@
     const UNIT_LAT = 27.2666;
     const UNIT_LON = -82.5163;
     const UNIT_ADDRESS = "3451 Queens Street";
-    const TARGET_LAT = 27.946713;
-    const TARGET_LON = -82.7268793;
-    const TARGET_NAME = "Bluestone on the Bay";
+    const TARGET_LAT = 27.95;
+    const TARGET_LON = -82.73;
+    const TARGET_NAME = "Clearwater, FL";
     const CONTACT_PHONE = null;
     const CONTACT_EMAIL = null;
     const CONTACT_NAME = null;

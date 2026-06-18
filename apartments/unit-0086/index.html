@@ -760,13 +760,53 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>The Breyley Apartments</h1>
   <div class="address">1820 Sunset Point Rd, Clearwater, FL 33765</div>
-  <div class="badges"><div class="badge price">$1,913/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,151 sqft</div><div class="badge">Apartment</div><div class="badge">3.7 mi away</div><div class="badge">Build credit score with RentTrack</div><div class="badge">Car care center</div><div class="badge">Club House</div><div class="badge">Deposit free with Rhino</div><div class="badge">Fitness Center</div><div class="badge">Flooring: Wood</div><div class="badge">Glass backsplash</div><div class="badge">Lifestyle services powered by Amenify</div><div class="badge">Moving services with Move Matcher</div><div class="badge">Off Street</div><div class="badge">Outdoor kitchens</div><div class="badge">Package Receiving</div><div class="badge">Pet Park</div><div class="badge">Pet friendly</div><div class="badge">Pool</div><div class="badge">Resident App</div><div class="badge">Smart home + Internet package</div><div class="badge">Stainless steel appliances</div><div class="badge">Tennis Court</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
+  <div class="badges"><div class="badge price">$1,913/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,151 sqft</div><div class="badge">Apartment</div><div class="badge">3.5 mi away</div><div class="badge">Build credit score with RentTrack</div><div class="badge">Car care center</div><div class="badge">Club House</div><div class="badge">Deposit free with Rhino</div><div class="badge">Fitness Center</div><div class="badge">Flooring: Wood</div><div class="badge">Glass backsplash</div><div class="badge">Lifestyle services powered by Amenify</div><div class="badge">Moving services with Move Matcher</div><div class="badge">Off Street</div><div class="badge">Outdoor kitchens</div><div class="badge">Package Receiving</div><div class="badge">Pet Park</div><div class="badge">Pet friendly</div><div class="badge">Pool</div><div class="badge">Resident App</div><div class="badge">Smart home + Internet package</div><div class="badge">Stainless steel appliances</div><div class="badge">Tennis Court</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://www.realtor.com/realestateandhomes-detail/1820-Sunset-Point-Rd_Clearwater_FL_33765_M63333-80012" target="_blank">Realtor.com &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-17</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0086</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
@@ -871,9 +911,9 @@
     const UNIT_LAT = 27.991413;
     const UNIT_LON = -82.761606;
     const UNIT_ADDRESS = "1820 Sunset Point Rd, Clearwater, FL 33765";
-    const TARGET_LAT = 27.946713;
-    const TARGET_LON = -82.7268793;
-    const TARGET_NAME = "Bluestone on the Bay";
+    const TARGET_LAT = 27.95;
+    const TARGET_LON = -82.73;
+    const TARGET_NAME = "Clearwater, FL";
     const CONTACT_PHONE = null;
     const CONTACT_EMAIL = null;
     const CONTACT_NAME = null;

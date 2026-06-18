@@ -760,13 +760,53 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>Renters needed</h1>
   <div class="address">7501 142nd Ave N lot 466</div>
-  <div class="badges"><div class="badge price">$750/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,400 sqft</div><div class="badge">House</div><div class="badge">2.9 mi away</div><div class="badge">cats are OK - purrr</div><div class="badge">dogs are OK - wooof</div><div class="badge">laundry in bldg</div><div class="badge">carport</div><div class="badge">no smoking</div><div class="badge">air conditioning</div></div>
+  <div class="badges"><div class="badge price">$750/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,400 sqft</div><div class="badge">House</div><div class="badge">3.0 mi away</div><div class="badge">cats are OK - purrr</div><div class="badge">dogs are OK - wooof</div><div class="badge">laundry in bldg</div><div class="badge">carport</div><div class="badge">no smoking</div><div class="badge">air conditioning</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://tampa.craigslist.org/pnl/apa/d/clearwater-renters-needed/7941106032.html" target="_blank">Craigslist &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-17</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0190</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
@@ -782,11 +822,11 @@
     <h2>Scam Risk Analysis</h2>
     <div class="scam-report">
       <div class="scam-score-header">
-        <span class="scam-score-value" style="color: #e53e3e">65</span>
-        <span class="scam-score-label">Very high risk — almost certainly a scam</span>
+        <span class="scam-score-value" style="color: #fc8181">55</span>
+        <span class="scam-score-label">High risk — likely scam</span>
       </div>
-      <div class="scam-score-bar-bg"><div class="scam-score-bar" style="width: 65%; background: #e53e3e"></div></div>
-      <div class="scam-factors"><div class="scam-factor" style="border-left-color: #fc8181"><span class="scam-factor-icon" style="color: #fc8181">‼</span><span>Price $750 is 68% below median $2,364 for 3bd units — extreme underpricing</span></div><div class="scam-factor" style="border-left-color: #ecc94b"><span class="scam-factor-icon" style="color: #ecc94b">⚠</span><span>No contact information available at all</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>No contact name provided</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>Listed on Craigslist (higher scam rate than managed platforms)</span></div><div class="scam-factor" style="border-left-color: #48bb78"><span class="scam-factor-icon" style="color: #48bb78">✓</span><span>8 photos — good photo coverage</span></div></div>
+      <div class="scam-score-bar-bg"><div class="scam-score-bar" style="width: 55%; background: #fc8181"></div></div>
+      <div class="scam-factors"><div class="scam-factor" style="border-left-color: #fc8181"><span class="scam-factor-icon" style="color: #fc8181">‼</span><span>Price $750 is 68% below median $2,364 for 3bd units — extreme underpricing</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>Only has Craigslist relay email (no direct email)</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>Contact name &quot;jollie&quot; is a single short first name (no surname)</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>Listed on Craigslist (higher scam rate than managed platforms)</span></div><div class="scam-factor" style="border-left-color: #48bb78"><span class="scam-factor-icon" style="color: #48bb78">✓</span><span>8 photos — good photo coverage</span></div><div class="scam-factor" style="border-left-color: #48bb78"><span class="scam-factor-icon" style="color: #48bb78">✓</span><span>Local area code (727)</span></div></div>
     </div>
   </div>
   <div class="section">
@@ -875,12 +915,12 @@
     const UNIT_LAT = 27.906871;
     const UNIT_LON = -82.739896;
     const UNIT_ADDRESS = "7501 142nd Ave N lot 466";
-    const TARGET_LAT = 27.946713;
-    const TARGET_LON = -82.7268793;
-    const TARGET_NAME = "Bluestone on the Bay";
-    const CONTACT_PHONE = null;
-    const CONTACT_EMAIL = null;
-    const CONTACT_NAME = null;
+    const TARGET_LAT = 27.95;
+    const TARGET_LON = -82.73;
+    const TARGET_NAME = "Clearwater, FL";
+    const CONTACT_PHONE = "(727) 831-4523";
+    const CONTACT_EMAIL = "a8757f8cb9263953a67f94349babf25e@hous.craigslist.org";
+    const CONTACT_NAME = "Jollie";
     const CONTACT_MESSAGE = "Hi, I'm interested in your listing \"Renters needed\" at 7501 142nd Ave N lot 466.\n\nIs it still available? Our lease ends Aug 21, 2026 and we're looking for a $750/month apartment and would love to schedule a viewing.\n\nPlease let us know if available and what the next steps are.\n\nThank you!";
     const EMBEDDED_CONTACTS = [];
     const EMBEDDED_INTERACTIONS = [];

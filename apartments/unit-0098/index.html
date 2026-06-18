@@ -760,13 +760,53 @@
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>Anthem Clearwater</h1>
   <div class="address">2770 Roosevelt Blvd, Clearwater, FL 33760</div>
-  <div class="badges"><div class="badge price">$1,636/mo</div><div class="badge">2 bd</div><div class="badge">1.0 ba</div><div class="badge">940 sqft</div><div class="badge">Apartment</div><div class="badge">1.9 mi away</div><div class="badge">24-Hour Emergency Maintenance</div><div class="badge">AcceptsCreditCardPayments</div><div class="badge">Auto Detail Center</div><div class="badge">Barbecue Area</div><div class="badge">Basketball Court</div><div class="badge">Club House</div><div class="badge">Convenient Curved Shower Rods</div><div class="badge">Exterior Type: Conventional</div><div class="badge">Fitness Center</div><div class="badge">Flexible Bi-Monthly Payment Options</div><div class="badge">Garden</div><div class="badge">Gray Quartz and Granite Style Counters in Kitchen and Baths</div><div class="badge">HardwoodFloor</div><div class="badge">High-speed Internet Ready</div><div class="badge">Housekeeping</div><div class="badge">Package Receiving</div><div class="badge">Pet Park</div><div class="badge">PetsAllowed</div><div class="badge">Play Ground</div><div class="badge">Pool</div><div class="badge">Positive Credit Reporting</div><div class="badge">Preferred Employer Program</div><div class="badge">Rainfall Shower Heads</div><div class="badge">Timeless White Herringbone Tile Backsplash</div><div class="badge">Undermount Kitchen Sink with Gooseneck Faucet</div><div class="badge">Walk-in and Reach-in Closets</div><div class="badge">White Shaker Cabinets in Kitchen and Baths</div><div class="badge">Wood Shaker Cabinets in Kitchen and Baths</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
+  <div class="badges"><div class="badge price">$1,636/mo</div><div class="badge">2 bd</div><div class="badge">1.0 ba</div><div class="badge">940 sqft</div><div class="badge">Apartment</div><div class="badge">2.2 mi away</div><div class="badge">24-Hour Emergency Maintenance</div><div class="badge">AcceptsCreditCardPayments</div><div class="badge">Auto Detail Center</div><div class="badge">Barbecue Area</div><div class="badge">Basketball Court</div><div class="badge">Club House</div><div class="badge">Convenient Curved Shower Rods</div><div class="badge">Exterior Type: Conventional</div><div class="badge">Fitness Center</div><div class="badge">Flexible Bi-Monthly Payment Options</div><div class="badge">Garden</div><div class="badge">Gray Quartz and Granite Style Counters in Kitchen and Baths</div><div class="badge">HardwoodFloor</div><div class="badge">High-speed Internet Ready</div><div class="badge">Housekeeping</div><div class="badge">Package Receiving</div><div class="badge">Pet Park</div><div class="badge">PetsAllowed</div><div class="badge">Play Ground</div><div class="badge">Pool</div><div class="badge">Positive Credit Reporting</div><div class="badge">Preferred Employer Program</div><div class="badge">Rainfall Shower Heads</div><div class="badge">Timeless White Herringbone Tile Backsplash</div><div class="badge">Undermount Kitchen Sink with Gooseneck Faucet</div><div class="badge">Walk-in and Reach-in Closets</div><div class="badge">White Shaker Cabinets in Kitchen and Baths</div><div class="badge">Wood Shaker Cabinets in Kitchen and Baths</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://www.realtor.com/realestateandhomes-detail/2770-Roosevelt-Blvd_Clearwater_FL_33760_M56192-38235" target="_blank">Realtor.com &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-17</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0098</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
@@ -871,9 +911,9 @@
     const UNIT_LAT = 27.919094;
     const UNIT_LON = -82.722935;
     const UNIT_ADDRESS = "2770 Roosevelt Blvd, Clearwater, FL 33760";
-    const TARGET_LAT = 27.946713;
-    const TARGET_LON = -82.7268793;
-    const TARGET_NAME = "Bluestone on the Bay";
+    const TARGET_LAT = 27.95;
+    const TARGET_LON = -82.73;
+    const TARGET_NAME = "Clearwater, FL";
     const CONTACT_PHONE = null;
     const CONTACT_EMAIL = null;
     const CONTACT_NAME = null;
