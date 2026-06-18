@@ -800,13 +800,103 @@
       color: var(--subtext);
       white-space: nowrap;
     }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 14px;
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 18px;
+        line-height: 1.3;
+      }
+
+      .badges {
+        gap: 6px;
+      }
+
+      .badge {
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .info-item {
+        padding: 10px 12px;
+      }
+
+      .info-label {
+        font-size: 10px;
+      }
+
+      .info-value {
+        font-size: 14px;
+      }
+
+      .photos {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 6px;
+      }
+
+      .photos img {
+        height: 110px;
+      }
+
+      .detail-map {
+        height: 220px;
+      }
+
+      .detail-lightbox img {
+        max-width: 95vw;
+        max-height: 85vh;
+      }
+
+      .detail-lb-nav {
+        font-size: 24px;
+        padding: 6px 12px;
+      }
+
+      .your-notes textarea {
+        min-height: 80px;
+        font-size: 14px;
+      }
+
+      .section h2 {
+        font-size: 11px;
+      }
+
+      .contact-modal-content {
+        width: 95%;
+        max-height: 85vh;
+      }
+
+      .linked-units-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .commute-table th,
+      .commute-table td {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+
+      .description {
+        padding: 12px;
+        font-size: 13px;
+      }
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html" onclick="if (window.opener || window.history.length > 1) { window.close(); return false; }">&larr; Back to list</a>
   <h1>Estates at Countryside</h1>
   <div class="address">2652 N McMullen Booth Rd, Clearwater, FL 33761</div>
-  <div class="badges"><div class="badge price">$2,116/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,365 sqft</div><div class="badge">Apartment</div><div class="badge">4.9 mi away</div><div class="badge">2x2 Renovation</div><div class="badge">3x2 Renovation</div><div class="badge">Extra Storage Closet</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
+  <div class="badges"><div class="badge price">$2,116/mo</div><div class="badge">3 bd</div><div class="badge">2.0 ba</div><div class="badge">1,365 sqft</div><div class="badge">Apartment</div><div class="badge">4.9 mi away</div><div class="badge quality" title="Modern kitchens, stainless steel appliances, and a beautiful community pool.">5.0 ★ quality</div><div class="badge">Mixed flooring</div><div class="badge">🍳 Modern kitchen</div><div class="badge">🪴 Patio</div><div class="badge">📐 Spacious</div><div class="badge">2x2 Renovation</div><div class="badge">3x2 Renovation</div><div class="badge">Extra Storage Closet</div><div class="badge">Dogs Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Cats Allowed</div><div class="badge">Dogs Allowed</div></div>
   <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://www.realtor.com/realestateandhomes-detail/2652-N-McMullen-Booth-Rd_Clearwater_FL_33761_M67189-01937" target="_blank">Realtor.com &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-17</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0074</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (64d)</div></div></div>
   <div class="section contact-section">
     <h2>Contact</h2>
