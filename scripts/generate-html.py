@@ -6119,7 +6119,7 @@ def generate_unit_detail_html(unit, lease_end=None, target_location=None,
   <style>{DETAIL_PAGE_CSS}</style>
 </head>
 <body>
-  <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
+  <a class="back-link" href="../../units-summary.html" onclick="if (window.opener || window.history.length > 1) {{ window.close(); return false; }}">&larr; Back to list</a>
   <h1>{html_escape(title)}</h1>
   <div class="address">{html_escape(address)}</div>
   <div class="badges">{''.join(badges)}</div>
