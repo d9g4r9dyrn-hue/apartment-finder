@@ -2504,11 +2504,11 @@ def generate_html():
             <th class="source-col sortable" data-sort="source" onclick="applySort('source')">Source</th>
             <th class="quality-col sortable" data-sort="quality_rating" onclick="applySort('quality_rating')">Quality</th>
             <th class="risk-col sortable" data-sort="scam_score" onclick="applySort('scam_score')">Risk</th>
-            <th class="contact-col sortable" data-sort="contact_phone" onclick="applySort('contact_phone')">Contact</th>
             <th class="kitchen-col sortable" data-sort="kitchen_style" onclick="applySort('kitchen_style')">Kitchen</th>
             <th class="outdoor-col sortable" data-sort="outdoor_space" onclick="applySort('outdoor_space')">Outdoor</th>
             <th class="size-col sortable" data-sort="size_impression" onclick="applySort('size_impression')">Size feel</th>
             <th class="score-col sortable" data-sort="overall_score" onclick="applySort('overall_score')">Rank</th>
+            <th class="contact-col sortable" data-sort="contact_phone" onclick="applySort('contact_phone')">Contact</th>
             <th id="work-anchor-th" style="display:none"></th>
           </tr>
         </thead>
@@ -3370,7 +3370,7 @@ def generate_html():
     }}
 
     // ---- Column visibility (persisted across reloads) ----
-    const ALL_COLUMNS = ['mine', 'photo', 'distance', 'price', 'beds', 'baths', 'sqft', 'type', 'movein', 'amenities', 'flooring', 'source', 'quality', 'risk', 'contact', 'kitchen', 'outdoor', 'size', 'score'];
+    const ALL_COLUMNS = ['mine', 'photo', 'distance', 'price', 'beds', 'baths', 'sqft', 'type', 'movein', 'amenities', 'flooring', 'source', 'quality', 'risk', 'kitchen', 'outdoor', 'size', 'score', 'contact'];
 
     function loadColumnPrefs() {{
       try {{ return JSON.parse(localStorage.getItem('columnPrefs') || '{{}}'); }} catch (e) {{ return {{}}; }}
@@ -4066,11 +4066,11 @@ def generate_html():
         <td class="unit-source-col">${{source}}</td>
         <td class="quality-col">${{qualityStarsHtml(u)}}</td>
         <td class="risk-col">${{riskCellHtml(u)}}</td>
-        <td class="contact-col">${{contactCellHtml(u)}}</td>
         <td class="kitchen-col">${{escapeHtml(u.kitchen_style || '\\u2014')}}</td>
         <td class="outdoor-col">${{escapeHtml(u.outdoor_space || '\\u2014')}}</td>
         <td class="size-col">${{escapeHtml(u.size_impression || '\\u2014')}}</td>
         <td class="score-col">${{scoreCellHtml(u)}}</td>
+        <td class="contact-col">${{contactCellHtml(u)}}</td>
 
         ${{workCells}}${{commuteCell}}
       </tr>`;
