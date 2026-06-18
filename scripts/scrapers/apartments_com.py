@@ -35,7 +35,7 @@ CONFIG_JSON = PROJECT_ROOT / 'config.json'
 
 from scripts.scrapers.common import download_image
 
-MAX_PHOTOS = 8
+MAX_PHOTOS = 30
 
 # How long to wait (seconds) for the page's XHR listing data to arrive
 PAGE_LOAD_WAIT = 14

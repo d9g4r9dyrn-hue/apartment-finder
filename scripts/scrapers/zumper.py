@@ -45,7 +45,7 @@ HEADERS = {
     'Accept-Encoding': 'gzip, deflate, br',
 }
 
-MAX_PHOTOS = 8
+MAX_PHOTOS = 30
 
 
 def load_config():

@@ -42,7 +42,7 @@ PHOTOS_DIR = OUTPUTS_DIR / 'photos'
 UNITS_JSON = OUTPUTS_DIR / 'units.json'
 
 MIN_PHOTOS = 4
-MAX_PHOTOS = 8
+MAX_PHOTOS = 30
 MAX_QUALITY_PHOTOS = 8
 QUALITY_MODEL = 'gemini-2.5-flash'
 # Free-tier Gemini quota is 5 requests/minute - pace requests to stay under it

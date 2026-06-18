@@ -44,7 +44,95 @@ HEADERS = {
     'Accept-Encoding': 'gzip, deflate, br',
 }
 
-MAX_PHOTOS = 8
+MAX_PHOTOS = 30
+
+
+def upsize_photo_url(url):
+    """Convert rdcpix thumbnail URLs to original/large size."""
+    if 'rdcpix.com' in url:
+        url = re.sub(r'(\d)s\.jpg$', r'\1o.jpg', url)
+        url = re.sub(r'-\d+x\d+', '', url)
+    return url
+
+
+def _fetch_detail_html(source_url):
+    """Fetch a single Realtor.com detail page, using Playwright if available."""
+    try:
+        from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
+    except ImportError:
+        # Fallback to curl_cffi
+        sess = curl_requests.Session(impersonate='chrome')
+        r = sess.get(source_url, timeout=20, headers=HEADERS)
+        if r.status_code == 429:
+            return None
+        return r.text
+
+    with sync_playwright() as pw:
+        user_data = str(PROJECT_ROOT / '_chrome_profile_realtor')
+        try:
+            ctx = pw.chromium.launch_persistent_context(
+                user_data, channel='chrome', headless=False,
+                args=['--disable-blink-features=AutomationControlled'],
+                ignore_default_args=['--enable-automation'],
+                viewport={'width': 1366, 'height': 768}, locale='en-US',
+            )
+        except Exception:
+            ctx = pw.chromium.launch_persistent_context(
+                user_data, headless=False,
+                args=['--disable-blink-features=AutomationControlled'],
+                ignore_default_args=['--enable-automation'],
+                viewport={'width': 1366, 'height': 768}, locale='en-US',
+            )
+        ctx.add_init_script("Object.defineProperty(navigator, 'webdriver', { get: () => undefined });")
+        page = ctx.pages[0] if ctx.pages else ctx.new_page()
+        try:
+            page.goto(source_url, wait_until='domcontentloaded', timeout=20000)
+        except PWTimeout:
+            pass
+        page.wait_for_timeout(4000)
+        html = page.content()
+        ctx.close()
+        return html
+
+
+def fetch_detail_photos(source_url, session=None):
+    """Fetch the listing detail page to get all photos (search page only has 1-3)."""
+    if not source_url or 'realtor.com' not in source_url:
+        return []
+    try:
+        html = _fetch_detail_html(source_url)
+        if not html:
+            return []
+        nd = extract_next_data(html)
+        if not nd:
+            return []
+        props = nd.get('props', {}).get('pageProps', {})
+        photos = []
+
+        def find_photos(obj, depth=0):
+            if depth > 8:
+                return
+            if isinstance(obj, dict):
+                if 'href' in obj and isinstance(obj['href'], str) and ('rdcpix' in obj['href'] or '.jpg' in obj['href'].lower()):
+                    photos.append(obj['href'])
+                for v in obj.values():
+                    find_photos(v, depth + 1)
+            elif isinstance(obj, list):
+                for v in obj:
+                    find_photos(v, depth + 1)
+
+        find_photos(props)
+        seen = set()
+        unique = []
+        for p in photos:
+            p = upsize_photo_url(p)
+            if p not in seen:
+                seen.add(p)
+                unique.append(p)
+        return unique
+    except Exception as e:
+        print(f'    Detail page fetch failed: {e}')
+        return []
 
 
 def load_config():
@@ -228,7 +316,7 @@ def parse_listing(item):
         else:
             href = str(p)
         if href:
-            photo_urls.append(href)
+            photo_urls.append(upsize_photo_url(href))
 
     # Contact info (Realtor.com may include agent/broker info)
     advertiser = item.get('advertisers') or []
@@ -442,11 +530,25 @@ def crawl_realtor_com(search_url, max_listings=50):
 
         unit_id = make_unit_id(units_data.get('units', []))
 
+        # Fetch detail page for full photo set
+        all_photos = info['photo_urls']
+        if info['source_url'] and len(all_photos) < 5:
+            print(f'    Fetching detail page for more photos...')
+            detail_photos = fetch_detail_photos(info['source_url'])
+            if detail_photos:
+                seen = set(all_photos)
+                for dp in detail_photos:
+                    if dp not in seen:
+                        all_photos.append(dp)
+                        seen.add(dp)
+                print(f'    Found {len(all_photos)} total photos')
+            time.sleep(1)
+
         # Download photos
         photo_paths = []
         photo_sources = []
         photo_dir = PHOTOS_DIR / unit_id
-        for i, img_url in enumerate(info['photo_urls'][:MAX_PHOTOS]):
+        for i, img_url in enumerate(all_photos[:MAX_PHOTOS]):
             try:
                 photo_dir.mkdir(parents=True, exist_ok=True)
                 dest = photo_dir / f'photo-{i + 1}.jpg'

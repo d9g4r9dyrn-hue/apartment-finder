@@ -619,8 +619,8 @@ def crawl_craigslist(search_url, max_listings=24):
             unit['lat'] = lat
             unit['lon'] = lon
 
-        # download up to 8 photos
-        for i, img_url in enumerate(info.get('photos', [])[:8]):
+        # download all available photos
+        for i, img_url in enumerate(info.get('photos', [])[:30]):
             try:
                 unit_id = make_unit_id(units_data.get('units', []))
                 photo_dir = PHOTOS_DIR / unit_id
