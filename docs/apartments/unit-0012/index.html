@@ -135,16 +135,6 @@
       margin-bottom: 8px;
     }
 
-    .description {
-      white-space: pre-wrap;
-      font-size: 14px;
-      color: var(--text);
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px 16px;
-    }
-
     .photos {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -158,6 +148,7 @@
       border-radius: 6px;
       border: 1px solid var(--border);
       display: block;
+      cursor: pointer;
     }
 
     .your-notes {
@@ -289,14 +280,19 @@
     }
 
     .timeline-add-row input[type="date"] {
-      flex: 0 0 150px;
+      flex: 0 0 130px;
     }
 
     .timeline-add-row input[type="text"] {
       flex: 1;
+      min-width: 120px;
     }
 
-    .timeline-add-row input {
+    .timeline-add-row select {
+      flex: 0 0 auto;
+    }
+
+    .timeline-add-row input, .timeline-add-row select {
       background: var(--bg);
       color: var(--text);
       border: 1px solid var(--border);
@@ -316,29 +312,514 @@
       font-size: 13px;
       cursor: pointer;
     }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .contact-chip {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      min-width: 150px;
+    }
+
+    .contact-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--subtext);
+      margin-bottom: 3px;
+    }
+
+    .contact-value {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .contact-value:hover { text-decoration: underline; }
+
+    .compose-btn {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .compose-btn:hover { opacity: 0.9; }
+
+    .contact-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-overlay.open { display: flex; }
+
+    .contact-modal {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      width: min(560px, 92vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .contact-modal h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .contact-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: transparent;
+      border: none;
+      color: var(--subtext);
+      font-size: 20px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .contact-modal-close:hover { color: var(--text); }
+
+    .contact-modal textarea {
+      width: 100%;
+      min-height: 160px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      resize: vertical;
+      margin-bottom: 14px;
+      box-sizing: border-box;
+    }
+
+    .contact-modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .contact-modal-actions button {
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-email { background: var(--accent); color: var(--bg); }
+    .btn-copy-call { background: var(--surface); color: var(--text); border: 1px solid var(--border) !important; }
+    .btn-log { background: transparent; color: var(--subtext); border: 1px solid var(--border) !important; }
+
+    .description {
+      font-size: 14px;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      line-height: 1.65;
+    }
+
+    .description p { margin: 0 0 10px; }
+    .description p:last-child { margin-bottom: 0; }
+    .description a { color: var(--accent); word-break: break-all; }
+
+    .desc-heading {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 14px 0 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+    .desc-heading:first-child { margin-top: 0; }
+
+    .desc-list {
+      margin: 0 0 10px 0;
+      padding: 0 0 0 18px;
+      columns: 160px 3;
+      column-gap: 24px;
+    }
+
+    .desc-list li {
+      margin-bottom: 3px;
+      break-inside: avoid;
+    }
+
+    .spec-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0;
+    }
+    .spec-chip {
+      background: rgba(79,209,197,0.1);
+      border: 1px solid rgba(79,209,197,0.3);
+      color: var(--text);
+      border-radius: 4px;
+      padding: 3px 9px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    dl.desc-kv {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 0;
+      margin: 8px 0 12px;
+      font-size: 13px;
+    }
+    .desc-kv-row {
+      display: contents;
+    }
+    .desc-kv-row dt {
+      color: var(--subtext);
+      font-weight: 500;
+      padding: 3px 14px 3px 0;
+      white-space: nowrap;
+    }
+    .desc-kv-row dd {
+      color: var(--text);
+      padding: 3px 0;
+      margin: 0;
+    }
+    .desc-kv-row:not(:last-child) dt,
+    .desc-kv-row:not(:last-child) dd {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .desc-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .desc-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .desc-link-btn:hover { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
+
+    .scam-report {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .scam-score-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .scam-score-value {
+      font-family: 'DM Mono', monospace;
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .scam-score-label {
+      font-size: 13px;
+      color: var(--subtext);
+    }
+    .scam-score-bar-bg {
+      height: 6px;
+      background: var(--bg);
+      border-radius: 3px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .scam-score-bar {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.3s;
+    }
+    .scam-factors {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .scam-factor {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      padding: 4px 0 4px 10px;
+      border-left: 3px solid var(--border);
+    }
+    .scam-factor-icon {
+      flex-shrink: 0;
+      font-weight: 700;
+      width: 16px;
+      text-align: center;
+    }
+
+    .people-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .people-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .person-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+    .person-card .person-name { font-weight: 500; flex: 1; }
+    .person-card .person-role {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--subtext);
+      background: var(--surface);
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+    .person-card .person-contact { font-size: 12px; color: var(--accent); }
+    .person-card .person-remove {
+      background: transparent; border: none; color: var(--subtext);
+      cursor: pointer; font-size: 14px; padding: 0 2px;
+    }
+    .person-card .person-remove:hover { color: var(--red); }
+    .people-add-row {
+      display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+    }
+    .people-add-row input, .people-add-row select {
+      background: var(--bg); color: var(--text); border: 1px solid var(--border);
+      border-radius: 4px; padding: 7px 10px; font-family: 'DM Sans', sans-serif; font-size: 13px;
+    }
+    .people-add-row input[type="text"] { flex: 1; min-width: 100px; }
+    .people-add-row input[type="tel"], .people-add-row input[type="email"] { flex: 1; min-width: 120px; }
+    .people-add-row select { min-width: 90px; }
+    .people-add-row button {
+      background: var(--accent); color: var(--bg); border: none;
+      border-radius: 4px; padding: 7px 14px; font-weight: 600; font-size: 13px; cursor: pointer;
+    }
+    .people-empty { font-size: 12px; color: var(--subtext); font-style: italic; margin-bottom: 12px; }
+
+    .detail-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.88);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .detail-lightbox.open { display: flex; }
+    .detail-lightbox img {
+      max-width: 90vw;
+      max-height: 82vh;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+    .detail-lb-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,.55);
+      border: none;
+      color: #fff;
+      font-size: 32px;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      z-index: 10000;
+    }
+    .detail-lb-prev { left: 16px; }
+    .detail-lb-next { right: 16px; }
+    .detail-lb-counter {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,.75);
+      font-size: 13px;
+    }
+    .detail-lb-close {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      z-index: 10000;
+    }
+
+    .contact-display { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+    .contact-none {
+      font-size: 13px;
+      color: var(--subtext);
+      font-style: italic;
+    }
+
+    .contact-edit-link {
+      background: transparent;
+      border: none;
+      color: var(--accent);
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .contact-edit-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .contact-edit-form input {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 7px 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      flex: 1 1 180px;
+    }
+
+    .contact-edit-form .save-btn {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: 4px;
+      padding: 7px 14px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .contact-edit-form .cancel-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--subtext);
+      border-radius: 4px;
+      padding: 7px 14px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
 </style>
 </head>
 <body>
   <a class="back-link" href="../../units-summary.html">&larr; Back to list</a>
   <h1>Pinebrook  Estates - 2 bedrooms 2.5 bath Town House</h1>
   <div class="address">6620 121st Ave. North, Unit 1 near Keen and 118th Ave. North</div>
-  <div class="badges"><div class="badge price">$1,900/mo</div><div class="badge">2 bd</div><div class="badge">2.5 ba</div><div class="badge">1,080 sqft</div><div class="badge">House</div><div class="badge">4.5 mi away</div><div class="badge quality" title="Some dated features like older appliances and paint, but generally clean.">3.0 ★ quality</div><div class="badge">Tile flooring</div><div class="badge">🧺 Washer/Dryer</div><div class="badge">$50 for famiy</div><div class="badge">cats are OK - purrr</div><div class="badge">w/d hookups</div><div class="badge">off-street parking</div><div class="badge">no smoking</div></div>
-  <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://tampa.craigslist.org/pnl/apa/d/largo-pinebrook-estates-bedrooms-25/7938116988.html" target="_blank">Craigslist &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-15</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0012</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (67d)</div></div></div>
+  <div class="badges"><div class="badge price">$1,900/mo</div><div class="badge">2 bd</div><div class="badge">2.5 ba</div><div class="badge">1,080 sqft</div><div class="badge">House</div><div class="badge">4.5 mi away</div><div class="badge quality" title="Clean, well-maintained interior with good natural light; dated kitchen aesthetic.">4.0 ★ quality</div><div class="badge">Tile flooring</div><div class="badge">🍳 Dated kitchen</div><div class="badge">🧺 Washer/Dryer</div><div class="badge">$50 for famiy</div><div class="badge">cats are OK - purrr</div><div class="badge">w/d hookups</div><div class="badge">off-street parking</div><div class="badge">no smoking</div></div>
+  <div class="info-grid"><div class="info-item"><div class="info-label">Source</div><div class="info-value"><a href="https://tampa.craigslist.org/pnl/apa/d/largo-pinebrook-estates-bedrooms-25/7938116988.html" target="_blank">Craigslist &#8599;</a></div></div><div class="info-item"><div class="info-label">Date Added</div><div class="info-value">2026-06-15</div></div><div class="info-item"><div class="info-label">Unit ID</div><div class="info-value">unit-0012</div></div><div class="info-item"><div class="info-label">Your Lease Ends</div><div class="info-value">Aug 21, 2026 (65d)</div></div></div>
+  <div class="section contact-section">
+    <h2>Contact</h2>
+    <div id="contact-display" class="contact-display"></div>
+    <div id="contact-edit-form" class="contact-edit-form" style="display:none">
+      <input type="tel" id="contact-edit-phone" placeholder="Phone number">
+      <input type="email" id="contact-edit-email" placeholder="Email address">
+      <button class="save-btn" onclick="saveContactInfo()">Save</button>
+      <button class="cancel-btn" onclick="toggleContactEdit(false)">Cancel</button>
+    </div>
+  </div>
+  <div class="section">
+    <h2>Scam Risk Analysis</h2>
+    <div class="scam-report">
+      <div class="scam-score-header">
+        <span class="scam-score-value" style="color: #ecc94b">15</span>
+        <span class="scam-score-label">Moderate risk — proceed with caution</span>
+      </div>
+      <div class="scam-score-bar-bg"><div class="scam-score-bar" style="width: 15%; background: #ecc94b"></div></div>
+      <div class="scam-factors"><div class="scam-factor" style="border-left-color: #ecc94b"><span class="scam-factor-icon" style="color: #ecc94b">⚠</span><span>No contact information available at all</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>No contact name provided</span></div><div class="scam-factor" style="border-left-color: #8892a4"><span class="scam-factor-icon" style="color: #8892a4">•</span><span>Listed on Craigslist (higher scam rate than managed platforms)</span></div><div class="scam-factor" style="border-left-color: #48bb78"><span class="scam-factor-icon" style="color: #48bb78">✓</span><span>8 photos — good photo coverage</span></div></div>
+    </div>
+  </div>
+  <div class="section">
+    <h2>People</h2>
+    <div class="people-section">
+      <div id="people-list"></div>
+      <div class="people-add-row">
+        <input type="text" id="person-name" placeholder="Name">
+        <input type="tel" id="person-phone" placeholder="Phone">
+        <input type="email" id="person-email" placeholder="Email">
+        <select id="person-role">
+          <option value="">Role…</option>
+          <option value="owner">Owner</option>
+          <option value="manager">Manager</option>
+          <option value="agent">Agent</option>
+          <option value="tenant">Tenant</option>
+          <option value="other">Other</option>
+        </select>
+        <button onclick="addPerson()">Add</button>
+      </div>
+    </div>
+  </div>
   <div class="section">
     <h2>Location</h2>
     <div id="detail-map" class="detail-map"></div>
   </div>
   <div class="section">
     <h2>Description (from listing)</h2>
-    <div class="description">QR Code Link to This Post
-Beautifully renovated a 2 bedroom, 3 bath townhouse, in very quite and nice neighborhood, Living room, dining room, , kitchen, tile, wood and carpet floors,  with washer and dryer hook up, Central Air,  corner unit.
-Please call or text
-show contact info
-for appointment.</div>
+    <div class="description"><p>Beautifully renovated a 2 bedroom, 3 bath townhouse, in very quite and nice neighborhood, Living room, dining room, , kitchen, tile, wood and carpet floors,  with washer and dryer hook up, Central Air,  corner unit.<br>Please call or text<br>for appointment.</p></div>
   </div>
   <div class="section">
     <h2>Photos (8)</h2>
-    <div class="photos"><a href="../../photos/unit-0012/photo-1.jpg" target="_blank"><img src="../../photos/unit-0012/photo-1.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0012/photo-2.jpg" target="_blank"><img src="../../photos/unit-0012/photo-2.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0012/photo-3.jpg" target="_blank"><img src="../../photos/unit-0012/photo-3.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0012/photo-4.jpg" target="_blank"><img src="../../photos/unit-0012/photo-4.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0012/photo-5.jpg" target="_blank"><img src="../../photos/unit-0012/photo-5.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0012/photo-6.jpg" target="_blank"><img src="../../photos/unit-0012/photo-6.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0012/photo-7.jpg" target="_blank"><img src="../../photos/unit-0012/photo-7.jpg" alt="Photo" loading="lazy"></a><a href="../../photos/unit-0012/photo-8.jpg" target="_blank"><img src="../../photos/unit-0012/photo-8.jpg" alt="Photo" loading="lazy"></a></div>
+    <div class="photos"><img src="../../photos/unit-0012/photo-1.jpg" alt="Photo" loading="lazy" data-photos='["../../photos/unit-0012/photo-1.jpg", "../../photos/unit-0012/photo-2.jpg", "../../photos/unit-0012/photo-3.jpg", "../../photos/unit-0012/photo-4.jpg", "../../photos/unit-0012/photo-5.jpg", "../../photos/unit-0012/photo-6.jpg", "../../photos/unit-0012/photo-7.jpg", "../../photos/unit-0012/photo-8.jpg"]' data-index="0" onclick="openDetailGallery(this)"><img src="../../photos/unit-0012/photo-2.jpg" alt="Photo" loading="lazy" data-photos='["../../photos/unit-0012/photo-1.jpg", "../../photos/unit-0012/photo-2.jpg", "../../photos/unit-0012/photo-3.jpg", "../../photos/unit-0012/photo-4.jpg", "../../photos/unit-0012/photo-5.jpg", "../../photos/unit-0012/photo-6.jpg", "../../photos/unit-0012/photo-7.jpg", "../../photos/unit-0012/photo-8.jpg"]' data-index="1" onclick="openDetailGallery(this)"><img src="../../photos/unit-0012/photo-3.jpg" alt="Photo" loading="lazy" data-photos='["../../photos/unit-0012/photo-1.jpg", "../../photos/unit-0012/photo-2.jpg", "../../photos/unit-0012/photo-3.jpg", "../../photos/unit-0012/photo-4.jpg", "../../photos/unit-0012/photo-5.jpg", "../../photos/unit-0012/photo-6.jpg", "../../photos/unit-0012/photo-7.jpg", "../../photos/unit-0012/photo-8.jpg"]' data-index="2" onclick="openDetailGallery(this)"><img src="../../photos/unit-0012/photo-4.jpg" alt="Photo" loading="lazy" data-photos='["../../photos/unit-0012/photo-1.jpg", "../../photos/unit-0012/photo-2.jpg", "../../photos/unit-0012/photo-3.jpg", "../../photos/unit-0012/photo-4.jpg", "../../photos/unit-0012/photo-5.jpg", "../../photos/unit-0012/photo-6.jpg", "../../photos/unit-0012/photo-7.jpg", "../../photos/unit-0012/photo-8.jpg"]' data-index="3" onclick="openDetailGallery(this)"><img src="../../photos/unit-0012/photo-5.jpg" alt="Photo" loading="lazy" data-photos='["../../photos/unit-0012/photo-1.jpg", "../../photos/unit-0012/photo-2.jpg", "../../photos/unit-0012/photo-3.jpg", "../../photos/unit-0012/photo-4.jpg", "../../photos/unit-0012/photo-5.jpg", "../../photos/unit-0012/photo-6.jpg", "../../photos/unit-0012/photo-7.jpg", "../../photos/unit-0012/photo-8.jpg"]' data-index="4" onclick="openDetailGallery(this)"><img src="../../photos/unit-0012/photo-6.jpg" alt="Photo" loading="lazy" data-photos='["../../photos/unit-0012/photo-1.jpg", "../../photos/unit-0012/photo-2.jpg", "../../photos/unit-0012/photo-3.jpg", "../../photos/unit-0012/photo-4.jpg", "../../photos/unit-0012/photo-5.jpg", "../../photos/unit-0012/photo-6.jpg", "../../photos/unit-0012/photo-7.jpg", "../../photos/unit-0012/photo-8.jpg"]' data-index="5" onclick="openDetailGallery(this)"><img src="../../photos/unit-0012/photo-7.jpg" alt="Photo" loading="lazy" data-photos='["../../photos/unit-0012/photo-1.jpg", "../../photos/unit-0012/photo-2.jpg", "../../photos/unit-0012/photo-3.jpg", "../../photos/unit-0012/photo-4.jpg", "../../photos/unit-0012/photo-5.jpg", "../../photos/unit-0012/photo-6.jpg", "../../photos/unit-0012/photo-7.jpg", "../../photos/unit-0012/photo-8.jpg"]' data-index="6" onclick="openDetailGallery(this)"><img src="../../photos/unit-0012/photo-8.jpg" alt="Photo" loading="lazy" data-photos='["../../photos/unit-0012/photo-1.jpg", "../../photos/unit-0012/photo-2.jpg", "../../photos/unit-0012/photo-3.jpg", "../../photos/unit-0012/photo-4.jpg", "../../photos/unit-0012/photo-5.jpg", "../../photos/unit-0012/photo-6.jpg", "../../photos/unit-0012/photo-7.jpg", "../../photos/unit-0012/photo-8.jpg"]' data-index="7" onclick="openDetailGallery(this)"></div>
   </div>
   <div class="section">
     <h2>Commute</h2>
@@ -361,8 +842,30 @@ for appointment.</div>
       <div id="detail-timeline-entries" class="timeline-entries"></div>
       <div class="timeline-add-row">
         <input type="date" id="detail-timeline-date">
-        <input type="text" id="detail-timeline-text" placeholder="e.g. Called landlord, toured unit...">
+        <select id="detail-timeline-type"><option value="note">Note</option><option value="call">Call</option><option value="text">Text</option><option value="email">Email</option><option value="visit">Visit</option><option value="app">App msg</option></select>
+        <select id="detail-timeline-direction"><option value="out">Out</option><option value="in">In</option></select>
+        <select id="detail-timeline-person"><option value="">Person&hellip;</option></select>
+        <input type="text" id="detail-timeline-text" placeholder="What happened...">
         <button onclick="addDetailTimelineEntry()">Add</button>
+      </div>
+    </div>
+  </div>
+  <div id="detail-lightbox" class="detail-lightbox" onclick="closeDetailLightbox(event)">
+    <button class="detail-lb-close" onclick="closeDetailLightbox()">&times;</button>
+    <button class="detail-lb-nav detail-lb-prev" onclick="detailLbPrev(event)">&#8249;</button>
+    <img id="detail-lb-img" src="" alt="Full-size photo">
+    <button class="detail-lb-nav detail-lb-next" onclick="detailLbNext(event)">&#8250;</button>
+    <div class="detail-lb-counter" id="detail-lb-counter"></div>
+  </div>
+  <div id="contact-overlay" class="contact-overlay" onclick="closeContactOverlay(event)">
+    <div class="contact-modal">
+      <button class="contact-modal-close" onclick="document.getElementById('contact-overlay').classList.remove('open')">&times;</button>
+      <h3>Contact about this property</h3>
+      <textarea id="contact-textarea"></textarea>
+      <div class="contact-modal-actions">
+        <button class="btn-email" id="btn-email" onclick="sendContactEmail()">Send Email</button>
+        <button class="btn-copy-call" id="btn-copy-call" onclick="copyAndCall()">Copy &amp; Call</button>
+        <button class="btn-log" onclick="logContactOnly()">Log only</button>
       </div>
     </div>
   </div>
@@ -375,6 +878,12 @@ for appointment.</div>
     const TARGET_LAT = 27.95;
     const TARGET_LON = -82.73;
     const TARGET_NAME = "Clearwater, FL";
+    const CONTACT_PHONE = null;
+    const CONTACT_EMAIL = null;
+    const CONTACT_NAME = null;
+    const CONTACT_MESSAGE = "Hi, I'm interested in your listing \"Pinebrook  Estates - 2 bedrooms 2.5 bath Town House\" at 6620 121st Ave. North, Unit 1 near Keen and 118th Ave. North.\n\nIs it still available? Our lease ends Aug 21, 2026 and we're looking for a $1,900/month apartment and would love to schedule a viewing.\n\nPlease let us know if available and what the next steps are.\n\nThank you!";
+    const EMBEDDED_CONTACTS = [];
+    const EMBEDDED_INTERACTIONS = [];
 
     function escapeHtml(s) {
       return String(s)
@@ -394,8 +903,6 @@ for appointment.</div>
       return R * 2 * Math.asin(Math.sqrt(a));
     }
 
-    // Distance to each work location is computed client-side from the same
-    // `workLocations` list (name/address/lat/lon) saved by the list page
     function renderCommute() {
       const list = document.getElementById('commute-list');
       let workLocations = [];
@@ -409,10 +916,45 @@ for appointment.</div>
         list.innerHTML = '<div class="info-item" style="grid-column: 1 / -1;"><div class="info-value">This unit\'s location is unknown, so commute distance can\'t be calculated.</div></div>';
         return;
       }
+
       list.innerHTML = workLocations.map(loc => {
         const d = Math.round(haversineMiles(UNIT_LAT, UNIT_LON, loc.lat, loc.lon) * 10) / 10;
-        return `<div class="info-item"><div class="info-label">${escapeHtml(loc.name)}</div><div class="info-value">${d} mi</div></div>`;
+        let commuteExtra = '';
+        if (loc.commute_to_min || loc.commute_from_min) {
+          const parts = [];
+          if (loc.commute_to_min) parts.push(`\u2192 work: ${loc.commute_to_min} min`);
+          if (loc.commute_from_min) parts.push(`\u2190 home: ${loc.commute_from_min} min`);
+          commuteExtra = `<div style="font-size:12px;color:var(--subtext);">${parts.join(' &nbsp;|&nbsp; ')}</div>`;
+        }
+        return `<div class="info-item" id="commute-item-${encodeURIComponent(loc.name)}">` +
+          `<div class="info-label">${escapeHtml(loc.name)}</div>` +
+          `<div class="info-value">${d} mi (straight)<span class="drive-route-placeholder" style="display:block;font-size:12px;color:var(--subtext);">Loading drive\u2026</span>${commuteExtra}</div>` +
+          `</div>`;
       }).join('');
+
+      workLocations.forEach(async (loc, i) => {
+        if (loc.lat == null || loc.lon == null) return;
+        try {
+          const url = `https://router.project-osrm.org/route/v1/driving/${UNIT_LON},${UNIT_LAT};${loc.lon},${loc.lat}?overview=false`;
+          const resp = await fetch(url);
+          const data = await resp.json();
+          if (data.code === 'Ok' && data.routes.length) {
+            const driveMi = Math.round(data.routes[0].distance / 1609.344 * 10) / 10;
+            const driveMin = Math.round(data.routes[0].duration / 60);
+            const el = document.getElementById('commute-item-' + encodeURIComponent(loc.name));
+            if (el) {
+              const placeholder = el.querySelector('.drive-route-placeholder');
+              if (placeholder) placeholder.innerHTML = `\uD83D\uDE97 ${driveMi} mi drive &middot; ~${driveMin} min`;
+            }
+          }
+        } catch (e) {
+          const el = document.getElementById('commute-item-' + encodeURIComponent(loc.name));
+          if (el) {
+            const placeholder = el.querySelector('.drive-route-placeholder');
+            if (placeholder) placeholder.textContent = '';
+          }
+        }
+      });
     }
 
     function loadDetailOverrides() {
@@ -465,21 +1007,30 @@ for appointment.</div>
         return;
       }
       const sorted = entries.map((e, i) => ({ ...e, i })).sort((a, b) => b.date.localeCompare(a.date));
-      list.innerHTML = sorted.map(entry => `<div class="timeline-entry">` +
-        `<div class="timeline-entry-date">${formatTimelineDate(entry.date)}</div>` +
-        `<div class="timeline-entry-text">${escapeHtml(entry.text)}</div>` +
-        `<button class="timeline-entry-remove" title="Remove" onclick="removeDetailTimelineEntry(${entry.i})">\u2715</button>` +
-      `</div>`).join('');
+      const typeIcons = { call: '\uD83D\uDCDE', text: '\uD83D\uDCAC', email: '\u2709', visit: '\uD83D\uDEB6', app: '\uD83D\uDCF1', note: '\uD83D\uDCDD' };
+      list.innerHTML = sorted.map(entry => {
+        const icon = typeIcons[entry.type] || typeIcons.note;
+        const dir = entry.direction === 'in' ? '\u2B05' : (entry.direction === 'out' ? '\u27A1' : '');
+        const personTag = entry.person ? `<span style="color:var(--accent);font-size:11px;margin-right:4px">${escapeHtml(entry.person)}</span>` : '';
+        return `<div class="timeline-entry">`
+          + `<div class="timeline-entry-date">${formatTimelineDate(entry.date)} ${icon}${dir}</div>`
+          + `<div class="timeline-entry-text">${personTag}${escapeHtml(entry.text)}</div>`
+          + `<button class="timeline-entry-remove" title="Remove" onclick="removeDetailTimelineEntry(${entry.i})">\u2715</button>`
+          + `</div>`;
+      }).join('');
     }
 
     function addDetailTimelineEntry() {
       const date = document.getElementById('detail-timeline-date').value;
       const text = document.getElementById('detail-timeline-text').value.trim();
+      const type = document.getElementById('detail-timeline-type').value;
+      const direction = document.getElementById('detail-timeline-direction').value;
+      const person = document.getElementById('detail-timeline-person').value;
       if (!date || !text) return;
       const overrides = loadDetailOverrides();
       const entry = overrides[UNIT_ID] || {};
       const timeline = entry.timeline || [];
-      timeline.push({ date, text });
+      timeline.push({ date, text, type, direction, person });
       entry.timeline = timeline;
       overrides[UNIT_ID] = entry;
       saveDetailOverrides(overrides);
@@ -510,25 +1061,282 @@ for appointment.</div>
         maxZoom: 19
       }).addTo(map);
 
-      const points = [[UNIT_LAT, UNIT_LON]];
+      const bounds = [[UNIT_LAT, UNIT_LON]];
       L.marker([UNIT_LAT, UNIT_LON]).addTo(map)
         .bindPopup(`<b>This unit</b><br>${escapeHtml(UNIT_ADDRESS)}`)
         .openPopup();
 
       if (TARGET_LAT != null && TARGET_LON != null) {
-        points.push([TARGET_LAT, TARGET_LON]);
+        bounds.push([TARGET_LAT, TARGET_LON]);
         L.marker([TARGET_LAT, TARGET_LON]).addTo(map)
           .bindPopup(`<b>${escapeHtml(TARGET_NAME || 'Search center')}</b>`);
-        L.polyline(points, { color: '#63b3ed', weight: 2, dashArray: '4 6' }).addTo(map);
+        L.polyline([[UNIT_LAT, UNIT_LON], [TARGET_LAT, TARGET_LON]], { color: '#63b3ed', weight: 2, dashArray: '4 6' }).addTo(map);
       }
 
-      if (points.length > 1) {
-        map.fitBounds(points, { padding: [30, 30] });
+      // Work locations from localStorage
+      let workLocations = [];
+      try { workLocations = JSON.parse(localStorage.getItem('workLocations') || '[]'); } catch (e) {}
+      const workIcon = L.divIcon({
+        html: '&#128188;',
+        className: 'work-marker-icon',
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+      workLocations.forEach(async (loc, i) => {
+        if (loc.lat == null || loc.lon == null) return;
+        const d = Math.round(haversineMiles(UNIT_LAT, UNIT_LON, loc.lat, loc.lon) * 10) / 10;
+        bounds.push([loc.lat, loc.lon]);
+        let popupHtml = `<b>${escapeHtml(loc.name)}</b><br>${d} mi straight-line`;
+        const marker = L.marker([loc.lat, loc.lon], { icon: workIcon }).addTo(map)
+          .bindPopup(popupHtml);
+        L.polyline([[UNIT_LAT, UNIT_LON], [loc.lat, loc.lon]], { color: '#b794f4', weight: 2, dashArray: '4 6' }).addTo(map);
+        try {
+          const url = `https://router.project-osrm.org/route/v1/driving/${UNIT_LON},${UNIT_LAT};${loc.lon},${loc.lat}?overview=false`;
+          const resp = await fetch(url);
+          const data = await resp.json();
+          if (data.code === 'Ok' && data.routes.length) {
+            const driveMi = Math.round(data.routes[0].distance / 1609.344 * 10) / 10;
+            const driveMin = Math.round(data.routes[0].duration / 60);
+            popupHtml += `<br>\uD83D\uDE97 ${driveMi} mi drive &middot; ~${driveMin} min`;
+            if (loc.commute_to_min || loc.commute_from_min) {
+              const parts = [];
+              if (loc.commute_to_min) parts.push(`\u2192 ${loc.commute_to_min}m`);
+              if (loc.commute_from_min) parts.push(`\u2190 ${loc.commute_from_min}m`);
+              popupHtml += `<br>${parts.join(' / ')}`;
+            }
+            marker.setPopupContent(popupHtml);
+          }
+        } catch (e) {}
+      });
+
+      if (bounds.length > 1) {
+        map.fitBounds(bounds, { padding: [30, 30] });
       } else {
-        map.setView(points[0], 13);
+        map.setView(bounds[0], 13);
       }
       setTimeout(() => map.invalidateSize(), 100);
     }
+
+    function getEffectiveContact() {
+      const overrides = loadDetailOverrides();
+      const entry = overrides[UNIT_ID] || {};
+      return {
+        phone: (entry.contact_phone !== undefined ? entry.contact_phone : CONTACT_PHONE) || null,
+        email: (entry.contact_email !== undefined ? entry.contact_email : CONTACT_EMAIL) || null,
+      };
+    }
+
+    function renderContactSection() {
+      const { phone, email } = getEffectiveContact();
+      const display = document.getElementById('contact-display');
+      if (!display) return;
+      let html = '';
+      if (CONTACT_NAME) {
+        html += `<div class="contact-chip"><span class="contact-label">Name</span><span class="contact-value">${escapeHtml(CONTACT_NAME)}</span></div>`;
+      }
+      if (phone) {
+        const ph = phone.replace(/[^0-9+]/g, '');
+        html += `<div class="contact-chip"><span class="contact-label">Phone</span><a href="tel:${ph}" class="contact-value">${escapeHtml(phone)}</a></div>`;
+      }
+      if (email) {
+        html += `<div class="contact-chip"><span class="contact-label">Email</span><a href="mailto:${escapeHtml(email)}" class="contact-value">${escapeHtml(email)}</a></div>`;
+      }
+      if (phone || email) {
+        html += `<button class="compose-btn" onclick="openContactModal()">&#9993; Compose Message</button>`;
+        html += `<button class="contact-edit-link" onclick="toggleContactEdit(true)">Edit</button>`;
+      } else {
+        html += `<span class="contact-none">No contact info found on listing.</span> `;
+        html += `<button class="contact-edit-link" onclick="toggleContactEdit(true)">Add manually</button>`;
+      }
+      display.innerHTML = html;
+    }
+
+    function toggleContactEdit(show) {
+      const form = document.getElementById('contact-edit-form');
+      const display = document.getElementById('contact-display');
+      if (show) {
+        const { phone, email } = getEffectiveContact();
+        document.getElementById('contact-edit-phone').value = phone || '';
+        document.getElementById('contact-edit-email').value = email || '';
+        form.style.display = '';
+        display.style.display = 'none';
+      } else {
+        form.style.display = 'none';
+        display.style.display = '';
+      }
+    }
+
+    function saveContactInfo() {
+      const phone = document.getElementById('contact-edit-phone').value.trim() || null;
+      const email = document.getElementById('contact-edit-email').value.trim() || null;
+      const overrides = loadDetailOverrides();
+      const entry = overrides[UNIT_ID] || {};
+      entry.contact_phone = phone;
+      entry.contact_email = email;
+      overrides[UNIT_ID] = entry;
+      saveDetailOverrides(overrides);
+      toggleContactEdit(false);
+      renderContactSection();
+    }
+
+    // ---- People (contacts associated with this unit) ----
+    function getPeople() {
+      const overrides = loadDetailOverrides();
+      const entry = overrides[UNIT_ID] || {};
+      const stored = entry.people || [];
+      if (stored.length === 0 && EMBEDDED_CONTACTS.length > 0) return [...EMBEDDED_CONTACTS];
+      return stored;
+    }
+
+    function savePeople(people) {
+      const overrides = loadDetailOverrides();
+      const entry = overrides[UNIT_ID] || {};
+      entry.people = people;
+      overrides[UNIT_ID] = entry;
+      saveDetailOverrides(overrides);
+    }
+
+    function renderPeople() {
+      const list = document.getElementById('people-list');
+      if (!list) return;
+      const people = getPeople();
+      if (!people.length) {
+        list.innerHTML = '<div class="people-empty">No contacts added yet.</div>';
+        return;
+      }
+      list.innerHTML = people.map((p, i) => {
+        const roleBadge = p.role ? `<span class="person-role">${escapeHtml(p.role)}</span>` : '';
+        const contactParts = [];
+        if (p.phone) contactParts.push(`<a href="tel:${encodeURIComponent(p.phone)}" class="person-contact">${escapeHtml(p.phone)}</a>`);
+        if (p.email) contactParts.push(`<a href="mailto:${encodeURIComponent(p.email)}" class="person-contact">${escapeHtml(p.email)}</a>`);
+        return `<div class="person-card">`
+          + `<span class="person-name">${escapeHtml(p.name || 'Unknown')}</span>`
+          + roleBadge
+          + contactParts.join(' ')
+          + `<button class="person-remove" title="Remove" onclick="removePerson(${i})">\u2715</button>`
+          + `</div>`;
+      }).join('');
+      updatePersonSelect();
+    }
+
+    function addPerson() {
+      const name = document.getElementById('person-name').value.trim();
+      const phone = document.getElementById('person-phone').value.trim();
+      const email = document.getElementById('person-email').value.trim();
+      const role = document.getElementById('person-role').value;
+      if (!name && !phone && !email) return;
+      const people = getPeople();
+      people.push({ name: name || '', phone: phone || '', email: email || '', role: role || '' });
+      savePeople(people);
+      document.getElementById('person-name').value = '';
+      document.getElementById('person-phone').value = '';
+      document.getElementById('person-email').value = '';
+      document.getElementById('person-role').value = '';
+      renderPeople();
+    }
+
+    function removePerson(index) {
+      const people = getPeople();
+      people.splice(index, 1);
+      savePeople(people);
+      renderPeople();
+    }
+
+    function updatePersonSelect() {
+      const sel = document.getElementById('detail-timeline-person');
+      if (!sel) return;
+      const people = getPeople();
+      const val = sel.value;
+      sel.innerHTML = '<option value="">Person…</option>' +
+        people.filter(p => p.name).map(p =>
+          `<option value="${escapeHtml(p.name)}">${escapeHtml(p.name)}</option>`
+        ).join('');
+      sel.value = val;
+    }
+
+    function openContactModal() {
+      const { phone, email } = getEffectiveContact();
+      document.getElementById('contact-textarea').value = CONTACT_MESSAGE;
+      const emailBtn = document.getElementById('btn-email');
+      const callBtn = document.getElementById('btn-copy-call');
+      if (emailBtn) emailBtn.style.display = email ? '' : 'none';
+      if (callBtn) callBtn.style.display = phone ? '' : 'none';
+      document.getElementById('contact-overlay').classList.add('open');
+    }
+
+    function closeContactOverlay(event) {
+      if (!event || event.target === document.getElementById('contact-overlay')) {
+        document.getElementById('contact-overlay').classList.remove('open');
+      }
+    }
+
+    function logContactToTimeline(method, preview) {
+      const overrides = loadDetailOverrides();
+      const entry = overrides[UNIT_ID] || {};
+      const timeline = entry.timeline || [];
+      const today = new Date().toISOString().slice(0, 10);
+      const short = preview.length > 80 ? preview.slice(0, 80) + '...' : preview;
+      timeline.push({ date: today, text: method + ': ' + short });
+      entry.timeline = timeline;
+      overrides[UNIT_ID] = entry;
+      saveDetailOverrides(overrides);
+      renderDetailTimeline();
+    }
+
+    function sendContactEmail() {
+      const { email } = getEffectiveContact();
+      const msg = document.getElementById('contact-textarea').value;
+      const subject = encodeURIComponent('Inquiry about your listing');
+      const body = encodeURIComponent(msg);
+      window.open('mailto:' + (email || '') + '?subject=' + subject + '&body=' + body, '_blank');
+      logContactToTimeline('Emailed', msg);
+      document.getElementById('contact-overlay').classList.remove('open');
+    }
+
+    function copyAndCall() {
+      const { phone } = getEffectiveContact();
+      const msg = document.getElementById('contact-textarea').value;
+      try { navigator.clipboard.writeText(msg); } catch (e) {}
+      logContactToTimeline('Called (message copied)', msg);
+      if (phone) window.location.href = 'tel:' + phone;
+      document.getElementById('contact-overlay').classList.remove('open');
+    }
+
+    function logContactOnly() {
+      const msg = document.getElementById('contact-textarea').value;
+      logContactToTimeline('Contacted', msg);
+      document.getElementById('contact-overlay').classList.remove('open');
+    }
+
+    // ---- Detail-page lightbox ----
+    var _dlbPhotos = [];
+    var _dlbIndex = 0;
+    function openDetailGallery(el) {
+      _dlbPhotos = JSON.parse(el.dataset.photos || '[]');
+      _dlbIndex = parseInt(el.dataset.index || '0', 10);
+      _showDetailLb();
+      document.getElementById('detail-lightbox').classList.add('open');
+    }
+    function _showDetailLb() {
+      document.getElementById('detail-lb-img').src = _dlbPhotos[_dlbIndex] || '';
+      var ctr = document.getElementById('detail-lb-counter');
+      ctr.textContent = _dlbPhotos.length > 1 ? (_dlbIndex + 1) + ' / ' + _dlbPhotos.length : '';
+      document.querySelectorAll('.detail-lb-nav').forEach(function(b) {
+        b.style.display = _dlbPhotos.length > 1 ? '' : 'none';
+      });
+    }
+    function detailLbPrev(e) { e && e.stopPropagation(); _dlbIndex = (_dlbIndex - 1 + _dlbPhotos.length) % _dlbPhotos.length; _showDetailLb(); }
+    function detailLbNext(e) { e && e.stopPropagation(); _dlbIndex = (_dlbIndex + 1) % _dlbPhotos.length; _showDetailLb(); }
+    function closeDetailLightbox(e) {
+      if (e && e.target.id !== 'detail-lightbox') return;
+      document.getElementById('detail-lightbox').classList.remove('open');
+    }
+    document.addEventListener('keydown', function(e) {
+      if (!document.getElementById('detail-lightbox').classList.contains('open')) return;
+      if (e.key === 'Escape') document.getElementById('detail-lightbox').classList.remove('open');
+      else if (e.key === 'ArrowLeft') detailLbPrev(null);
+      else if (e.key === 'ArrowRight') detailLbNext(null);
+    });
 
     (function() {
       const overrides = loadDetailOverrides();
@@ -536,6 +1344,8 @@ for appointment.</div>
       document.getElementById('detail-notes-textarea').value = entry.notes || '';
       updateFavToggleBtn(overrides);
       renderCommute();
+      renderContactSection();
+      renderPeople();
       document.getElementById('detail-timeline-date').value = new Date().toISOString().slice(0, 10);
       renderDetailTimeline();
       initDetailMap();
