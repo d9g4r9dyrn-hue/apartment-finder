@@ -1849,18 +1849,56 @@ def generate_html():
       font-size: 13px;
     }}
 
-    /* Narrow / tall (mobile) viewports: stack the sidebar above the list
-       instead of side-by-side, and let the page scroll vertically */
+    .mobile-specs-row {{
+      display: none;
+    }}
+
+    .mobile-sidebar-toggle {{
+      display: none;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 8px;
+    }}
+    .mobile-sidebar-toggle:hover {{ border-color: var(--accent); }}
+    .mobile-sidebar-toggle .toggle-arrow {{
+      display: inline-block;
+      transition: transform 0.2s;
+      margin-right: 6px;
+      font-size: 10px;
+    }}
+    .mobile-sidebar-toggle.collapsed .toggle-arrow {{ transform: rotate(-90deg); }}
+
     @media (max-width: 860px) {{
       body {{
         height: auto;
         overflow: auto;
+        font-size: 14px;
+      }}
+
+      header {{
+        padding: 10px 14px;
+        flex-wrap: wrap;
+        gap: 8px;
       }}
 
       .layout {{
         flex-direction: column;
         overflow: visible;
         height: auto;
+        padding: 10px 10px;
+        gap: 10px;
+      }}
+
+      .mobile-sidebar-toggle {{
+        display: block;
       }}
 
       .sidebar {{
@@ -1870,6 +1908,11 @@ def generate_html():
         min-width: 0;
         overflow-y: visible;
         padding-right: 0;
+        gap: 10px;
+      }}
+
+      .sidebar.mobile-collapsed {{
+        display: none;
       }}
 
       .resizer {{
@@ -1879,10 +1922,343 @@ def generate_html():
       .list-panel {{
         flex: 1 1 auto;
         padding-left: 0;
+        overflow: visible;
       }}
 
       #map {{
         aspect-ratio: 16 / 9;
+        min-height: 200px;
+      }}
+
+      .stats {{
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 12px;
+      }}
+
+      .stat-value {{ font-size: 16px; }}
+
+      .tools-row {{
+        gap: 6px;
+      }}
+
+      .tools-group {{
+        flex-wrap: wrap;
+        gap: 6px;
+      }}
+
+      .tool-btn {{
+        flex: 1 1 70px;
+        min-width: 70px;
+        padding: 8px 8px;
+        font-size: 12px;
+      }}
+
+      .filter-group {{
+        min-width: 80px;
+      }}
+
+      .criteria-edit-grid {{
+        grid-template-columns: 1fr;
+      }}
+
+      .columns-grid {{
+        grid-template-columns: 1fr;
+      }}
+
+      .ranking-row {{
+        flex-wrap: wrap;
+        gap: 4px;
+      }}
+
+      .ranking-row label {{
+        flex: 0 0 100%;
+      }}
+
+      /* --- Card layout for table rows on mobile --- */
+      .units-table {{
+        border: none;
+        background: transparent;
+      }}
+
+      .units-table thead {{
+        display: none;
+      }}
+
+      .units-table tbody {{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }}
+
+      .units-table tbody tr.unit-row {{
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto;
+        gap: 2px 10px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px;
+        position: relative;
+      }}
+
+      .units-table tbody tr.unit-row > td {{
+        display: block;
+        border: none;
+      }}
+
+      .units-table tbody tr.unit-row:hover {{
+        background: var(--surface);
+      }}
+
+      .units-table tbody tr.scam-row {{
+        border-color: rgba(220, 60, 60, 0.3);
+      }}
+
+      .units-table tbody tr.same-property {{
+        border-left: 3px solid var(--accent);
+      }}
+
+      .units-table tbody tr.group-continues {{
+        border-bottom: 1px solid var(--border);
+      }}
+
+      .units-table tbody tr.addr-group-hdr {{
+        display: block;
+        background: rgba(79, 209, 197, 0.06);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--accent);
+        border-radius: 6px;
+        padding: 0;
+      }}
+
+      .units-table tbody tr.addr-group-hdr td {{
+        padding: 10px 12px;
+        font-size: 13px;
+      }}
+
+      /* Photo - spans full width at top */
+      .units-table tbody tr.unit-row .unit-thumb-col {{
+        grid-column: 1;
+        grid-row: 1 / 4;
+        padding: 0;
+        display: flex;
+        align-items: flex-start;
+      }}
+
+      .unit-thumb, .unit-thumb-empty, .thumb-grid {{
+        width: 64px !important;
+        height: 64px !important;
+      }}
+
+      /* Address - next to photo */
+      .units-table tbody tr.unit-row .unit-address-col {{
+        grid-column: 2;
+        grid-row: 1;
+        padding: 0;
+        min-width: 0;
+      }}
+
+      .units-table tbody tr.unit-row .unit-address-col .unit-link {{
+        font-size: 14px;
+        line-height: 1.3;
+        word-break: break-word;
+      }}
+
+      .unit-id-line {{
+        flex-wrap: wrap;
+        gap: 4px;
+      }}
+
+      /* Price + key specs next to photo */
+      .units-table tbody tr.unit-row .unit-price-col {{
+        grid-column: 2;
+        grid-row: 2;
+        padding: 2px 0;
+        text-align: left;
+        font-size: 16px;
+      }}
+
+      /* Type badge row */
+      .units-table tbody tr.unit-row .unit-type-col {{
+        grid-column: 2;
+        grid-row: 3;
+        padding: 0;
+      }}
+
+      /* Spec cells in a row below */
+      .units-table tbody tr.unit-row .beds-col,
+      .units-table tbody tr.unit-row .baths-col,
+      .units-table tbody tr.unit-row .sqft-col {{
+        padding: 0;
+        text-align: left;
+        font-size: 13px;
+      }}
+
+      .units-table tbody tr.unit-row .beds-col {{
+        grid-column: 1;
+        grid-row: 4;
+      }}
+
+      .units-table tbody tr.unit-row .baths-col {{
+        grid-column: 1;
+        grid-row: 4;
+      }}
+
+      .units-table tbody tr.unit-row .sqft-col {{
+        grid-column: 2;
+        grid-row: 4;
+      }}
+
+      /* Combine beds/baths/sqft into one visual row */
+      .units-table tbody tr.unit-row .beds-col,
+      .units-table tbody tr.unit-row .baths-col,
+      .units-table tbody tr.unit-row .sqft-col {{
+        display: inline;
+      }}
+
+      /* Mobile card: secondary info row */
+      .units-table tbody tr.unit-row .unit-distance-col {{
+        grid-column: 1 / -1;
+        grid-row: 5;
+        padding: 4px 0 0;
+        text-align: left;
+      }}
+
+      .units-table tbody tr.unit-row .unit-distance-col::before {{
+        content: 'Distance: ';
+        color: var(--subtext);
+        font-size: 11px;
+      }}
+
+      /* Mine (favorites/notes) - top-right corner */
+      .units-table tbody tr.unit-row .mine-col {{
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: auto;
+        padding: 0;
+        display: flex;
+        gap: 2px;
+      }}
+
+      /* Hide less important columns on mobile cards */
+      .units-table tbody tr.unit-row .movein-col,
+      .units-table tbody tr.unit-row .unit-amenity-col,
+      .units-table tbody tr.unit-row .flooring-col,
+      .units-table tbody tr.unit-row .unit-source-col,
+      .units-table tbody tr.unit-row .risk-col,
+      .units-table tbody tr.unit-row .kitchen-col,
+      .units-table tbody tr.unit-row .outdoor-col,
+      .units-table tbody tr.unit-row .size-col,
+      .units-table tbody tr.unit-row .contact-col,
+      .units-table tbody tr.unit-row .work-loc-col,
+      .units-table tbody tr.unit-row .commute-score-col {{
+        display: none;
+      }}
+
+      /* Quality and score - show inline at bottom */
+      .units-table tbody tr.unit-row .quality-col {{
+        grid-column: 1;
+        grid-row: 6;
+        padding: 4px 0 0;
+        text-align: left;
+        width: auto;
+      }}
+
+      .units-table tbody tr.unit-row .score-col {{
+        grid-column: 2;
+        grid-row: 6;
+        padding: 4px 0 0;
+        text-align: left;
+      }}
+
+      /* Hide individual spec cols on mobile, show combined row */
+      .units-table tbody tr.unit-row .beds-col,
+      .units-table tbody tr.unit-row .baths-col,
+      .units-table tbody tr.unit-row .sqft-col {{
+        display: none !important;
+      }}
+
+      .mobile-specs-row {{
+        grid-column: 1 / -1;
+        grid-row: 4;
+        display: block !important;
+        padding: 4px 0 0 !important;
+        font-size: 13px;
+        color: var(--muted);
+      }}
+
+      /* Lightbox */
+      .lightbox-nav {{ width: 38px; height: 38px; font-size: 22px; }}
+      .lightbox-prev {{ left: 8px; }}
+      .lightbox-next {{ right: 8px; }}
+
+      /* Modals */
+      .notes-modal, .scrape-modal {{
+        width: 95%;
+        max-height: 85vh;
+      }}
+
+      .scrape-modal {{
+        padding: 14px 16px;
+      }}
+
+      .scrape-totals-bar {{
+        flex-wrap: wrap;
+      }}
+
+      .scrape-summary-grid {{
+        grid-template-columns: 1fr;
+      }}
+
+      .scrape-run-table {{
+        font-size: 10px;
+      }}
+
+      .scrape-run-table th,
+      .scrape-run-table td {{
+        padding: 4px 4px;
+      }}
+
+      /* Work location items */
+      .work-location-item {{
+        flex-wrap: wrap;
+      }}
+
+      /* Filter note */
+      .filter-note {{
+        font-size: 11px;
+        padding: 10px 12px;
+      }}
+
+      /* Empty state */
+      .empty-state {{
+        padding: 40px 20px;
+      }}
+
+      .empty-state h2 {{ font-size: 16px; }}
+    }}
+
+    /* Extra-small phones */
+    @media (max-width: 400px) {{
+      .layout {{ padding: 6px 6px; }}
+
+      .units-table tbody tr.unit-row {{
+        padding: 10px;
+      }}
+
+      .unit-thumb, .unit-thumb-empty, .thumb-grid {{
+        width: 54px !important;
+        height: 54px !important;
+      }}
+
+      .stat-value {{ font-size: 14px; }}
+
+      .tool-btn {{
+        min-width: 60px;
+        font-size: 11px;
+        padding: 6px 6px;
       }}
     }}
 
@@ -2058,7 +2434,10 @@ def generate_html():
   </header>
 
   <div class="layout">
-    <aside class="sidebar">
+    <button class="mobile-sidebar-toggle" id="mobile-sidebar-toggle" onclick="toggleMobileSidebar()">
+      <span class="toggle-arrow">▼</span> Filters &amp; Map
+    </button>
+    <aside class="sidebar" id="sidebar">
       <div class="tools-row">
         <div class="filter-group">
           <label for="search-contains">Contains</label>
@@ -2560,6 +2939,30 @@ def generate_html():
     // ---- Load any saved criteria overrides (address, lease end, radius, price, beds, baths, sqft) ----
     const OVERRIDE_KEYS = ['target_location', 'target_name', 'current_lease_end', 'search_radius_miles',
       'min_price', 'max_price', 'min_beds', 'max_beds', 'min_baths', 'min_sqft'];
+
+    function toggleMobileSidebar() {{
+      const sidebar = document.getElementById('sidebar');
+      const btn = document.getElementById('mobile-sidebar-toggle');
+      sidebar.classList.toggle('mobile-collapsed');
+      btn.classList.toggle('collapsed');
+      const isCollapsed = sidebar.classList.contains('mobile-collapsed');
+      btn.innerHTML = `<span class="toggle-arrow">▼</span> ${{isCollapsed ? 'Show' : 'Hide'}} Filters &amp; Map`;
+      if (!isCollapsed && typeof map !== 'undefined' && map) {{
+        setTimeout(() => map.invalidateSize(), 100);
+      }}
+    }}
+
+    (function initMobileSidebar() {{
+      if (window.innerWidth <= 860) {{
+        const sidebar = document.getElementById('sidebar');
+        const btn = document.getElementById('mobile-sidebar-toggle');
+        if (sidebar && btn) {{
+          sidebar.classList.add('mobile-collapsed');
+          btn.classList.add('collapsed');
+          btn.innerHTML = '<span class="toggle-arrow">▼</span> Show Filters &amp; Map';
+        }}
+      }}
+    }})();
 
     function saveOverrides() {{
       const overrides = {{}};
@@ -4056,9 +4459,10 @@ def generate_html():
         <td class="unit-distance-col"${{distTint ? ` style="${{distTint}}"` : ''}}>${{distanceHtml}}</td>
         <td class="unit-address-col"><span class="unit-link">${{address}}</span><div class="unit-id-line">${{idTag}}${{linkedBadge}}<span class="link-icons"><a href="${{sourceUrl}}" target="_blank" class="link-icon link-source">source</a><a href="${{detailsHref}}" target="_blank" class="link-icon link-details">details</a></span></div>${{addressExtra}}</td>
         <td class="unit-price-col"${{priceTint ? ` style="${{priceTint}}"` : ''}}>$${{formatNumber(price)}}</td>
-        <td class="unit-spec-col beds-col">${{beds}} bd</td>
-        <td class="unit-spec-col baths-col">${{baths}} ba</td>
-        <td class="unit-spec-col sqft-col">${{formatNumber(sqft)}}</td>
+        <td class="unit-spec-col beds-col" data-label="Beds">${{beds}} bd</td>
+        <td class="unit-spec-col baths-col" data-label="Baths">${{baths}} ba</td>
+        <td class="unit-spec-col sqft-col" data-label="Sqft">${{formatNumber(sqft)}}</td>
+        <td class="mobile-specs-row">${{beds}} bd &middot; ${{baths}} ba &middot; ${{formatNumber(sqft)}} sqft</td>
         <td class="unit-type-col"${{typeTint ? ` style="${{typeTint}}"` : ''}}>${{housingType}}${{ageBadge}}</td>
         <td class="movein-col">${{moveInHtml(u)}}</td>
         <td class="unit-amenity-col">${{amenitiesCellHtml(u)}}</td>
@@ -5900,6 +6304,96 @@ DETAIL_PAGE_CSS = '''
       font-size: 12px;
       color: var(--subtext);
       white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 14px;
+        font-size: 14px;
+      }
+
+      h1 {
+        font-size: 18px;
+        line-height: 1.3;
+      }
+
+      .badges {
+        gap: 6px;
+      }
+
+      .badge {
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .info-item {
+        padding: 10px 12px;
+      }
+
+      .info-label {
+        font-size: 10px;
+      }
+
+      .info-value {
+        font-size: 14px;
+      }
+
+      .photos {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 6px;
+      }
+
+      .photos img {
+        height: 110px;
+      }
+
+      .detail-map {
+        height: 220px;
+      }
+
+      .detail-lightbox img {
+        max-width: 95vw;
+        max-height: 85vh;
+      }
+
+      .detail-lb-nav {
+        font-size: 24px;
+        padding: 6px 12px;
+      }
+
+      .your-notes textarea {
+        min-height: 80px;
+        font-size: 14px;
+      }
+
+      .section h2 {
+        font-size: 11px;
+      }
+
+      .contact-modal-content {
+        width: 95%;
+        max-height: 85vh;
+      }
+
+      .linked-units-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .commute-table th,
+      .commute-table td {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+
+      .description {
+        padding: 12px;
+        font-size: 13px;
+      }
     }
 '''
 
