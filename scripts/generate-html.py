@@ -142,6 +142,87 @@ def move_in_sort_key(move_in_date):
     except ValueError:
         return None
 
+def find_linked_units(units):
+    """Detect listings that appear to be the same rental and store linked_ids on each."""
+    n = len(units)
+    parent = list(range(n))
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+    def union(a, b):
+        ra, rb = find(a), find(b)
+        if ra != rb:
+            parent[ra] = rb
+
+    # Signal 1: shared photo source URLs
+    photo_to_idx = {}
+    for i, u in enumerate(units):
+        for ps in (u.get('photo_sources') or []):
+            if ps in photo_to_idx:
+                union(i, photo_to_idx[ps])
+            else:
+                photo_to_idx[ps] = i
+
+    # Signal 2: proximity + beds + price within 10%
+    for i in range(n):
+        u1 = units[i]
+        if not u1.get('lat') or not u1.get('lon'):
+            continue
+        for j in range(i + 1, n):
+            u2 = units[j]
+            if not u2.get('lat') or not u2.get('lon'):
+                continue
+            if u1.get('beds') != u2.get('beds'):
+                continue
+            p1, p2 = u1.get('price', 0), u2.get('price', 0)
+            if p1 and p2 and abs(p1 - p2) / max(p1, p2) > 0.10:
+                continue
+            dlat = u1['lat'] - u2['lat']
+            dlon = u1['lon'] - u2['lon']
+            dist = math.sqrt(dlat ** 2 + dlon ** 2) * 69
+            if dist < 0.05:
+                union(i, j)
+
+    # Signal 3: shared phone at same coordinates
+    phone_loc = {}
+    for i, u in enumerate(units):
+        phone = u.get('contact_phone')
+        if not phone or not u.get('lat') or not u.get('lon'):
+            continue
+        key = (phone, round(u['lat'], 3), round(u['lon'], 3))
+        if key in phone_loc:
+            union(i, phone_loc[key])
+        else:
+            phone_loc[key] = i
+
+    from collections import defaultdict
+    groups = defaultdict(list)
+    for i in range(n):
+        groups[find(i)].append(i)
+
+    for _root, members in groups.items():
+        if len(members) < 2:
+            units[members[0]]['linked_ids'] = []
+            units[members[0]]['linked_primary'] = None
+            continue
+        ids = [units[m]['id'] for m in members]
+        best = max(members, key=lambda m: (
+            len(units[m].get('photos') or []),
+            1 if units[m].get('quality_rating') else 0,
+            -m,
+        ))
+        primary_id = units[best]['id']
+        for m in members:
+            others = [uid for uid in ids if uid != units[m]['id']]
+            units[m]['linked_ids'] = others
+            units[m]['linked_primary'] = primary_id
+
+    linked_groups = [ms for ms in groups.values() if len(ms) > 1]
+    total_linked = sum(len(ms) for ms in linked_groups)
+    print(f"  \U0001f517 Found {len(linked_groups)} groups of linked listings ({total_linked} units)")
+
 def unit_to_js(u):
     """Trim a unit down to the fields the page renders client-side."""
     photos = u.get('photos', [])
@@ -178,6 +259,8 @@ def unit_to_js(u):
         'contact_name': u.get('contact_name'),
         'scam_score': u.get('scam_score'),
         'scam_level': u.get('scam_level'),
+        'linked_ids': u.get('linked_ids', []),
+        'linked_primary': u.get('linked_primary'),
     }
 
 def generate_html():
@@ -186,9 +269,11 @@ def generate_html():
     config = load_config()
     all_units = units_data.get('units', [])
 
+    # Detect duplicate/linked listings before any other processing
+    find_linked_units(all_units)
+
     # Apply distance/price/beds filtering (console stats only - the page itself
-    # re-applies these filters client-side so the Re-fetch button can refresh
-    # without rerunning this script)
+    # re-applies these filters client-side)
     filtered_units = filter_units_by_distance(all_units, config)
     total = len(filtered_units)
 
@@ -230,6 +315,7 @@ def generate_html():
         u['scam_level'] = result['level']
 
     # Generate per-unit detail pages for all units in the database
+    all_units_map = {u.get('id', ''): u for u in all_units}
     for u in all_units:
         uid = u.get('id', '')
         unit_dir = PROJECT_ROOT / 'outputs' / 'apartments' / uid
@@ -239,6 +325,7 @@ def generate_html():
             u, lease_end, config.get('target_location'),
             scam_result=scam_results.get(uid),
             interactions_entry=interactions_data.get(uid, {}),
+            all_units_map=all_units_map,
         )
         detail_path.write_text(detail_html, encoding='utf-8')
 
@@ -313,7 +400,7 @@ def generate_html():
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Units Found — Rental Finder</title>
+  <title>Rental Finder</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
@@ -1334,6 +1421,24 @@ def generate_html():
       font-family: 'DM Mono', monospace;
     }}
 
+    .linked-badge {{
+      font-size: 10px;
+      color: var(--accent);
+      background: rgba(0,194,168,0.10);
+      padding: 1px 6px;
+      border-radius: 8px;
+      margin-left: 4px;
+      white-space: nowrap;
+      cursor: pointer;
+    }}
+    .linked-badge:hover {{
+      background: rgba(0,194,168,0.22);
+    }}
+    .linked-badge-dup {{
+      color: var(--subtext);
+      background: rgba(255,255,255,0.06);
+    }}
+
     .link-icons {{
       margin-left: auto;
     }}
@@ -1352,12 +1457,15 @@ def generate_html():
 
     .spec-col {{
       width: 70px;
+      min-width: 55px;
       text-align: right;
+      white-space: nowrap;
       color: var(--muted);
     }}
 
     .unit-spec-col {{
       text-align: right;
+      white-space: nowrap;
     }}
 
     .type-col {{
@@ -2101,7 +2209,13 @@ def generate_html():
             <label class="checkbox-label"><input type="checkbox" id="lf-hide-age-restricted" onchange="applyListFilters()" checked> Hide age-restricted <span class="field-count" data-count="ageRestricted"></span></label>
           </div>
           <div class="checkbox-cell">
+            <label class="checkbox-label"><input type="checkbox" id="lf-hide-unknown-address" onchange="applyListFilters()" checked> Hide unknown address <span class="field-count" data-count="unknownAddress"></span></label>
+          </div>
+          <div class="checkbox-cell">
             <label class="checkbox-label"><input type="checkbox" id="lf-hide-scams" onchange="applyListFilters()" checked> Hide scams <span class="field-count" data-count="scam"></span></label>
+          </div>
+          <div class="checkbox-cell">
+            <label class="checkbox-label"><input type="checkbox" id="lf-hide-duplicates" onchange="applyListFilters()" checked> Hide duplicates <span class="field-count" data-count="duplicates"></span></label>
           </div>
         </div>
         <div class="criteria-edit-actions">
@@ -2336,7 +2450,6 @@ def generate_html():
 
       <div class="refresh-controls">
         <button id="reload-btn" class="ctrl-btn" title="Reload this page from disk">&#10227; Reload</button>
-        <button id="refetch-btn" class="ctrl-btn" title="Re-fetch units.json and refresh without reloading">&#10227; Re-fetch</button>
         <button id="howto-btn" class="ctrl-btn ctrl-btn-icon" title="How to update results">&#9432;</button>
       </div>
       <div id="howto-panel" class="howto-panel">
@@ -2344,13 +2457,17 @@ def generate_html():
         <code>python scripts/crawl_all.py</code>
         <code>python scripts/generate-map.py</code>
         <code>python scripts/generate-html.py</code>
-        <p>Then click Reload above. (Re-fetch only works if this page is served over http://, not opened as a file.)</p>
+        <p>Then click Reload above.</p>
       </div>
     </aside>
 
     <div class="resizer" id="resizer"></div>
 
     <div class="list-panel">
+      <div id="linked-group-banner" style="display:none; align-items:center; gap:8px; padding:6px 12px; background:rgba(0,194,168,0.12); border-radius:6px; margin:4px 8px; font-size:13px;">
+        <span></span>
+        <button onclick="clearLinkedGroupFilter()" style="margin-left:auto; background:none; border:1px solid var(--border); color:var(--text); border-radius:4px; padding:2px 8px; cursor:pointer; font-size:12px;">Clear</button>
+      </div>
       <table class="units-table">
         <thead>
           <tr>
@@ -2975,7 +3092,10 @@ def generate_html():
       washerDryer: false,
       gated: false,
       hideAgeRestricted: true,
+      hideUnknownAddress: true,
+      hideDuplicates: true,
       workMaxDistance: [],
+      linkedGroupIds: null,
     }};
 
     // Free-text search (top-left of sidebar) - narrows the list/map by
@@ -3084,6 +3204,9 @@ def generate_html():
         if (listFilters.washerDryer && !u.has_washer_dryer) return;
         if (listFilters.gated && !u.is_gated) return;
         if (listFilters.hideAgeRestricted && u.age_restriction) return;
+        if (listFilters.linkedGroupIds && !listFilters.linkedGroupIds.has(u.id)) return;
+        if (!listFilters.linkedGroupIds && listFilters.hideDuplicates && u.linked_ids && u.linked_ids.length && u.linked_primary && u.linked_primary !== u.id) return;
+        if (listFilters.hideUnknownAddress && !u.address) return;
         if (workLocations.some((loc, i) => {{
           const maxD = listFilters.workMaxDistance[i];
           if (maxD != null) {{
@@ -3128,6 +3251,20 @@ def generate_html():
       renderAll(lastData);
     }}
 
+    function filterToLinkedGroup(ids) {{
+      listFilters.linkedGroupIds = new Set(ids);
+      const banner = document.getElementById('linked-group-banner');
+      banner.style.display = 'flex';
+      banner.querySelector('span').textContent = `Showing ${{ids.length}} linked listings`;
+      renderAll(lastData);
+    }}
+
+    function clearLinkedGroupFilter() {{
+      listFilters.linkedGroupIds = null;
+      document.getElementById('linked-group-banner').style.display = 'none';
+      renderAll(lastData);
+    }}
+
     function applyListFilters() {{
       listFilters.maxDistance = numOrNull(document.getElementById('lf-max-distance').value);
       listFilters.minPrice = numOrNull(document.getElementById('lf-min-price').value);
@@ -3147,6 +3284,8 @@ def generate_html():
       listFilters.washerDryer = document.getElementById('lf-washer-dryer').checked;
       listFilters.gated = document.getElementById('lf-gated').checked;
       listFilters.hideAgeRestricted = document.getElementById('lf-hide-age-restricted').checked;
+      listFilters.hideUnknownAddress = document.getElementById('lf-hide-unknown-address').checked;
+      listFilters.hideDuplicates = document.getElementById('lf-hide-duplicates').checked;
       listFilters.workMaxDistance = workLocations.map((loc, i) => numOrNull(document.getElementById(`lf-work-distance-${{i}}`).value));
       listFilters.workMaxCommute = workLocations.map((loc, i) => numOrNull(document.getElementById(`lf-work-commute-${{i}}`).value));
       saveListFilters();
@@ -3160,10 +3299,13 @@ def generate_html():
        'lf-outdoor-space', 'lf-size-impression'].forEach(id => {{
         document.getElementById(id).value = '';
       }});
-      ['lf-has-contact', 'lf-washer-dryer', 'lf-gated', 'lf-hide-age-restricted'].forEach(id => {{
+      ['lf-has-contact', 'lf-washer-dryer', 'lf-gated'].forEach(id => {{
         document.getElementById(id).checked = false;
       }});
       document.getElementById('lf-hide-scams').checked = true;
+      document.getElementById('lf-hide-age-restricted').checked = true;
+      document.getElementById('lf-hide-unknown-address').checked = true;
+      document.getElementById('lf-hide-duplicates').checked = true;
       workLocations.forEach((loc, i) => {{
         document.getElementById(`lf-work-distance-${{i}}`).value = '';
         const ct = document.getElementById(`lf-work-commute-${{i}}`);
@@ -3191,6 +3333,8 @@ def generate_html():
       if (listFilters.sizeImpression) parts.push(`size:${{listFilters.sizeImpression}}`);
 
       if (!listFilters.hideScams) parts.push('showing scams');
+      if (!listFilters.hideDuplicates) parts.push('showing duplicates');
+      if (!listFilters.hideUnknownAddress) parts.push('showing unknown addr');
       if (listFilters.hasContact) parts.push('has contact');
       if (listFilters.washerDryer) parts.push('washer/dryer');
       if (listFilters.gated) parts.push('gated');
@@ -3485,6 +3629,8 @@ def generate_html():
       document.getElementById('lf-washer-dryer').checked = !!listFilters.washerDryer;
       document.getElementById('lf-gated').checked = !!listFilters.gated;
       document.getElementById('lf-hide-age-restricted').checked = listFilters.hideAgeRestricted !== false;
+      document.getElementById('lf-hide-unknown-address').checked = listFilters.hideUnknownAddress !== false;
+      document.getElementById('lf-hide-duplicates').checked = listFilters.hideDuplicates !== false;
       document.getElementById('search-contains').value = searchFilters.contains || '';
       document.getElementById('search-excludes').value = searchFilters.excludes || '';
     }}
@@ -3792,6 +3938,15 @@ def generate_html():
       // Always show the unit's id so otherwise-identical rows can be told apart
       const idTag = `<span class="unit-id-tag">${{escapeHtml(u.id || '')}}</span>`;
 
+      const isPrimary = !u.linked_primary || u.linked_primary === u.id;
+      const linkedGroup = u.linked_ids && u.linked_ids.length ? [u.id, ...u.linked_ids] : [];
+      const linkedBadge = linkedGroup.length
+        ? `<span class="linked-badge${{isPrimary ? '' : ' linked-badge-dup'}}" onclick="filterToLinkedGroup(${{JSON.stringify(linkedGroup).replace(/"/g, '&quot;')}})" title="Click to show all ${{linkedGroup.length}} linked listings">`
+          + `\U0001f517 ${{linkedGroup.length}} listings`
+          + (isPrimary ? '' : ' (dup)')
+          + `</span>`
+        : '';
+
       const photoPaths = (u.photos || []).map(photoPath);
       const photosAttr = JSON.stringify(photoPaths).replace(/'/g, '&#39;');
       let thumbHtml;
@@ -3857,7 +4012,7 @@ def generate_html():
         <td class="mine-col">${{mineHtml}}</td>
         <td class="unit-thumb-col">${{thumbHtml}}</td>
         <td class="unit-distance-col"${{distTint ? ` style="${{distTint}}"` : ''}}>${{distanceHtml}}</td>
-        <td class="unit-address-col"><span class="unit-link">${{address}}</span><div class="unit-id-line">${{idTag}}<span class="link-icons"><a href="${{sourceUrl}}" target="_blank" class="link-icon link-source">source</a><a href="${{detailsHref}}" target="_blank" class="link-icon link-details">details</a></span></div>${{addressExtra}}</td>
+        <td class="unit-address-col"><span class="unit-link">${{address}}</span><div class="unit-id-line">${{idTag}}${{linkedBadge}}<span class="link-icons"><a href="${{sourceUrl}}" target="_blank" class="link-icon link-source">source</a><a href="${{detailsHref}}" target="_blank" class="link-icon link-details">details</a></span></div>${{addressExtra}}</td>
         <td class="unit-price-col"${{priceTint ? ` style="${{priceTint}}"` : ''}}>$${{formatNumber(price)}}</td>
         <td class="unit-spec-col beds-col">${{beds}} bd</td>
         <td class="unit-spec-col baths-col">${{baths}} ba</td>
@@ -4169,7 +4324,9 @@ def generate_html():
       counts.washerDryer = units.filter(u => u.has_washer_dryer).length;
       counts.gated = units.filter(u => u.is_gated).length;
       counts.ageRestricted = units.filter(u => u.age_restriction).length;
+      counts.unknownAddress = units.filter(u => !u.address).length;
       counts.scam = units.filter(u => isScam(u.id)).length;
+      counts.duplicates = units.filter(u => u.linked_ids && u.linked_ids.length && u.linked_primary && u.linked_primary !== u.id).length;
       document.querySelectorAll('[data-count]').forEach(span => {{
         const key = span.dataset.count;
         const count = counts[key];
@@ -4201,25 +4358,6 @@ def generate_html():
     document.getElementById('howto-btn').addEventListener('click', () => {{
       const panel = document.getElementById('howto-panel');
       panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
-    }});
-
-    document.getElementById('refetch-btn').addEventListener('click', async () => {{
-      const btn = document.getElementById('refetch-btn');
-      const original = btn.textContent;
-      btn.textContent = '\\u23f3 Fetching\\u2026';
-      btn.disabled = true;
-      try {{
-        const resp = await fetch('units.json', {{ cache: 'no-store' }});
-        if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        const data = await resp.json();
-        renderAll(data);
-        btn.textContent = '\\u2713 Updated';
-      }} catch (e) {{
-        console.error('Re-fetch failed:', e);
-        btn.textContent = '\\u2717 Failed (see \\u24d8)';
-      }} finally {{
-        setTimeout(() => {{ btn.textContent = original; btn.disabled = false; }}, 2000);
-      }}
     }});
 
     // ---- Resizable divider between the sidebar (map) and the list panel ----
@@ -5681,11 +5819,85 @@ DETAIL_PAGE_CSS = '''
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
     }
+
+    .linked-units-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .linked-unit-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+    }
+    .linked-unit-card:hover {
+      background: rgba(0,194,168,0.08);
+      border-color: var(--accent);
+    }
+    .linked-unit-id {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--accent);
+      min-width: 80px;
+    }
+    .linked-unit-title {
+      flex: 1;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .linked-unit-meta {
+      font-size: 12px;
+      color: var(--subtext);
+      white-space: nowrap;
+    }
 '''
 
 
+def _build_linked_section(unit, all_units_map):
+    """Build an HTML section showing other listings linked to this unit."""
+    linked_ids = unit.get('linked_ids', [])
+    if not linked_ids or not all_units_map:
+        return ''
+    is_primary = unit.get('linked_primary') == unit.get('id')
+    header_note = ' (this is the primary listing)' if is_primary else ''
+    rows = []
+    for lid in linked_ids:
+        lu = all_units_map.get(lid)
+        if not lu:
+            continue
+        title_text = html_escape(lu.get('title') or lu.get('address') or lid)
+        if len(title_text) > 60:
+            title_text = title_text[:57] + '&hellip;'
+        price_text = f'${lu["price"]:,}' if lu.get('price') else '&mdash;'
+        source_text = html_escape(lu.get('source') or '?')
+        is_this_primary = lu.get('id') == unit.get('linked_primary')
+        primary_tag = ' <span style="color:var(--accent);font-size:11px;">(primary)</span>' if is_this_primary else ''
+        rows.append(
+            f'<a href="../{html_escape(lid)}/index.html" class="linked-unit-card">'
+            f'<span class="linked-unit-id">{html_escape(lid)}{primary_tag}</span>'
+            f'<span class="linked-unit-title">{title_text}</span>'
+            f'<span class="linked-unit-meta">{price_text} &middot; {source_text}</span>'
+            f'</a>'
+        )
+    return f'''
+  <div class="section">
+    <h2>\U0001f517 Linked Listings ({len(linked_ids) + 1} total){header_note}</h2>
+    <p style="color:var(--subtext);font-size:13px;margin:0 0 8px;">These appear to be the same rental listed multiple times.</p>
+    <div class="linked-units-list">{''.join(rows)}</div>
+  </div>'''
+
 def generate_unit_detail_html(unit, lease_end=None, target_location=None,
-                              scam_result=None, interactions_entry=None):
+                              scam_result=None, interactions_entry=None,
+                              all_units_map=None):
     """Render a dark-themed page showing everything we've scraped for one unit."""
     title = unit.get('title') or unit.get('address') or unit.get('id')
     address = unit.get('address') or 'Address unknown'
@@ -5911,7 +6123,7 @@ def generate_unit_detail_html(unit, lease_end=None, target_location=None,
   <h1>{html_escape(title)}</h1>
   <div class="address">{html_escape(address)}</div>
   <div class="badges">{''.join(badges)}</div>
-  <div class="info-grid">{''.join(info_items)}</div>{contact_section_html}{scam_report_html}{people_section_html}
+  <div class="info-grid">{''.join(info_items)}</div>{contact_section_html}{scam_report_html}{people_section_html}{_build_linked_section(unit, all_units_map)}
   <div class="section">
     <h2>Location</h2>
     <div id="detail-map" class="detail-map"></div>

@@ -678,3 +678,34 @@ Queued requests:
       gradient). All scoring criteria persisted to `localStorage('scoringCriteria')`.
       Reset button restores defaults. Badge shows checkmark when scoring is active.
 - [x] Regenerated `units-summary.html`.
+
+### Contact scan (2026-06-17)
+- Ran `scan_photos.py --skip-backfill --skip-descriptions --skip-quality --scan-contacts`
+  with `TWOCAPTCHA_API_KEY`.
+- **42 CL units** scanned (those missing both phone and email).
+- **3 new contacts** found: unit-0190 (phone + email + name), unit-0194 (email),
+  unit-0199 (phone + email).
+- 16 units: no contact info on listing (property mgmt companies that don't share).
+- 15 units: "CL captcha error" (likely expired/deleted listings — many were already
+  410 Gone from prior backfill runs).
+- 2 units: 2captcha solver errors (unsolvable/timeout).
+- **Totals**: 39/200 units now have contact info (phone=30, email=37, name=10).
+
+## Linked listings / duplicate detection (2026-06-17)
+
+### Status
+- [x] **`generate-html.py`**: `find_linked_units(units)` — union-find duplicate detection
+      using three signals: shared photo source URLs, proximity (<0.05mi) + same beds +
+      price within 10%, shared phone at same coordinates. Each linked group gets a
+      `linked_primary` (most photos, then quality_rating, then lowest id).
+      Result: **16 groups, 57 linked units** out of 200 total.
+- [x] **Summary table**: linked badge in address cell — teal "🔗 N listings" for primary,
+      gray "🔗 N listings (dup)" for non-primary. Tooltip shows linked unit IDs.
+- [x] **"Hide duplicates" checkbox** in List Filters panel (default: checked/ON).
+      Non-primary listings are hidden, showing only the best listing per group.
+      Wired through `listFilters.hideDuplicates` → `filterUnits` → `applyListFilters` →
+      `clearListFilters` → `populateListFilterDom` → `renderListFiltersSummary` →
+      `updateFieldCounts`.
+- [x] **Detail pages**: "Linked Listings" section showing all other listings in the group
+      as clickable cards (title, price, source), with "(primary)" tag. CSS: `.linked-unit-card`.
+- [x] Regenerated `units-summary.html` + 200 detail pages. Published to GitHub Pages.
