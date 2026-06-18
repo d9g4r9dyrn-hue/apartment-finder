@@ -88,6 +88,14 @@ def run_all_scrapers():
     except Exception:
         pass
 
+    # Remove dead Craigslist listings
+    print(f"\n{'='*60}")
+    print("Checking for deleted Craigslist listings...")
+    result = subprocess.run(['python', '-m', 'scripts.check_deleted', '--remove'],
+                            cwd=PROJECT_ROOT, check=False)
+    if result.returncode != 0:
+        print("  Warning: deleted listing check failed")
+
     # Regenerate the HTML dashboard
     print(f"\n{'='*60}")
     print("Regenerating dashboard HTML...")

@@ -2239,25 +2239,25 @@ def generate_html():
           </div>
         </div>
         <div class="criteria-edit-grid columns-grid">
-          <label><input type="checkbox" data-col="mine" onchange="onColumnToggle(this)"> Fav <span class="field-count" data-count="mine"></span></label>
-          <label><input type="checkbox" data-col="photo" onchange="onColumnToggle(this)"> Photo <span class="field-count" data-count="photo"></span></label>
-          <label><input type="checkbox" data-col="distance" onchange="onColumnToggle(this)"> Distance <span class="field-count" data-count="distance"></span></label>
-          <label><input type="checkbox" data-col="price" onchange="onColumnToggle(this)"> Price <span class="field-count" data-count="price"></span></label>
-          <label><input type="checkbox" data-col="beds" onchange="onColumnToggle(this)"> Beds <span class="field-count" data-count="beds"></span></label>
-          <label><input type="checkbox" data-col="baths" onchange="onColumnToggle(this)"> Baths <span class="field-count" data-count="baths"></span></label>
-          <label><input type="checkbox" data-col="sqft" onchange="onColumnToggle(this)"> Sqft <span class="field-count" data-count="sqft"></span></label>
-          <label><input type="checkbox" data-col="type" onchange="onColumnToggle(this)"> Type <span class="field-count" data-count="type"></span></label>
-          <label><input type="checkbox" data-col="movein" onchange="onColumnToggle(this)"> Move-in <span class="field-count" data-count="movein"></span></label>
           <label><input type="checkbox" data-col="amenities" onchange="onColumnToggle(this)"> Amenities <span class="field-count" data-count="amenities"></span></label>
+          <label><input type="checkbox" data-col="baths" onchange="onColumnToggle(this)"> Baths <span class="field-count" data-count="baths"></span></label>
+          <label><input type="checkbox" data-col="beds" onchange="onColumnToggle(this)"> Beds <span class="field-count" data-count="beds"></span></label>
+          <label><input type="checkbox" data-col="contact" onchange="onColumnToggle(this)"> Contact <span class="field-count" data-count="contact"></span></label>
+          <label><input type="checkbox" data-col="distance" onchange="onColumnToggle(this)"> Distance <span class="field-count" data-count="distance"></span></label>
+          <label><input type="checkbox" data-col="mine" onchange="onColumnToggle(this)"> Fav <span class="field-count" data-count="mine"></span></label>
           <label><input type="checkbox" data-col="flooring" onchange="onColumnToggle(this)"> Flooring <span class="field-count" data-count="flooring"></span></label>
-          <label><input type="checkbox" data-col="source" onchange="onColumnToggle(this)"> Source <span class="field-count" data-count="source"></span></label>
+          <label><input type="checkbox" data-col="kitchen" onchange="onColumnToggle(this)"> Kitchen <span class="field-count" data-count="kitchen"></span></label>
+          <label><input type="checkbox" data-col="movein" onchange="onColumnToggle(this)"> Move-in <span class="field-count" data-count="movein"></span></label>
+          <label><input type="checkbox" data-col="outdoor" onchange="onColumnToggle(this)"> Outdoor <span class="field-count" data-count="outdoor"></span></label>
+          <label><input type="checkbox" data-col="photo" onchange="onColumnToggle(this)"> Photo <span class="field-count" data-count="photo"></span></label>
+          <label><input type="checkbox" data-col="price" onchange="onColumnToggle(this)"> Price <span class="field-count" data-count="price"></span></label>
           <label><input type="checkbox" data-col="quality" onchange="onColumnToggle(this)"> Quality <span class="field-count" data-count="quality"></span></label>
           <label><input type="checkbox" data-col="risk" onchange="onColumnToggle(this)"> Risk <span class="field-count" data-count="risk"></span></label>
-          <label><input type="checkbox" data-col="contact" onchange="onColumnToggle(this)"> Contact <span class="field-count" data-count="contact"></span></label>
-          <label><input type="checkbox" data-col="kitchen" onchange="onColumnToggle(this)"> Kitchen <span class="field-count" data-count="kitchen"></span></label>
-          <label><input type="checkbox" data-col="outdoor" onchange="onColumnToggle(this)"> Outdoor <span class="field-count" data-count="outdoor"></span></label>
+          <label><input type="checkbox" data-col="score" onchange="onColumnToggle(this)"> Rank <span class="field-count" data-count="score"></span></label>
           <label><input type="checkbox" data-col="size" onchange="onColumnToggle(this)"> Size feel <span class="field-count" data-count="size"></span></label>
-          <label><input type="checkbox" data-col="score" onchange="onColumnToggle(this)"> Score <span class="field-count" data-count="score"></span></label>
+          <label><input type="checkbox" data-col="source" onchange="onColumnToggle(this)"> Source <span class="field-count" data-count="source"></span></label>
+          <label><input type="checkbox" data-col="sqft" onchange="onColumnToggle(this)"> Sqft <span class="field-count" data-count="sqft"></span></label>
+          <label><input type="checkbox" data-col="type" onchange="onColumnToggle(this)"> Type <span class="field-count" data-count="type"></span></label>
         </div>
         <div class="criteria-edit-actions">
           <button id="reset-columns-btn" class="ctrl-btn">Show All</button>
@@ -2308,6 +2308,18 @@ def generate_html():
           <input type="number" id="rank-max-commute" min="0" step="1" placeholder="e.g. 15" oninput="applyScoringCriteria()">
           <input type="range" id="rank-w-commute" min="0" max="10" value="5" oninput="applyScoringCriteria()">
           <span class="rank-weight" id="rank-w-commute-val">5</span>
+        </div>
+        <div class="ranking-row">
+          <label for="rank-target-beds">Bedrooms</label>
+          <input type="number" id="rank-target-beds" min="0" step="1" placeholder="e.g. 2" oninput="applyScoringCriteria()">
+          <input type="range" id="rank-w-beds" min="0" max="10" value="5" oninput="applyScoringCriteria()">
+          <span class="rank-weight" id="rank-w-beds-val">5</span>
+        </div>
+        <div class="ranking-row">
+          <label for="rank-target-baths">Bathrooms</label>
+          <input type="number" id="rank-target-baths" min="0" step="0.5" placeholder="e.g. 1.5" oninput="applyScoringCriteria()">
+          <input type="range" id="rank-w-baths" min="0" max="10" value="4" oninput="applyScoringCriteria()">
+          <span class="rank-weight" id="rank-w-baths-val">4</span>
         </div>
         <div class="ranking-row">
           <label for="rank-target-sqft">Target sqft</label>
@@ -2387,6 +2399,12 @@ def generate_html():
           <span style="flex:1"></span>
           <input type="range" id="rank-w-light" min="0" max="10" value="1" oninput="applyScoringCriteria()">
           <span class="rank-weight" id="rank-w-light-val">1</span>
+        </div>
+        <div class="ranking-row">
+          <label>No age restriction (55+)</label>
+          <span style="flex:1"></span>
+          <input type="range" id="rank-w-noage" min="0" max="10" value="5" oninput="applyScoringCriteria()">
+          <span class="rank-weight" id="rank-w-noage-val">5</span>
         </div>
 
         <div class="criteria-edit-actions" style="margin-top:10px;">
@@ -2490,7 +2508,7 @@ def generate_html():
             <th class="kitchen-col sortable" data-sort="kitchen_style" onclick="applySort('kitchen_style')">Kitchen</th>
             <th class="outdoor-col sortable" data-sort="outdoor_space" onclick="applySort('outdoor_space')">Outdoor</th>
             <th class="size-col sortable" data-sort="size_impression" onclick="applySort('size_impression')">Size feel</th>
-            <th class="score-col sortable" data-sort="overall_score" onclick="applySort('overall_score')">Score</th>
+            <th class="score-col sortable" data-sort="overall_score" onclick="applySort('overall_score')">Rank</th>
             <th id="work-anchor-th" style="display:none"></th>
           </tr>
         </thead>
@@ -2948,12 +2966,12 @@ def generate_html():
     }};
 
     const TYPE_COLORS = {{
-      apartment: 'color: #4fd1c5',
-      condo:     'color: #63b3ed',
-      house:     'color: #f6ad55',
-      townhouse: 'color: #d6bcfa',
-      duplex:    'color: #fc8181',
-      studio:    'color: #68d391',
+      apartment: 'color: #9ab8b4',
+      condo:     'color: #9ab4c8',
+      house:     'color: #c8b498',
+      townhouse: 'color: #b8aec8',
+      duplex:    'color: #c8a0a0',
+      studio:    'color: #98c0a8',
     }};
 
     // Renders the AI-detected primary flooring type, or a dash if unscanned/unknown
@@ -3438,12 +3456,14 @@ def generate_html():
     const SCORING_DEFAULTS = {{
       targetPrice: null, wPrice: 5,
       maxCommute: null, wCommute: 5,
+      targetBeds: null, wBeds: 5,
+      targetBaths: null, wBaths: 4,
       targetSqft: null, wSqft: 3,
       minQuality: null, wQuality: 4,
       prefFlooring: null, wFlooring: 2,
       prefKitchen: null, wKitchen: 2,
       prefOutdoor: null, wOutdoor: 2,
-      wScam: 3, wWd: 2, wSpacious: 1, wLight: 1,
+      wScam: 3, wWd: 2, wSpacious: 1, wLight: 1, wNoage: 5,
     }};
 
     function loadScoringCriteria() {{
@@ -3457,7 +3477,8 @@ def generate_html():
 
     function scoringActive() {{
       const s = scoringCriteria;
-      return s.targetPrice != null || s.maxCommute != null || s.targetSqft != null || s.minQuality != null
+      return s.targetPrice != null || s.maxCommute != null || s.targetBeds != null || s.targetBaths != null
+        || s.targetSqft != null || s.minQuality != null
         || s.prefFlooring || s.prefKitchen || s.prefOutdoor;
     }}
 
@@ -3481,6 +3502,18 @@ def generate_html():
         if (dist != null) {{
           dims.push({{ score: Math.max(0, 1 - dist / s.maxCommute), weight: s.wCommute }});
         }}
+      }}
+
+      if (s.targetBeds != null && s.wBeds > 0 && u.beds != null) {{
+        const beds = Number(u.beds);
+        const diff = Math.abs(beds - s.targetBeds) / Math.max(s.targetBeds, 1);
+        dims.push({{ score: Math.max(0, 1 - diff), weight: s.wBeds }});
+      }}
+
+      if (s.targetBaths != null && s.wBaths > 0 && u.baths != null) {{
+        const baths = Number(u.baths);
+        const diff = Math.abs(baths - s.targetBaths) / Math.max(s.targetBaths, 1);
+        dims.push({{ score: Math.max(0, 1 - diff), weight: s.wBaths }});
       }}
 
       if (s.targetSqft != null && s.wSqft > 0 && u.sqft) {{
@@ -3519,6 +3552,9 @@ def generate_html():
         const lightMap = {{ high: 1, medium: 0.5, low: 0 }};
         dims.push({{ score: lightMap[u.natural_light] != null ? lightMap[u.natural_light] : 0.5, weight: s.wLight }});
       }}
+      if (s.wNoage > 0) {{
+        dims.push({{ score: u.age_restriction ? 0 : 1, weight: s.wNoage }});
+      }}
 
       if (dims.length === 0) return null;
       const totalWeight = dims.reduce((a, d) => a + d.weight, 0);
@@ -3530,12 +3566,14 @@ def generate_html():
     function applyScoringCriteria() {{
       scoringCriteria.targetPrice = numOrNull(document.getElementById('rank-target-price').value);
       scoringCriteria.maxCommute = numOrNull(document.getElementById('rank-max-commute').value);
+      scoringCriteria.targetBeds = numOrNull(document.getElementById('rank-target-beds').value);
+      scoringCriteria.targetBaths = numOrNull(document.getElementById('rank-target-baths').value);
       scoringCriteria.targetSqft = numOrNull(document.getElementById('rank-target-sqft').value);
       scoringCriteria.minQuality = numOrNull(document.getElementById('rank-min-quality').value);
       scoringCriteria.prefFlooring = document.getElementById('rank-pref-flooring').value || null;
       scoringCriteria.prefKitchen = document.getElementById('rank-pref-kitchen').value || null;
       scoringCriteria.prefOutdoor = document.getElementById('rank-pref-outdoor').value || null;
-      ['price', 'commute', 'sqft', 'quality', 'flooring', 'kitchen', 'outdoor', 'scam', 'wd', 'spacious', 'light'].forEach(k => {{
+      ['price', 'commute', 'beds', 'baths', 'sqft', 'quality', 'flooring', 'kitchen', 'outdoor', 'scam', 'wd', 'spacious', 'light', 'noage'].forEach(k => {{
         const el = document.getElementById('rank-w-' + k);
         const val = Number(el.value);
         scoringCriteria['w' + k.charAt(0).toUpperCase() + k.slice(1)] = val;
@@ -3558,12 +3596,14 @@ def generate_html():
       const s = scoringCriteria;
       document.getElementById('rank-target-price').value = s.targetPrice != null ? s.targetPrice : '';
       document.getElementById('rank-max-commute').value = s.maxCommute != null ? s.maxCommute : '';
+      document.getElementById('rank-target-beds').value = s.targetBeds != null ? s.targetBeds : '';
+      document.getElementById('rank-target-baths').value = s.targetBaths != null ? s.targetBaths : '';
       document.getElementById('rank-target-sqft').value = s.targetSqft != null ? s.targetSqft : '';
       document.getElementById('rank-min-quality').value = s.minQuality != null ? String(s.minQuality) : '';
       document.getElementById('rank-pref-flooring').value = s.prefFlooring || '';
       document.getElementById('rank-pref-kitchen').value = s.prefKitchen || '';
       document.getElementById('rank-pref-outdoor').value = s.prefOutdoor || '';
-      ['price', 'commute', 'sqft', 'quality', 'flooring', 'kitchen', 'outdoor', 'scam', 'wd', 'spacious', 'light'].forEach(k => {{
+      ['price', 'commute', 'beds', 'baths', 'sqft', 'quality', 'flooring', 'kitchen', 'outdoor', 'scam', 'wd', 'spacious', 'light', 'noage'].forEach(k => {{
         const key = 'w' + k.charAt(0).toUpperCase() + k.slice(1);
         document.getElementById('rank-w-' + k).value = s[key];
         document.getElementById('rank-w-' + k + '-val').textContent = s[key];
@@ -3575,6 +3615,8 @@ def generate_html():
       const s = scoringCriteria;
       if (s.targetPrice != null) parts.push('$' + s.targetPrice + '/mo');
       if (s.maxCommute != null) parts.push(s.maxCommute + ' mi');
+      if (s.targetBeds != null) parts.push(s.targetBeds + ' bd');
+      if (s.targetBaths != null) parts.push(s.targetBaths + ' ba');
       if (s.targetSqft != null) parts.push(s.targetSqft + ' sqft');
       if (s.minQuality != null) parts.push(s.minQuality + '\\u2605');
       if (s.prefFlooring) parts.push(s.prefFlooring);
