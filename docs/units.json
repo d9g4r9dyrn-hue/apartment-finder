@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-06-17T21:35:03.927347",
-  "total_units": 200,
+  "last_updated": "2026-06-17T23:55:28.087055",
+  "total_units": 187,
   "schema_notes": {
     "photos": "Array of local relative paths to downloaded images",
     "photo_sources": "Original URLs the photos were downloaded from"
@@ -553,119 +553,6 @@
       "natural_light": "high",
       "kitchen_style": "updated",
       "outdoor_space": "yard",
-      "size_impression": "spacious",
-      "view_quality": "good"
-    },
-    {
-      "title": "Discover This Great Modern One-Story Family-Friendly Warm 3 Bedroom Home",
-      "address": "Madison Ave",
-      "price": 1945,
-      "beds": 3,
-      "baths": 2.0,
-      "sqft": 1429,
-      "amenities": [
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "w/d in unit",
-        "attached garage",
-        "wheelchair accessible",
-        "air conditioning",
-        "EV charging"
-      ],
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/largo-discover-this-great-modern-one/7940189611.html",
-      "photos": [
-        "outputs/photos/unit-0016/photo-1.jpg",
-        "outputs/photos/unit-0016/photo-2.jpg",
-        "outputs/photos/unit-0016/photo-3.jpg",
-        "outputs/photos/unit-0016/photo-4.jpg",
-        "outputs/photos/unit-0016/photo-5.jpg",
-        "outputs/photos/unit-0016/photo-6.jpg",
-        "outputs/photos/unit-0016/photo-7.jpg",
-        "outputs/photos/unit-0016/photo-8.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/01414_9RHXnTd0cwL_0CI0pP_600x450.jpg",
-        "https://images.craigslist.org/00u0u_1VluLl3B8k7_0CI0t2_600x450.jpg",
-        "https://images.craigslist.org/00b0b_1koFpSkaPXa_0CI0t2_600x450.jpg",
-        "https://images.craigslist.org/00707_2SuoKClZV7G_0CI0t2_600x450.jpg",
-        "https://images.craigslist.org/00Q0Q_2gm4YkigrO5_0CI0t2_600x450.jpg",
-        "https://images.craigslist.org/00D0D_5TJoMeJFmnJ_0CI0t2_600x450.jpg",
-        "https://images.craigslist.org/00x0x_1VUPut1adWV_0CI0t2_600x450.jpg",
-        "https://images.craigslist.org/00A0A_6Xr24bV19ys_0CI0t2_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nWelcome to the house you can make your home. All this place needs is a dose of your personality. The living space offers plenty of room for formal dining and a relaxed entertainment area. Prepare delicious meals in a great kitchen perfect for any occasion. Stainless steel appliances, granite countertops and roomy cabinets deliver a kitchen that makes every meal easier. Turn this fenced backyard into the ideal outdoor space. Here's your invitation to host dinner parties and backyard barbecues, or enjoy a little quiet time to do you. There's also a patio, and plenty of room for outdoor plants. Don't wait too long to lease!",
-      "lat": 27.88,
-      "lon": -82.751,
-      "id": "unit-0016",
-      "date_added": "2026-06-15T02:32:51",
-      "housing_type": "House",
-      "quality_rating": 4,
-      "quality_notes": "Move-in ready with updated flooring and appliances. Features vaulted ceilings and a yard.",
-      "flooring_type": "mixed",
-      "has_washer_dryer": true,
-      "is_gated": false,
-      "age_restriction": null,
-      "contact_phone": null,
-      "contact_email": null,
-      "natural_light": "high",
-      "kitchen_style": "updated",
-      "outdoor_space": "yard",
-      "size_impression": "spacious",
-      "view_quality": "good"
-    },
-    {
-      "title": "Brand New 2BR/2BA | Balcony | All Utilities Included | Best Value | Ba",
-      "address": "15950 Bay Vista Drive",
-      "price": 1950,
-      "beds": 2,
-      "baths": 2.0,
-      "sqft": 800,
-      "amenities": [
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "w/d in unit",
-        "air conditioning"
-      ],
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-brand-new-2br-2ba-balcony/7940142198.html",
-      "photos": [
-        "outputs/photos/unit-0017/photo-1.jpg",
-        "outputs/photos/unit-0017/photo-2.jpg",
-        "outputs/photos/unit-0017/photo-3.jpg",
-        "outputs/photos/unit-0017/photo-4.jpg",
-        "outputs/photos/unit-0017/photo-5.jpg",
-        "outputs/photos/unit-0017/photo-6.jpg",
-        "outputs/photos/unit-0017/photo-7.jpg",
-        "outputs/photos/unit-0017/photo-8.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00E0E_jtzC2dfL2ic_0jh0es_600x450.jpg",
-        "https://images.craigslist.org/00909_2n6thDBR0O_0jh0es_600x450.jpg",
-        "https://images.craigslist.org/00a0a_8H1DgFnm7iR_0jh0es_600x450.jpg",
-        "https://images.craigslist.org/00Q0Q_hCA0TgLeJlr_0es0jh_600x450.jpg",
-        "https://images.craigslist.org/00h0h_jsNOmhTMxwq_0es0jh_600x450.jpg",
-        "https://images.craigslist.org/00606_hLlvrwt1KsB_0es0jh_600x450.jpg",
-        "https://images.craigslist.org/00101_emwdp59tZpl_0es0jh_600x450.jpg",
-        "https://images.craigslist.org/00w0w_3SWjyc3WHaq_0es0jh_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nBrand New 2BR/2BA | Balcony | All Utilities Included | Best Value | Bay Vista Apts\n15950 Bay Vista Drive, 206, Clearwater, FL 33760\n1950.00 / Month\n2 BEDROOMS | 2 BATHROOMS\nInterested? Fill out this form\n:\nhttps://renter.turbotenant.com/general-prescreener/T3duZXI6MTEyNDg3OA==?property=2513644&source=cl\nHave questions? Contact the Landlord\n:\nhttps://rental.turbotenant.com/p/15950-bay-vista-drive-clearwater-fl-unit-206/30dc59d8-e289-4bba-96bf-556ccce30dca?source=craigslist\nProperty Description:\nEverything is included in the rent. Electric, water, sewer, trash, and high-speed internet are all covered, saving most tenants $250–$300 per month compared to a standard lease. What you see is what you pay.\nUnit 206 is a second-floor 2-bedroom, 2-bathroom home with a private balcony, priced as the most accessible 2-bedroom option in the building. At $1,995 per month with all utilities included, the effective cost compares favorably to most 2-bedroom units in the Clearwater area where tenants pay utilities separately. The kitchen features quartz countertops and stainless steel appliances. Designer lighting, tile flooring, and an in-unit washer/dryer are included. Sound-insulated construction throughout.\nBay Vista is a brand new mixed-use building completed in 2026, with elevator access, keyless entry, secured entry, EV charging, a fitness center, a package delivery room, and one assigned parking space per unit. One mile from St. Pete-Clearwater Airport, 12–15 minutes to Downtown St. Pete, and 20 minutes to Tampa. Jabil, Honeywell, Raymond James, and BayCare are all nearby.\nThis is the entry point into a brand new building at a competitive price. It won't stay available long.\n2 Bed | 2 Bath | 800 sq ft | 2nd Floor | Balcony | $1,995/mo | All Utilities Included. Virtually staged. Unit is unfurnished.\nProperty Type\n: Apartment\nPets\n: Cats, Small Dogs Allowed\nSmoking\n: OUTSIDE_ONLY\nLease Term\n:\n1950.00 / Month\n1950.00 Deposit\nLease Length: One Year\nAvailable: 05/17/2026\nOccupancy Limit: 4 People\nUtilities Included\n:\nElectricity\nGarbage\nSewage\nWater\nAppliances\n:\nDishwasher\nDryer\nFreezer\nMicrowave\nRange Oven\nRefrigerator\nWasher\nAmenities\n:\nEv Charging\nLawn\nFitness Center\nSecure Building\nSecurity Cameras\nVaulted Ceiling\nBalcony Or Deck\nHeating & Cooling\n:\nOther\nOther\nInterested?\nFill out this form\n:\nhttps://renter.turbotenant.com/general-prescreener/T3duZXI6MTEyNDg3OA==?property=2513644&source=cl\nHave questions? Contact the Landlord\n:\nhttps://rental.turbotenant.com/p/15950-bay-vista-drive-clearwater-fl-unit-206/30dc59d8-e289-4bba-96bf-556ccce30dca?source=craigslist",
-      "lat": 27.917942,
-      "lon": -82.710716,
-      "id": "unit-0017",
-      "date_added": "2026-06-15T02:32:54",
-      "housing_type": "Apartment",
-      "quality_rating": 4,
-      "quality_notes": "Modern, bright, open concept unit with stylish finishes and good natural light.",
-      "flooring_type": "tile",
-      "has_washer_dryer": true,
-      "is_gated": false,
-      "age_restriction": null,
-      "contact_phone": null,
-      "contact_email": null,
-      "natural_light": "high",
-      "kitchen_style": "modern",
-      "outdoor_space": "none",
       "size_impression": "spacious",
       "view_quality": "good"
     },
@@ -1556,463 +1443,6 @@
       "size_impression": "average",
       "view_quality": "good",
       "contact_name": "David Brown"
-    },
-    {
-      "title": "All bills paid and available now",
-      "address": "",
-      "price": 1060,
-      "beds": 3,
-      "baths": 1.0,
-      "sqft": null,
-      "housing_type": "House",
-      "amenities": [
-        "$85/adult",
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "w/d hookups",
-        "off-street parking",
-        "wheelchair accessible",
-        "air conditioning"
-      ],
-      "has_washer_dryer": true,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/largo-all-bills-paid-and-available-now/7941048509.html",
-      "photos": [
-        "outputs/photos/unit-0034/photo-1.jpg",
-        "outputs/photos/unit-0034/photo-2.jpg",
-        "outputs/photos/unit-0034/photo-3.jpg",
-        "outputs/photos/unit-0034/photo-4.jpg",
-        "outputs/photos/unit-0034/photo-5.jpg",
-        "outputs/photos/unit-0034/photo-6.jpg",
-        "outputs/photos/unit-0034/photo-7.jpg",
-        "outputs/photos/unit-0034/photo-8.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/01414_8lzYS74jybz_0kc0CI_600x450.jpg",
-        "https://images.craigslist.org/00m0m_epNxARtrRqU_0qn0CI_600x450.jpg",
-        "https://images.craigslist.org/00H0H_1Hys5siWqMX_0qu0CI_600x450.jpg",
-        "https://images.craigslist.org/00y0y_adidPnZEOdL_0qn0CI_600x450.jpg",
-        "https://images.craigslist.org/01313_5rcFeLiWucJ_0qt0CI_600x450.jpg",
-        "https://images.craigslist.org/00W0W_gGVRS2XPg84_0qx0CI_600x450.jpg",
-        "https://images.craigslist.org/00u0u_lfLWTpXsx8S_0qB0CI_600x450.jpg",
-        "https://images.craigslist.org/00s0s_9GREOTRwrTS_0qs0CI_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\n3bed/1bath ready for move in. All bills paid in a great location.\nFenced backyard and pet friendly.\nCall or text landlord to schedule a tour and apply Mr Mark 813- 32 5-1 40 8\nMonthly rent: $1,060\nSecurity deposit: $1,000\nTotal move in cost: $2,060",
-      "move_in_date": "now",
-      "lat": 27.916,
-      "lon": -82.803,
-      "id": "unit-0034",
-      "date_added": "2026-06-15T16:43:20",
-      "contact_phone": null,
-      "contact_email": null,
-      "quality_rating": 5,
-      "quality_notes": "Recently updated home with modern kitchen and new vinyl flooring throughout.",
-      "flooring_type": "vinyl",
-      "natural_light": "high",
-      "kitchen_style": "modern",
-      "outdoor_space": "yard",
-      "size_impression": "average",
-      "view_quality": "good"
-    },
-    {
-      "title": "INCREDIBLE NEWS-MOVE IN  JUNE - PAY NO RENT UNTIL JULY 1!",
-      "address": "Palmetto Street near Drew Street",
-      "price": 1195,
-      "beds": 2,
-      "baths": 1.0,
-      "sqft": 800,
-      "housing_type": "Apartment",
-      "amenities": [
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "laundry on site",
-        "street parking",
-        "no smoking",
-        "air conditioning"
-      ],
-      "has_washer_dryer": false,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-incredible-news-move-in-june/7941048304.html",
-      "photos": [
-        "outputs/photos/unit-0035/photo-1.jpg",
-        "outputs/photos/unit-0035/photo-2.jpg",
-        "outputs/photos/unit-0035/photo-3.jpg",
-        "outputs/photos/unit-0035/photo-4.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00J0J_62qA77BJMQV_05k03y_600x450.jpg",
-        "https://images.craigslist.org/00a0a_hy0cNh6Uye0_05j03y_600x450.jpg",
-        "https://images.craigslist.org/00s0s_itfdHN2rIAo_0ed09u_600x450.jpg",
-        "https://images.craigslist.org/00505_jQJn7kiEspz_0CI0t2_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!www.palmettoonwest.com\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screenings are required for those 18 yrs or older\n*Resident Selection Plan Criteria must be met\n*Specials, Rates & Availability are subject to change without notice*",
-      "move_in_date": null,
-      "lat": 27.9781,
-      "lon": -82.7815,
-      "id": "unit-0035",
-      "date_added": "2026-06-15T16:43:23",
-      "contact_phone": null,
-      "contact_email": null,
-      "quality_rating": 4,
-      "quality_notes": "Clean, functional spaces, well-maintained exterior with common picnic area.",
-      "flooring_type": "vinyl",
-      "natural_light": "medium",
-      "kitchen_style": "updated",
-      "outdoor_space": "yard",
-      "size_impression": "average",
-      "view_quality": "limited"
-    },
-    {
-      "title": "DELIGHTFUL MOVE IN INCENTIVES!  LIMITED TIME OFFER!",
-      "address": "Palmetto Street near EDGEWATER DRIVE",
-      "price": 1195,
-      "beds": 2,
-      "baths": 1.0,
-      "sqft": 800,
-      "housing_type": "Apartment",
-      "amenities": [
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "laundry on site",
-        "street parking",
-        "no smoking",
-        "air conditioning"
-      ],
-      "has_washer_dryer": false,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-delightful-move-in/7941048230.html",
-      "photos": [
-        "outputs/photos/unit-0036/photo-1.jpg",
-        "outputs/photos/unit-0036/photo-2.jpg",
-        "outputs/photos/unit-0036/photo-3.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00J0J_62qA77BJMQV_05k03y_600x450.jpg",
-        "https://images.craigslist.org/00s0s_itfdHN2rIAo_0ed09u_600x450.jpg",
-        "https://images.craigslist.org/00505_jQJn7kiEspz_0CI0t2_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nPlease call\nshow contact info\nto schedule your tour!  Apply on line today @ www.palmettoonwest.com.   MOVE IN JUNE -PAY NO RENT UNTIL JULY 1ST!\nIncome Guidelines are indicated below:\nIncome Guidelines are indicated below:\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screening Required for each applicant 18 yrs or older*\n*Resident Selection Plan Guideline terms must be met*\n*Location: 1003 West Ave Clearwater, Fl 33755",
-      "move_in_date": null,
-      "lat": 27.9781,
-      "lon": -82.7815,
-      "id": "unit-0036",
-      "date_added": "2026-06-15T16:43:25",
-      "contact_phone": null,
-      "contact_email": null,
-      "quality_rating": 4,
-      "quality_notes": "Clean interior with updated fan; well-maintained exteriors and grounds.",
-      "flooring_type": "vinyl",
-      "natural_light": "medium",
-      "kitchen_style": "unknown",
-      "outdoor_space": "yard",
-      "size_impression": "average",
-      "view_quality": "limited"
-    },
-    {
-      "title": "MOVE IN SPECIAL SOON TO EXPIRE! MUST M-IN JUNE TO RECEIVE!",
-      "address": "Palmetto Street near Drew Street",
-      "price": 1195,
-      "beds": 2,
-      "baths": 1.0,
-      "sqft": 800,
-      "housing_type": "Apartment",
-      "amenities": [
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "laundry on site",
-        "street parking",
-        "no smoking",
-        "air conditioning"
-      ],
-      "has_washer_dryer": false,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-move-in-special-soon-to/7941048175.html",
-      "photos": [
-        "outputs/photos/unit-0037/photo-1.jpg",
-        "outputs/photos/unit-0037/photo-2.jpg",
-        "outputs/photos/unit-0037/photo-3.jpg",
-        "outputs/photos/unit-0037/photo-4.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00J0J_62qA77BJMQV_05k03y_600x450.jpg",
-        "https://images.craigslist.org/00a0a_hy0cNh6Uye0_05j03y_600x450.jpg",
-        "https://images.craigslist.org/00s0s_itfdHN2rIAo_0ed09u_600x450.jpg",
-        "https://images.craigslist.org/00505_jQJn7kiEspz_0CI0t2_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!  Location:   1003 West Ave, Clearwater Fl 33755.   Property Website: www.palmettoonwest.com /Office Hours 8am to 5pm/Monday-Friday.  Last Tour @ 4:30 pm.   *MUST MOVE IN JUNE TO RECEIVE MOVE IN SPECIAL:  PAY NO RENT UNTIL JULY 1ST!  *Limited Availability*\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nIncome Guidelines are indicated below:\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screening Required for each applicant 18 yrs or older*\n*Resident Selection Plan Guideline terms must be met*\n*Location: 1003 West Ave Clearwater, Fl 33755\nMove In Incentives Subject to Change Without Notice!",
-      "move_in_date": null,
-      "lat": 27.9781,
-      "lon": -82.7815,
-      "id": "unit-0037",
-      "date_added": "2026-06-15T16:43:27",
-      "contact_phone": null,
-      "contact_email": null,
-      "quality_rating": 5,
-      "quality_notes": "Modern kitchen, clean interiors, shared yard.",
-      "flooring_type": "vinyl",
-      "natural_light": "medium",
-      "kitchen_style": "modern",
-      "outdoor_space": "yard",
-      "size_impression": "average",
-      "view_quality": "limited"
-    },
-    {
-      "title": "SUMMER SAVINGS!  MOVE IN JUNE/PAY NO RENT UNTIL JULY 1!",
-      "address": "Palmetto Street near Drew Street",
-      "price": 1195,
-      "beds": 2,
-      "baths": 1.0,
-      "sqft": 800,
-      "housing_type": "Apartment",
-      "amenities": [
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "laundry on site",
-        "street parking",
-        "no smoking",
-        "air conditioning"
-      ],
-      "has_washer_dryer": false,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-summer-savings-move-in-june/7941048087.html",
-      "photos": [
-        "outputs/photos/unit-0038/photo-1.jpg",
-        "outputs/photos/unit-0038/photo-2.jpg",
-        "outputs/photos/unit-0038/photo-3.jpg",
-        "outputs/photos/unit-0038/photo-4.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00J0J_62qA77BJMQV_05k03y_600x450.jpg",
-        "https://images.craigslist.org/00a0a_hy0cNh6Uye0_05j03y_600x450.jpg",
-        "https://images.craigslist.org/00s0s_itfdHN2rIAo_0ed09u_600x450.jpg",
-        "https://images.craigslist.org/00505_jQJn7kiEspz_0CI0t2_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!  Location:   1003 West Ave, Clearwater Fl 33755.   Property Website: www.palmettoonwest.com /Office Hours 8am to 5pm/Monday-Friday.  Last Tour @ 4:30 pm.\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nIncome Guidelines are indicated below:\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screening Required for each applicant 18 yrs or older*\n*Resident Selection Plan Guideline terms must be met*\n*Location: 1003 West Ave Clearwater, Fl 33755",
-      "move_in_date": null,
-      "lat": 27.9781,
-      "lon": -82.7815,
-      "id": "unit-0038",
-      "date_added": "2026-06-15T16:43:30",
-      "contact_phone": null,
-      "contact_email": null,
-      "quality_rating": 4,
-      "quality_notes": "Clean, updated kitchen. Well-maintained exterior and common areas.",
-      "flooring_type": "vinyl",
-      "natural_light": "medium",
-      "kitchen_style": "updated",
-      "outdoor_space": "yard",
-      "size_impression": "average",
-      "view_quality": "good"
-    },
-    {
-      "title": "INCREDIBLE NEWS-LIMITED TIME OFFER-M-IN JUNE- NO RENT TIL 7/1!",
-      "address": "Palmetto Street near Drew Street",
-      "price": 1195,
-      "beds": 2,
-      "baths": 1.0,
-      "sqft": 800,
-      "housing_type": "Apartment",
-      "amenities": [
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "laundry on site",
-        "street parking",
-        "no smoking",
-        "air conditioning"
-      ],
-      "has_washer_dryer": false,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-incredible-news-limited-time/7941047505.html",
-      "photos": [
-        "outputs/photos/unit-0039/photo-1.jpg",
-        "outputs/photos/unit-0039/photo-2.jpg",
-        "outputs/photos/unit-0039/photo-3.jpg",
-        "outputs/photos/unit-0039/photo-4.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00J0J_62qA77BJMQV_05k03y_600x450.jpg",
-        "https://images.craigslist.org/00a0a_hy0cNh6Uye0_05j03y_600x450.jpg",
-        "https://images.craigslist.org/00s0s_itfdHN2rIAo_0ed09u_600x450.jpg",
-        "https://images.craigslist.org/00505_jQJn7kiEspz_0CI0t2_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!www.palmettoonwest.com\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820",
-      "move_in_date": null,
-      "lat": 27.9781,
-      "lon": -82.7815,
-      "id": "unit-0039",
-      "date_added": "2026-06-15T16:43:32",
-      "contact_phone": null,
-      "contact_email": null,
-      "quality_rating": 4,
-      "quality_notes": "Updated kitchen, simple but clean living area, well-maintained common outdoor spaces.",
-      "flooring_type": "vinyl",
-      "natural_light": "medium",
-      "kitchen_style": "updated",
-      "outdoor_space": "yard",
-      "size_impression": "average",
-      "view_quality": "limited"
-    },
-    {
-      "title": "MOVE IN SPECIAL SOON ENDING!   MOVE IN JUNE-NO RENT TIL JULY 1",
-      "address": "Palmetto Street near Drew Street",
-      "price": 1195,
-      "beds": 2,
-      "baths": 1.0,
-      "sqft": 800,
-      "housing_type": "Apartment",
-      "amenities": [
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "laundry on site",
-        "street parking",
-        "no smoking",
-        "air conditioning"
-      ],
-      "has_washer_dryer": false,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-move-in-special-soon-ending/7941047457.html",
-      "photos": [
-        "outputs/photos/unit-0040/photo-1.jpg",
-        "outputs/photos/unit-0040/photo-2.jpg",
-        "outputs/photos/unit-0040/photo-3.jpg",
-        "outputs/photos/unit-0040/photo-4.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00J0J_62qA77BJMQV_05k03y_600x450.jpg",
-        "https://images.craigslist.org/00a0a_hy0cNh6Uye0_05j03y_600x450.jpg",
-        "https://images.craigslist.org/00s0s_itfdHN2rIAo_0ed09u_600x450.jpg",
-        "https://images.craigslist.org/00505_jQJn7kiEspz_0CI0t2_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!  Location:   1003 West Ave, Clearwater Fl 33755.   Property Website: www.palmettoonwest.com /Office Hours 8am to 5pm/Monday-Friday.  Last Tour @ 4:30 pm.\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nIncome Guidelines are indicated below:\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screening Required for each applicant 18 yrs or older*\n*Resident Selection Plan Guideline terms must be met*\n*Location: 1003 West Ave Clearwater, Fl 33755\nMove In Incentives Subject to Change Without Notice!",
-      "move_in_date": null,
-      "lat": 27.9781,
-      "lon": -82.7815,
-      "id": "unit-0040",
-      "date_added": "2026-06-15T16:43:34",
-      "contact_phone": null,
-      "contact_email": null,
-      "quality_rating": 4,
-      "quality_notes": "Clean, updated kitchen with good outdoor amenities. Move-in ready.",
-      "flooring_type": "vinyl",
-      "natural_light": "medium",
-      "kitchen_style": "updated",
-      "outdoor_space": "yard",
-      "size_impression": "average",
-      "view_quality": "limited"
-    },
-    {
-      "title": "INCREDIBLE NEWS-MOVE IN  JUNE /PAY NO RENT UNTIL JULY 1!",
-      "address": "Palmetto Street near Drew Street",
-      "price": 1195,
-      "beds": 2,
-      "baths": 1.0,
-      "sqft": 800,
-      "housing_type": "Apartment",
-      "amenities": [
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "laundry on site",
-        "street parking",
-        "no smoking",
-        "air conditioning"
-      ],
-      "has_washer_dryer": false,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-incredible-news-move-in-june/7941047396.html",
-      "photos": [
-        "outputs/photos/unit-0041/photo-1.jpg",
-        "outputs/photos/unit-0041/photo-2.jpg",
-        "outputs/photos/unit-0041/photo-3.jpg",
-        "outputs/photos/unit-0041/photo-4.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00J0J_62qA77BJMQV_05k03y_600x450.jpg",
-        "https://images.craigslist.org/00a0a_hy0cNh6Uye0_05j03y_600x450.jpg",
-        "https://images.craigslist.org/00s0s_itfdHN2rIAo_0ed09u_600x450.jpg",
-        "https://images.craigslist.org/00505_jQJn7kiEspz_0CI0t2_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!www.palmettoonwest.com\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screenings are required for those 18 yrs or older\n*Resident Selection Plan Criteria must be met\n*Specials, Rates & Availability are subject to change without notice*",
-      "move_in_date": null,
-      "lat": 27.9781,
-      "lon": -82.7815,
-      "id": "unit-0041",
-      "date_added": "2026-06-15T16:43:36",
-      "contact_phone": null,
-      "contact_email": null,
-      "quality_rating": 4,
-      "quality_notes": "Clean, well-maintained complex with updated interiors and good communal spaces.",
-      "flooring_type": "vinyl",
-      "natural_light": "medium",
-      "kitchen_style": "updated",
-      "outdoor_space": "yard",
-      "size_impression": "average",
-      "view_quality": "limited"
-    },
-    {
-      "title": "MOVE IN SPECIAL SOON ENDING! M-IN JUNE/NO RENT TIL JULY 1!",
-      "address": "Palmetto Street near Drew Street",
-      "price": 1195,
-      "beds": 2,
-      "baths": 1.0,
-      "sqft": 800,
-      "housing_type": "Apartment",
-      "amenities": [
-        "cats are OK - purrr",
-        "dogs are OK - wooof",
-        "laundry on site",
-        "street parking",
-        "no smoking",
-        "air conditioning"
-      ],
-      "has_washer_dryer": false,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/pnl/apa/d/clearwater-move-in-special-soon-ending/7941047371.html",
-      "photos": [
-        "outputs/photos/unit-0042/photo-1.jpg",
-        "outputs/photos/unit-0042/photo-2.jpg",
-        "outputs/photos/unit-0042/photo-3.jpg",
-        "outputs/photos/unit-0042/photo-4.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00J0J_62qA77BJMQV_05k03y_600x450.jpg",
-        "https://images.craigslist.org/00a0a_hy0cNh6Uye0_05j03y_600x450.jpg",
-        "https://images.craigslist.org/00s0s_itfdHN2rIAo_0ed09u_600x450.jpg",
-        "https://images.craigslist.org/00505_jQJn7kiEspz_0CI0t2_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nDial\nshow contact info\nto schedule your tour today!  Location:   1003 West Ave, Clearwater Fl 33755.   Property Website: www.palmettoonwest.com /Office Hours 8am to 5pm/Monday-Friday.  Last Tour @ 4:30 pm.\nRestrictions Apply:  Palmetto on West is a Tax Credit Property with income guidelines.   This is not an income based property.   Applicants must be within the below income guidelines to apply for consideration of residency.\nIncome Guidelines are indicated below:\nOne occupant $40,620 to $48,180\nTwo Occupants $40,620 to$55,020\nThree Occupants $40,620 to $61,920\nFour Occupants $40,620 to $68,820\n*Credit and Background Screening Required for each applicant 18 yrs or older*\n*Resident Selection Plan Guideline terms must be met*\n*Location: 1003 West Ave Clearwater, Fl 33755\nMove In Incentives Subject to Change Without Notice!",
-      "move_in_date": null,
-      "lat": 27.9781,
-      "lon": -82.7815,
-      "id": "unit-0042",
-      "date_added": "2026-06-15T16:43:38",
-      "contact_phone": null,
-      "contact_email": null,
-      "quality_rating": 4,
-      "quality_notes": "Clean, updated interiors with good communal outdoor space and amenities.",
-      "flooring_type": "vinyl",
-      "natural_light": "medium",
-      "kitchen_style": "updated",
-      "outdoor_space": "yard",
-      "size_impression": "average",
-      "view_quality": "limited"
     },
     {
       "title": "2 BEDROOM ONE BATH NICE CONDO",
@@ -3053,62 +2483,6 @@
       "view_quality": "great"
     },
     {
-      "title": "Two-bedroom home with two baths in Gulfside Villas!",
-      "address": "google map",
-      "price": 1499,
-      "beds": 2,
-      "baths": 2.0,
-      "sqft": null,
-      "housing_type": "House",
-      "amenities": [
-        "no laundry on site",
-        "off-street parking",
-        "no smoking",
-        "air conditioning"
-      ],
-      "has_washer_dryer": false,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/psc/apa/d/hudson-two-bedroom-home-with-two-baths/7941219909.html",
-      "photos": [
-        "outputs/photos/unit-0062/photo-1.jpg",
-        "outputs/photos/unit-0062/photo-2.jpg",
-        "outputs/photos/unit-0062/photo-3.jpg",
-        "outputs/photos/unit-0062/photo-4.jpg",
-        "outputs/photos/unit-0062/photo-5.jpg",
-        "outputs/photos/unit-0062/photo-6.jpg",
-        "outputs/photos/unit-0062/photo-7.jpg",
-        "outputs/photos/unit-0062/photo-8.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00r0r_cjkJhR0GOMp_0pO0hc_600x450.jpg",
-        "https://images.craigslist.org/01717_7gWJ1kITHnW_0pO0hc_600x450.jpg",
-        "https://images.craigslist.org/00909_dCn0gyCAqoM_0gw0b1_600x450.jpg",
-        "https://images.craigslist.org/00Y0Y_5VzazQfpLEK_0gw0b1_600x450.jpg",
-        "https://images.craigslist.org/00K0K_2b1VB1qnwx9_0gw0b1_600x450.jpg",
-        "https://images.craigslist.org/00C0C_b0rOqj7frSJ_0gw0b1_600x450.jpg",
-        "https://images.craigslist.org/00D0D_7vE1mAnJa5b_0pO0hc_600x450.jpg",
-        "https://images.craigslist.org/00c0c_7Aky1YE88JG_0gw0b1_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\nReach out today and get pre-approved.\nTwo-bedroom home with two baths on the Hudson Intercoastal.\nGreat location. Just minutes from the legendary Gulf Beaches.\nCarpet in the living room and bedrooms. Laminate in the kitchen and bathrooms.\nCovered porch to enjoy that morning coffee or nightcap.\nKitchen features white shaker cabinets, stone look counter with stainless sink.\nBathrooms feature shower/tub combos, low flow commodes and shaker vanities.\nFridge under freezer and four burner range.\n14606 Coral Dr\nPet policy available.\nSection 8 ready\n$1499 per month when you pay first month and security.\n$1299 per month when you pay first, last and security.",
-      "move_in_date": null,
-      "contact_phone": null,
-      "contact_email": null,
-      "lat": 28.358292,
-      "lon": -82.704048,
-      "id": "unit-0062",
-      "date_added": "2026-06-15T21:42:41",
-      "quality_rating": 4,
-      "quality_notes": "Very clean, updated interior, with some virtual staging.",
-      "flooring_type": "mixed",
-      "natural_light": "medium",
-      "kitchen_style": "updated",
-      "outdoor_space": "none",
-      "size_impression": "average",
-      "view_quality": "limited"
-    },
-    {
       "title": "🌊 Luxury Waterfront Villas – Now at LOWER RATES",
       "address": "917 Apollo Beach Blvd",
       "price": 1699,
@@ -3546,54 +2920,6 @@
       "view_quality": "great"
     },
     {
-      "title": "2-Bed  Half of side by side duplex",
-      "address": "",
-      "price": 1400,
-      "beds": 2,
-      "baths": 1.0,
-      "sqft": null,
-      "housing_type": "Apartment",
-      "amenities": [
-        "cats are OK - purrr",
-        "w/d in unit",
-        "off-street parking",
-        "no smoking",
-        "air conditioning"
-      ],
-      "has_washer_dryer": true,
-      "is_gated": false,
-      "age_restriction": null,
-      "source": "Craigslist",
-      "source_url": "https://tampa.craigslist.org/psc/apa/d/new-port-richey-bed-half-of-side-by/7938293890.html",
-      "photos": [
-        "outputs/photos/unit-0071/photo-1.jpg",
-        "outputs/photos/unit-0071/photo-2.jpg",
-        "outputs/photos/unit-0071/photo-3.jpg"
-      ],
-      "photo_sources": [
-        "https://images.craigslist.org/00r0r_1fHXxQqUCl2_0co09i_600x450.jpg",
-        "https://images.craigslist.org/00k0k_2BgTNCnFxXh_0t20CI_600x450.jpg",
-        "https://images.craigslist.org/00j0j_7BC3VmiP1Yq_0t20CI_600x450.jpg"
-      ],
-      "notes": "QR Code Link to This Post\n2- Bed Apartment.  Half of side by side Duplex.  Large screened in Porch with washer and dryer.  Large backyard.  Ceiling fan, stove, fridge, New Vynal flooring and New Paint.  1400$ per month with 1,200$  Security deposit, decent background and No dogs.  New Central A/C",
-      "move_in_date": null,
-      "contact_phone": null,
-      "contact_email": "f6b11cdf25963dd8991e4e0465e93a39@hous.craigslist.org",
-      "lat": 28.2442,
-      "lon": -82.7193,
-      "id": "unit-0071",
-      "date_added": "2026-06-15T21:43:07",
-      "quality_rating": 4,
-      "quality_notes": "Clean interior, new flooring, modern bathroom and exterior.",
-      "flooring_type": "vinyl",
-      "natural_light": "high",
-      "kitchen_style": "unknown",
-      "outdoor_space": "patio",
-      "size_impression": "average",
-      "view_quality": "limited",
-      "contact_name": "mike"
-    },
-    {
       "id": "unit-0072",
       "title": "Lennox Court Apartments",
       "address": "2035 Kings Hwy, Clearwater, FL 33755",
@@ -3612,9 +2938,9 @@
         "outputs/photos/unit-0072/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/5f78a3b15c6f11bcf8cce2db4e7fee57c-f3665985431s.jpg",
-        "https://ar.rdcpix.com/5f78a3b15c6f11bcf8cce2db4e7fee57c-f4079671767s.jpg",
-        "https://ar.rdcpix.com/5f78a3b15c6f11bcf8cce2db4e7fee57c-f2759774123s.jpg"
+        "https://ar.rdcpix.com/5f78a3b15c6f11bcf8cce2db4e7fee57c-f3665985431o.jpg",
+        "https://ar.rdcpix.com/5f78a3b15c6f11bcf8cce2db4e7fee57c-f4079671767o.jpg",
+        "https://ar.rdcpix.com/5f78a3b15c6f11bcf8cce2db4e7fee57c-f2759774123o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -3633,12 +2959,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 2,
+      "quality_notes": "Dated kitchen with drop ceiling and old appliances, popcorn ceilings visible.",
+      "flooring_type": "mixed",
+      "kitchen_style": "dated",
+      "outdoor_space": "none",
+      "size_impression": "average",
       "date_added": "2026-06-17T20:10:44.049663"
     },
     {
@@ -3660,9 +2986,9 @@
         "outputs/photos/unit-0073/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/a44623e7fb2cf776b6747cbcddc1e3b6c-f2736221205s.jpg",
-        "https://ar.rdcpix.com/a44623e7fb2cf776b6747cbcddc1e3b6c-f2092270107s.jpg",
-        "https://ar.rdcpix.com/a44623e7fb2cf776b6747cbcddc1e3b6c-f4169582315s.jpg"
+        "https://ar.rdcpix.com/a44623e7fb2cf776b6747cbcddc1e3b6c-f2736221205o.jpg",
+        "https://ar.rdcpix.com/a44623e7fb2cf776b6747cbcddc1e3b6c-f2092270107o.jpg",
+        "https://ar.rdcpix.com/a44623e7fb2cf776b6747cbcddc1e3b6c-f4169582315o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -3686,12 +3012,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 4,
+      "quality_notes": "Clean, updated kitchen, spacious living room, nice exterior.",
+      "flooring_type": "vinyl",
+      "kitchen_style": "updated",
+      "outdoor_space": "none",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:10:46.293703"
     },
     {
@@ -3713,9 +3039,9 @@
         "outputs/photos/unit-0074/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/2349a21fdefe9dd9c0744f00f5f5a939c-f3352654775s.jpg",
-        "https://ar.rdcpix.com/2349a21fdefe9dd9c0744f00f5f5a939c-f2064174663s.jpg",
-        "https://ar.rdcpix.com/2349a21fdefe9dd9c0744f00f5f5a939c-f2530873632s.jpg"
+        "https://ar.rdcpix.com/2349a21fdefe9dd9c0744f00f5f5a939c-f3352654775o.jpg",
+        "https://ar.rdcpix.com/2349a21fdefe9dd9c0744f00f5f5a939c-f2064174663o.jpg",
+        "https://ar.rdcpix.com/2349a21fdefe9dd9c0744f00f5f5a939c-f2530873632o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -3734,12 +3060,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Modern kitchens, stainless steel appliances, and a beautiful community pool.",
+      "flooring_type": "mixed",
+      "kitchen_style": "modern",
+      "outdoor_space": "patio",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:10:48.464527"
     },
     {
@@ -3761,9 +3087,9 @@
         "outputs/photos/unit-0075/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ap.rdcpix.com/79902938624f09f8525f4f262ffeeb2fl-m314541796s.jpg",
-        "https://ap.rdcpix.com/79902938624f09f8525f4f262ffeeb2fl-m2798385671s.jpg",
-        "https://ap.rdcpix.com/79902938624f09f8525f4f262ffeeb2fl-m1087952562s.jpg"
+        "https://ap.rdcpix.com/79902938624f09f8525f4f262ffeeb2fl-m314541796o.jpg",
+        "https://ap.rdcpix.com/79902938624f09f8525f4f262ffeeb2fl-m2798385671o.jpg",
+        "https://ap.rdcpix.com/79902938624f09f8525f4f262ffeeb2fl-m1087952562o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -3818,12 +3144,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Modern, clean, great waterfront views, no kitchen photo.",
+      "flooring_type": "hardwood",
+      "kitchen_style": "unknown",
+      "outdoor_space": "unknown",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:10:50.761293"
     },
     {
@@ -3845,9 +3171,9 @@
         "outputs/photos/unit-0076/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ap.rdcpix.com/3893a9a33285adf5945163e29a8771f6l-m4286613648s.jpg",
-        "https://ap.rdcpix.com/3893a9a33285adf5945163e29a8771f6l-m2922426487s.jpg",
-        "https://ap.rdcpix.com/3893a9a33285adf5945163e29a8771f6l-m4077232054s.jpg"
+        "https://ap.rdcpix.com/3893a9a33285adf5945163e29a8771f6l-m4286613648o.jpg",
+        "https://ap.rdcpix.com/3893a9a33285adf5945163e29a8771f6l-m2922426487o.jpg",
+        "https://ap.rdcpix.com/3893a9a33285adf5945163e29a8771f6l-m4077232054o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -3905,12 +3231,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Modern kitchen, new appliances, spacious living area, great curb appeal.",
+      "flooring_type": "vinyl",
+      "kitchen_style": "modern",
+      "outdoor_space": "yard",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:10:52.994751"
     },
     {
@@ -3932,9 +3258,9 @@
         "outputs/photos/unit-0077/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ap.rdcpix.com/be120fca5d7bc5386c92da8f6d55b7c6l-m1935435060s.jpg",
-        "https://ap.rdcpix.com/be120fca5d7bc5386c92da8f6d55b7c6l-m3238347603s.jpg",
-        "https://ap.rdcpix.com/be120fca5d7bc5386c92da8f6d55b7c6l-m463392731s.jpg"
+        "https://ap.rdcpix.com/be120fca5d7bc5386c92da8f6d55b7c6l-m1935435060o.jpg",
+        "https://ap.rdcpix.com/be120fca5d7bc5386c92da8f6d55b7c6l-m3238347603o.jpg",
+        "https://ap.rdcpix.com/be120fca5d7bc5386c92da8f6d55b7c6l-m463392731o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -3963,12 +3289,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 3,
+      "quality_notes": "Only exterior photos available, interior condition unknown.",
+      "flooring_type": "unknown",
+      "kitchen_style": "unknown",
+      "outdoor_space": "unknown",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:10:56.050488"
     },
     {
@@ -3990,9 +3316,9 @@
         "outputs/photos/unit-0078/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ap.rdcpix.com/e95d54a19fdf6246c5fc519aaa678525l-m2644796118s.jpg",
-        "https://ap.rdcpix.com/e95d54a19fdf6246c5fc519aaa678525l-m3187037048s.jpg",
-        "https://ap.rdcpix.com/e95d54a19fdf6246c5fc519aaa678525l-m281710164s.jpg"
+        "https://ap.rdcpix.com/e95d54a19fdf6246c5fc519aaa678525l-m2644796118o.jpg",
+        "https://ap.rdcpix.com/e95d54a19fdf6246c5fc519aaa678525l-m3187037048o.jpg",
+        "https://ap.rdcpix.com/e95d54a19fdf6246c5fc519aaa678525l-m281710164o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4036,12 +3362,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 4,
+      "quality_notes": "Only exterior photos provided, showing a recently refreshed exterior.",
+      "flooring_type": "unknown",
+      "kitchen_style": "unknown",
+      "outdoor_space": "yard",
+      "size_impression": "unknown",
       "date_added": "2026-06-17T20:10:58.241980"
     },
     {
@@ -4063,9 +3389,9 @@
         "outputs/photos/unit-0079/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/ba998d0d2b4493dd9f1eebb37ede24aac-f3508629882s.jpg",
-        "https://ar.rdcpix.com/ba998d0d2b4493dd9f1eebb37ede24aac-f2545662388s.jpg",
-        "https://ar.rdcpix.com/ba998d0d2b4493dd9f1eebb37ede24aac-f1905321082s.jpg"
+        "https://ar.rdcpix.com/ba998d0d2b4493dd9f1eebb37ede24aac-f3508629882o.jpg",
+        "https://ar.rdcpix.com/ba998d0d2b4493dd9f1eebb37ede24aac-f2545662388o.jpg",
+        "https://ar.rdcpix.com/ba998d0d2b4493dd9f1eebb37ede24aac-f1905321082o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4107,12 +3433,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 4,
+      "quality_notes": "Clean, updated kitchen with modern black appliances and mixed flooring.",
+      "flooring_type": "mixed",
+      "kitchen_style": "updated",
+      "outdoor_space": "none",
+      "size_impression": "average",
       "date_added": "2026-06-17T20:11:00.427408"
     },
     {
@@ -4134,9 +3460,9 @@
         "outputs/photos/unit-0080/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/8e5567b857bc1427896899b197856195c-f3392971266s.jpg",
-        "https://ar.rdcpix.com/8e5567b857bc1427896899b197856195c-f2759796093s.jpg",
-        "https://ar.rdcpix.com/8e5567b857bc1427896899b197856195c-f5185330s.jpg"
+        "https://ar.rdcpix.com/8e5567b857bc1427896899b197856195c-f3392971266o.jpg",
+        "https://ar.rdcpix.com/8e5567b857bc1427896899b197856195c-f2759796093o.jpg",
+        "https://ar.rdcpix.com/8e5567b857bc1427896899b197856195c-f5185330o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4164,12 +3490,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Modern and clean apartment with good natural light and a nice pool area.",
+      "flooring_type": "vinyl",
+      "kitchen_style": "unknown",
+      "outdoor_space": "patio",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:02.630536"
     },
     {
@@ -4191,9 +3517,9 @@
         "outputs/photos/unit-0081/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/fcd8f1be4585e3cceb5dbc48f12bc43fc-f2022076942s.jpg",
-        "https://ar.rdcpix.com/fcd8f1be4585e3cceb5dbc48f12bc43fc-f1671943527s.jpg",
-        "https://ar.rdcpix.com/fcd8f1be4585e3cceb5dbc48f12bc43fc-f1522901938s.jpg"
+        "https://ar.rdcpix.com/fcd8f1be4585e3cceb5dbc48f12bc43fc-f2022076942o.jpg",
+        "https://ar.rdcpix.com/fcd8f1be4585e3cceb5dbc48f12bc43fc-f1671943527o.jpg",
+        "https://ar.rdcpix.com/fcd8f1be4585e3cceb5dbc48f12bc43fc-f1522901938o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4218,12 +3544,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Modern complex with excellent common areas and a large pool.",
+      "flooring_type": "unknown",
+      "kitchen_style": "unknown",
+      "outdoor_space": "unknown",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:04.858408"
     },
     {
@@ -4245,9 +3571,9 @@
         "outputs/photos/unit-0082/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/79ecb1097d7f0d8fc83b30a06791b022c-f2155450659s.jpg",
-        "https://ar.rdcpix.com/79ecb1097d7f0d8fc83b30a06791b022c-f3429149852s.jpg",
-        "https://ar.rdcpix.com/79ecb1097d7f0d8fc83b30a06791b022c-f2628012865s.jpg"
+        "https://ar.rdcpix.com/79ecb1097d7f0d8fc83b30a06791b022c-f2155450659o.jpg",
+        "https://ar.rdcpix.com/79ecb1097d7f0d8fc83b30a06791b022c-f3429149852o.jpg",
+        "https://ar.rdcpix.com/79ecb1097d7f0d8fc83b30a06791b022c-f2628012865o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4271,12 +3597,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Virtually staged, modern kitchen and finishes. Exterior is well-maintained.",
+      "flooring_type": "vinyl",
+      "kitchen_style": "modern",
+      "outdoor_space": "none",
+      "size_impression": "average",
       "date_added": "2026-06-17T20:11:07.034919"
     },
     {
@@ -4298,9 +3624,9 @@
         "outputs/photos/unit-0083/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/505ab82e21f9c2055d5dffe5860cc18bc-f2094644804s.jpg",
-        "https://ar.rdcpix.com/505ab82e21f9c2055d5dffe5860cc18bc-f3577153997s.jpg",
-        "https://ar.rdcpix.com/505ab82e21f9c2055d5dffe5860cc18bc-f569562798s.jpg"
+        "https://ar.rdcpix.com/505ab82e21f9c2055d5dffe5860cc18bc-f2094644804o.jpg",
+        "https://ar.rdcpix.com/505ab82e21f9c2055d5dffe5860cc18bc-f3577153997o.jpg",
+        "https://ar.rdcpix.com/505ab82e21f9c2055d5dffe5860cc18bc-f569562798o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4329,12 +3655,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Modern, bright, and clean with new appliances and updated finishes throughout.",
+      "flooring_type": "vinyl",
+      "kitchen_style": "modern",
+      "outdoor_space": "none",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:09.291541"
     },
     {
@@ -4356,9 +3682,9 @@
         "outputs/photos/unit-0084/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/153a33c760ef8d6c88169fb8d2ef4ca4c-f220086853s.jpg",
-        "https://ar.rdcpix.com/153a33c760ef8d6c88169fb8d2ef4ca4c-f1520222487s.jpg",
-        "https://ar.rdcpix.com/153a33c760ef8d6c88169fb8d2ef4ca4c-f2251106762s.jpg"
+        "https://ar.rdcpix.com/153a33c760ef8d6c88169fb8d2ef4ca4c-f220086853o.jpg",
+        "https://ar.rdcpix.com/153a33c760ef8d6c88169fb8d2ef4ca4c-f1520222487o.jpg",
+        "https://ar.rdcpix.com/153a33c760ef8d6c88169fb8d2ef4ca4c-f2251106762o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4394,12 +3720,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 3,
+      "quality_notes": "Only exterior photos available, no interior views of the apartment.",
+      "flooring_type": "unknown",
+      "kitchen_style": "unknown",
+      "outdoor_space": "yard",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:11.560426"
     },
     {
@@ -4421,9 +3747,9 @@
         "outputs/photos/unit-0085/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/c506be054f85b1f7f3814f2279aef7e2c-f176978744s.jpg",
-        "https://ar.rdcpix.com/c506be054f85b1f7f3814f2279aef7e2c-f1133810811s.jpg",
-        "https://ar.rdcpix.com/c506be054f85b1f7f3814f2279aef7e2c-f2991655490s.jpg"
+        "https://ar.rdcpix.com/c506be054f85b1f7f3814f2279aef7e2c-f176978744o.jpg",
+        "https://ar.rdcpix.com/c506be054f85b1f7f3814f2279aef7e2c-f1133810811o.jpg",
+        "https://ar.rdcpix.com/c506be054f85b1f7f3814f2279aef7e2c-f2991655490o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4455,12 +3781,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 4,
+      "quality_notes": "Modern kitchen and updated living areas. Features good natural light.",
+      "flooring_type": "vinyl",
+      "kitchen_style": "modern",
+      "outdoor_space": "patio",
+      "size_impression": "average",
       "date_added": "2026-06-17T20:11:13.753223"
     },
     {
@@ -4482,9 +3808,9 @@
         "outputs/photos/unit-0086/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/f66a5c3f92c2cfba5cb7119a864ded52c-f1852766654s.jpg",
-        "https://ar.rdcpix.com/f66a5c3f92c2cfba5cb7119a864ded52c-f2746915630s.jpg",
-        "https://ar.rdcpix.com/f66a5c3f92c2cfba5cb7119a864ded52c-f2529576072s.jpg"
+        "https://ar.rdcpix.com/f66a5c3f92c2cfba5cb7119a864ded52c-f1852766654o.jpg",
+        "https://ar.rdcpix.com/f66a5c3f92c2cfba5cb7119a864ded52c-f2746915630o.jpg",
+        "https://ar.rdcpix.com/f66a5c3f92c2cfba5cb7119a864ded52c-f2529576072o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4519,12 +3845,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 4,
+      "quality_notes": "Exterior and amenities look well-maintained.",
+      "flooring_type": "unknown",
+      "kitchen_style": "unknown",
+      "outdoor_space": "unknown",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:15.947726"
     },
     {
@@ -4546,9 +3872,9 @@
         "outputs/photos/unit-0087/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/9ef932b1244f4727e25004dd1f2018e3c-f2143558166s.jpg",
-        "https://ar.rdcpix.com/9ef932b1244f4727e25004dd1f2018e3c-f3618755121s.jpg",
-        "https://ar.rdcpix.com/9ef932b1244f4727e25004dd1f2018e3c-f3001401355s.jpg"
+        "https://ar.rdcpix.com/9ef932b1244f4727e25004dd1f2018e3c-f2143558166o.jpg",
+        "https://ar.rdcpix.com/9ef932b1244f4727e25004dd1f2018e3c-f3618755121o.jpg",
+        "https://ar.rdcpix.com/9ef932b1244f4727e25004dd1f2018e3c-f3001401355o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4575,12 +3901,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Photos only show amenities; no apartment interior views provided.",
+      "flooring_type": "unknown",
+      "kitchen_style": "unknown",
+      "outdoor_space": "unknown",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:18.223773"
     },
     {
@@ -4602,9 +3928,9 @@
         "outputs/photos/unit-0088/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/0415d5f0b4553c07afc2aef654306487c-f563739743s.jpg",
-        "https://ar.rdcpix.com/0415d5f0b4553c07afc2aef654306487c-f311473307s.jpg",
-        "https://ar.rdcpix.com/0415d5f0b4553c07afc2aef654306487c-f1677929021s.jpg"
+        "https://ar.rdcpix.com/0415d5f0b4553c07afc2aef654306487c-f563739743o.jpg",
+        "https://ar.rdcpix.com/0415d5f0b4553c07afc2aef654306487c-f311473307o.jpg",
+        "https://ar.rdcpix.com/0415d5f0b4553c07afc2aef654306487c-f1677929021o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4639,12 +3965,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 4,
+      "quality_notes": "Spacious, modern community lounge/game room in excellent, move-in ready condition.",
+      "flooring_type": "vinyl",
+      "kitchen_style": "unknown",
+      "outdoor_space": "unknown",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:20.451216"
     },
     {
@@ -4666,9 +3992,9 @@
         "outputs/photos/unit-0089/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/80a7e1f07b2061fb05223e472098fb36c-f1878004741s.jpg",
-        "https://ar.rdcpix.com/80a7e1f07b2061fb05223e472098fb36c-f1795311872s.jpg",
-        "https://ar.rdcpix.com/80a7e1f07b2061fb05223e472098fb36c-f3360593265s.jpg"
+        "https://ar.rdcpix.com/80a7e1f07b2061fb05223e472098fb36c-f1878004741o.jpg",
+        "https://ar.rdcpix.com/80a7e1f07b2061fb05223e472098fb36c-f1795311872o.jpg",
+        "https://ar.rdcpix.com/80a7e1f07b2061fb05223e472098fb36c-f3360593265o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4692,12 +4018,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 4,
+      "quality_notes": "Well-maintained exteriors, lush landscaping, and a clean pool area.",
+      "flooring_type": "unknown",
+      "kitchen_style": "unknown",
+      "outdoor_space": "unknown",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:22.642024"
     },
     {
@@ -4719,9 +4045,9 @@
         "outputs/photos/unit-0090/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/f9b645a5b90855a99df87b9ec7b3638ac-f3830462723s.jpg",
-        "https://ar.rdcpix.com/f9b645a5b90855a99df87b9ec7b3638ac-f3451591145s.jpg",
-        "https://ar.rdcpix.com/f9b645a5b90855a99df87b9ec7b3638ac-f1768426628s.jpg"
+        "https://ar.rdcpix.com/f9b645a5b90855a99df87b9ec7b3638ac-f3830462723o.jpg",
+        "https://ar.rdcpix.com/f9b645a5b90855a99df87b9ec7b3638ac-f3451591145o.jpg",
+        "https://ar.rdcpix.com/f9b645a5b90855a99df87b9ec7b3638ac-f1768426628o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4751,12 +4077,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 4,
+      "quality_notes": "Clean, move-in ready unit with a well-maintained pool area.",
+      "flooring_type": "mixed",
+      "kitchen_style": "updated",
+      "outdoor_space": "balcony",
+      "size_impression": "average",
       "date_added": "2026-06-17T20:11:24.876041"
     },
     {
@@ -4778,9 +4104,9 @@
         "outputs/photos/unit-0091/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/efe8de99a55f40a89096d632c977ccc9c-f2193598346s.jpg",
-        "https://ar.rdcpix.com/efe8de99a55f40a89096d632c977ccc9c-f1875346527s.jpg",
-        "https://ar.rdcpix.com/efe8de99a55f40a89096d632c977ccc9c-f2733579s.jpg"
+        "https://ar.rdcpix.com/efe8de99a55f40a89096d632c977ccc9c-f2193598346o.jpg",
+        "https://ar.rdcpix.com/efe8de99a55f40a89096d632c977ccc9c-f1875346527o.jpg",
+        "https://ar.rdcpix.com/efe8de99a55f40a89096d632c977ccc9c-f2733579o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4813,12 +4139,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Excellent pool area and clubhouse, high quality photos.",
+      "flooring_type": "unknown",
+      "kitchen_style": "unknown",
+      "outdoor_space": "none",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:27.104476"
     },
     {
@@ -4840,9 +4166,9 @@
         "outputs/photos/unit-0092/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/d8a3437535e09e8351d2bbd7359e7f1ec-f2851750511s.jpg",
-        "https://ar.rdcpix.com/d8a3437535e09e8351d2bbd7359e7f1ec-f2219088354s.jpg",
-        "https://ar.rdcpix.com/d8a3437535e09e8351d2bbd7359e7f1ec-f2204407257s.jpg"
+        "https://ar.rdcpix.com/d8a3437535e09e8351d2bbd7359e7f1ec-f2851750511o.jpg",
+        "https://ar.rdcpix.com/d8a3437535e09e8351d2bbd7359e7f1ec-f2219088354o.jpg",
+        "https://ar.rdcpix.com/d8a3437535e09e8351d2bbd7359e7f1ec-f2204407257o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4880,12 +4206,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Modern, move-in-ready with new appliances and a clean, bright aesthetic.",
+      "flooring_type": "vinyl",
+      "kitchen_style": "modern",
+      "outdoor_space": "none",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:29.339525"
     },
     {
@@ -4907,9 +4233,9 @@
         "outputs/photos/unit-0093/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/650b6b51868959d3afba2f297590234ac-f1599070193s.jpg",
-        "https://ar.rdcpix.com/650b6b51868959d3afba2f297590234ac-f3477160472s.jpg",
-        "https://ar.rdcpix.com/650b6b51868959d3afba2f297590234ac-f3882951565s.jpg"
+        "https://ar.rdcpix.com/650b6b51868959d3afba2f297590234ac-f1599070193o.jpg",
+        "https://ar.rdcpix.com/650b6b51868959d3afba2f297590234ac-f3477160472o.jpg",
+        "https://ar.rdcpix.com/650b6b51868959d3afba2f297590234ac-f3882951565o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -4935,12 +4261,12 @@
       "contact_phone": null,
       "contact_email": null,
       "contact_name": null,
-      "quality_rating": null,
-      "quality_notes": null,
-      "flooring_type": null,
-      "kitchen_style": null,
-      "outdoor_space": null,
-      "size_impression": null,
+      "quality_rating": 5,
+      "quality_notes": "Modern, well-maintained property with a spacious lobby and beautiful pool area.",
+      "flooring_type": "tile",
+      "kitchen_style": "unknown",
+      "outdoor_space": "unknown",
+      "size_impression": "spacious",
       "date_added": "2026-06-17T20:11:31.534082"
     },
     {
@@ -4962,9 +4288,9 @@
         "outputs/photos/unit-0094/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/c025782ceef68575a1290bb4182ab7c6c-f872119091s.jpg",
-        "https://ar.rdcpix.com/c025782ceef68575a1290bb4182ab7c6c-f3801941137s.jpg",
-        "https://ar.rdcpix.com/c025782ceef68575a1290bb4182ab7c6c-f1795671150s.jpg"
+        "https://ar.rdcpix.com/c025782ceef68575a1290bb4182ab7c6c-f872119091o.jpg",
+        "https://ar.rdcpix.com/c025782ceef68575a1290bb4182ab7c6c-f3801941137o.jpg",
+        "https://ar.rdcpix.com/c025782ceef68575a1290bb4182ab7c6c-f1795671150o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5023,9 +4349,9 @@
         "outputs/photos/unit-0095/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/7d7c18514e312a0dcd4c3d3e743e1596c-f1824258640s.jpg",
-        "https://ar.rdcpix.com/7d7c18514e312a0dcd4c3d3e743e1596c-f4199496408s.jpg",
-        "https://ar.rdcpix.com/7d7c18514e312a0dcd4c3d3e743e1596c-f1009359116s.jpg"
+        "https://ar.rdcpix.com/7d7c18514e312a0dcd4c3d3e743e1596c-f1824258640o.jpg",
+        "https://ar.rdcpix.com/7d7c18514e312a0dcd4c3d3e743e1596c-f4199496408o.jpg",
+        "https://ar.rdcpix.com/7d7c18514e312a0dcd4c3d3e743e1596c-f1009359116o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5072,9 +4398,9 @@
         "outputs/photos/unit-0096/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/20ce4db5950f9dd2bdf4b794fdd100ebc-f4114062868s.jpg",
-        "https://ar.rdcpix.com/20ce4db5950f9dd2bdf4b794fdd100ebc-f1666959669s.jpg",
-        "https://ar.rdcpix.com/20ce4db5950f9dd2bdf4b794fdd100ebc-f4042178067s.jpg"
+        "https://ar.rdcpix.com/20ce4db5950f9dd2bdf4b794fdd100ebc-f4114062868o.jpg",
+        "https://ar.rdcpix.com/20ce4db5950f9dd2bdf4b794fdd100ebc-f1666959669o.jpg",
+        "https://ar.rdcpix.com/20ce4db5950f9dd2bdf4b794fdd100ebc-f4042178067o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5142,9 +4468,9 @@
         "outputs/photos/unit-0097/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/f2b8051a7f5a207c18e77f05994e5da1c-f3533519841s.jpg",
-        "https://ar.rdcpix.com/f2b8051a7f5a207c18e77f05994e5da1c-f88726807s.jpg",
-        "https://ar.rdcpix.com/f2b8051a7f5a207c18e77f05994e5da1c-f2668150105s.jpg"
+        "https://ar.rdcpix.com/f2b8051a7f5a207c18e77f05994e5da1c-f3533519841o.jpg",
+        "https://ar.rdcpix.com/f2b8051a7f5a207c18e77f05994e5da1c-f88726807o.jpg",
+        "https://ar.rdcpix.com/f2b8051a7f5a207c18e77f05994e5da1c-f2668150105o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5219,9 +4545,9 @@
         "outputs/photos/unit-0098/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/aa9b009609125d44a53ff23a1699922dc-f2714417891s.jpg",
-        "https://ar.rdcpix.com/aa9b009609125d44a53ff23a1699922dc-f4068211651s.jpg",
-        "https://ar.rdcpix.com/aa9b009609125d44a53ff23a1699922dc-f893509507s.jpg"
+        "https://ar.rdcpix.com/aa9b009609125d44a53ff23a1699922dc-f2714417891o.jpg",
+        "https://ar.rdcpix.com/aa9b009609125d44a53ff23a1699922dc-f4068211651o.jpg",
+        "https://ar.rdcpix.com/aa9b009609125d44a53ff23a1699922dc-f893509507o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5292,9 +4618,9 @@
         "outputs/photos/unit-0099/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/3012832130cdd11c1f4261f200fcddbac-f1344532819s.jpg",
-        "https://ar.rdcpix.com/3012832130cdd11c1f4261f200fcddbac-f4063476507s.jpg",
-        "https://ar.rdcpix.com/3012832130cdd11c1f4261f200fcddbac-f2224468050s.jpg"
+        "https://ar.rdcpix.com/3012832130cdd11c1f4261f200fcddbac-f1344532819o.jpg",
+        "https://ar.rdcpix.com/3012832130cdd11c1f4261f200fcddbac-f4063476507o.jpg",
+        "https://ar.rdcpix.com/3012832130cdd11c1f4261f200fcddbac-f2224468050o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5355,9 +4681,9 @@
         "outputs/photos/unit-0100/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/6fb6196c0f1ce209c5f30d9b2a6ade8dc-f4097320552s.jpg",
-        "https://ar.rdcpix.com/6fb6196c0f1ce209c5f30d9b2a6ade8dc-f1213930022s.jpg",
-        "https://ar.rdcpix.com/6fb6196c0f1ce209c5f30d9b2a6ade8dc-f4121232774s.jpg"
+        "https://ar.rdcpix.com/6fb6196c0f1ce209c5f30d9b2a6ade8dc-f4097320552o.jpg",
+        "https://ar.rdcpix.com/6fb6196c0f1ce209c5f30d9b2a6ade8dc-f1213930022o.jpg",
+        "https://ar.rdcpix.com/6fb6196c0f1ce209c5f30d9b2a6ade8dc-f4121232774o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5417,9 +4743,9 @@
         "outputs/photos/unit-0101/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/ad0c503d293cef216ec9cd8b3c17a000c-f3473197039s.jpg",
-        "https://ar.rdcpix.com/ad0c503d293cef216ec9cd8b3c17a000c-f1405796526s.jpg",
-        "https://ar.rdcpix.com/ad0c503d293cef216ec9cd8b3c17a000c-f2217713422s.jpg"
+        "https://ar.rdcpix.com/ad0c503d293cef216ec9cd8b3c17a000c-f3473197039o.jpg",
+        "https://ar.rdcpix.com/ad0c503d293cef216ec9cd8b3c17a000c-f1405796526o.jpg",
+        "https://ar.rdcpix.com/ad0c503d293cef216ec9cd8b3c17a000c-f2217713422o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5472,9 +4798,9 @@
         "outputs/photos/unit-0102/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/33512e78fadfead8e7cfc59cf11c7780c-f1597228544s.jpg",
-        "https://ar.rdcpix.com/33512e78fadfead8e7cfc59cf11c7780c-f2788928531s.jpg",
-        "https://ar.rdcpix.com/33512e78fadfead8e7cfc59cf11c7780c-f1850230401s.jpg"
+        "https://ar.rdcpix.com/33512e78fadfead8e7cfc59cf11c7780c-f1597228544o.jpg",
+        "https://ar.rdcpix.com/33512e78fadfead8e7cfc59cf11c7780c-f2788928531o.jpg",
+        "https://ar.rdcpix.com/33512e78fadfead8e7cfc59cf11c7780c-f1850230401o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5531,9 +4857,9 @@
         "outputs/photos/unit-0103/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/0a6e74d29d259221fedbc287730bfb67c-f436616292s.jpg",
-        "https://ar.rdcpix.com/0a6e74d29d259221fedbc287730bfb67c-f2170981076s.jpg",
-        "https://ar.rdcpix.com/0a6e74d29d259221fedbc287730bfb67c-f4228957836s.jpg"
+        "https://ar.rdcpix.com/0a6e74d29d259221fedbc287730bfb67c-f436616292o.jpg",
+        "https://ar.rdcpix.com/0a6e74d29d259221fedbc287730bfb67c-f2170981076o.jpg",
+        "https://ar.rdcpix.com/0a6e74d29d259221fedbc287730bfb67c-f4228957836o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5606,9 +4932,9 @@
         "outputs/photos/unit-0104/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/ce1ff84452101b77e04cc1f9bc10d5f4c-f2338894952s.jpg",
-        "https://ar.rdcpix.com/ce1ff84452101b77e04cc1f9bc10d5f4c-f409191920s.jpg",
-        "https://ar.rdcpix.com/ce1ff84452101b77e04cc1f9bc10d5f4c-f239166381s.jpg"
+        "https://ar.rdcpix.com/ce1ff84452101b77e04cc1f9bc10d5f4c-f2338894952o.jpg",
+        "https://ar.rdcpix.com/ce1ff84452101b77e04cc1f9bc10d5f4c-f409191920o.jpg",
+        "https://ar.rdcpix.com/ce1ff84452101b77e04cc1f9bc10d5f4c-f239166381o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5661,9 +4987,9 @@
         "outputs/photos/unit-0105/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/eb7a713f05c124708b12ff731e0736ddc-f3132483902s.jpg",
-        "https://ar.rdcpix.com/eb7a713f05c124708b12ff731e0736ddc-f4241771659s.jpg",
-        "https://ar.rdcpix.com/eb7a713f05c124708b12ff731e0736ddc-f1384185349s.jpg"
+        "https://ar.rdcpix.com/eb7a713f05c124708b12ff731e0736ddc-f3132483902o.jpg",
+        "https://ar.rdcpix.com/eb7a713f05c124708b12ff731e0736ddc-f4241771659o.jpg",
+        "https://ar.rdcpix.com/eb7a713f05c124708b12ff731e0736ddc-f1384185349o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5721,9 +5047,9 @@
         "outputs/photos/unit-0106/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/84f053c3e9f73ca762d9ebdcb8f7b140c-f529587216s.jpg",
-        "https://ar.rdcpix.com/84f053c3e9f73ca762d9ebdcb8f7b140c-f1585760449s.jpg",
-        "https://ar.rdcpix.com/84f053c3e9f73ca762d9ebdcb8f7b140c-f2079549200s.jpg"
+        "https://ar.rdcpix.com/84f053c3e9f73ca762d9ebdcb8f7b140c-f529587216o.jpg",
+        "https://ar.rdcpix.com/84f053c3e9f73ca762d9ebdcb8f7b140c-f1585760449o.jpg",
+        "https://ar.rdcpix.com/84f053c3e9f73ca762d9ebdcb8f7b140c-f2079549200o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5784,7 +5110,7 @@
         "outputs/photos/unit-0107/photo-1.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/5519d151a1cb3ba3b44224c997e6a873c-f2252155861s.jpg"
+        "https://ar.rdcpix.com/5519d151a1cb3ba3b44224c997e6a873c-f2252155861o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5828,9 +5154,9 @@
         "outputs/photos/unit-0108/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/943be60561f72f9e4c2c408f1819bf71c-f1473215745s.jpg",
-        "https://ar.rdcpix.com/943be60561f72f9e4c2c408f1819bf71c-f4159520999s.jpg",
-        "https://ar.rdcpix.com/943be60561f72f9e4c2c408f1819bf71c-f2582515707s.jpg"
+        "https://ar.rdcpix.com/943be60561f72f9e4c2c408f1819bf71c-f1473215745o.jpg",
+        "https://ar.rdcpix.com/943be60561f72f9e4c2c408f1819bf71c-f4159520999o.jpg",
+        "https://ar.rdcpix.com/943be60561f72f9e4c2c408f1819bf71c-f2582515707o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5877,9 +5203,9 @@
         "outputs/photos/unit-0109/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/e3b67f70b144d503682780525faba53bc-f1441101176s.jpg",
-        "https://ar.rdcpix.com/e3b67f70b144d503682780525faba53bc-f1783993281s.jpg",
-        "https://ar.rdcpix.com/e3b67f70b144d503682780525faba53bc-f940477170s.jpg"
+        "https://ar.rdcpix.com/e3b67f70b144d503682780525faba53bc-f1441101176o.jpg",
+        "https://ar.rdcpix.com/e3b67f70b144d503682780525faba53bc-f1783993281o.jpg",
+        "https://ar.rdcpix.com/e3b67f70b144d503682780525faba53bc-f940477170o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5931,9 +5257,9 @@
         "outputs/photos/unit-0110/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/ea4017099073b649f6e2cd6eb75db907c-f3804094207s.jpg",
-        "https://ar.rdcpix.com/ea4017099073b649f6e2cd6eb75db907c-f1022132113s.jpg",
-        "https://ar.rdcpix.com/ea4017099073b649f6e2cd6eb75db907c-f1725896435s.jpg"
+        "https://ar.rdcpix.com/ea4017099073b649f6e2cd6eb75db907c-f3804094207o.jpg",
+        "https://ar.rdcpix.com/ea4017099073b649f6e2cd6eb75db907c-f1022132113o.jpg",
+        "https://ar.rdcpix.com/ea4017099073b649f6e2cd6eb75db907c-f1725896435o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -5999,9 +5325,9 @@
         "outputs/photos/unit-0111/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/00cf62322bac2f3341c10afa4dc6ae47c-f2730325781s.jpg",
-        "https://ar.rdcpix.com/00cf62322bac2f3341c10afa4dc6ae47c-f93297478s.jpg",
-        "https://ar.rdcpix.com/00cf62322bac2f3341c10afa4dc6ae47c-f3350617188s.jpg"
+        "https://ar.rdcpix.com/00cf62322bac2f3341c10afa4dc6ae47c-f2730325781o.jpg",
+        "https://ar.rdcpix.com/00cf62322bac2f3341c10afa4dc6ae47c-f93297478o.jpg",
+        "https://ar.rdcpix.com/00cf62322bac2f3341c10afa4dc6ae47c-f3350617188o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -6064,7 +5390,7 @@
         "outputs/photos/unit-0112/photo-1.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/d261918dc04ffefd41c577cb0dbad596c-f2883132783s.jpg"
+        "https://ar.rdcpix.com/d261918dc04ffefd41c577cb0dbad596c-f2883132783o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -6110,9 +5436,9 @@
         "outputs/photos/unit-0113/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/b7329a561a1b85df87d303168c13a6d4c-f3662212555s.jpg",
-        "https://ar.rdcpix.com/b7329a561a1b85df87d303168c13a6d4c-f3787397322s.jpg",
-        "https://ar.rdcpix.com/b7329a561a1b85df87d303168c13a6d4c-f2364584395s.jpg"
+        "https://ar.rdcpix.com/b7329a561a1b85df87d303168c13a6d4c-f3662212555o.jpg",
+        "https://ar.rdcpix.com/b7329a561a1b85df87d303168c13a6d4c-f3787397322o.jpg",
+        "https://ar.rdcpix.com/b7329a561a1b85df87d303168c13a6d4c-f2364584395o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -10785,9 +10111,9 @@
         "outputs/photos/unit-0201/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ap.rdcpix.com/137a9e96001f4d8fe1b733364b9e635cl-m3051528083s.jpg",
-        "https://ap.rdcpix.com/137a9e96001f4d8fe1b733364b9e635cl-m1675607841s.jpg",
-        "https://ap.rdcpix.com/137a9e96001f4d8fe1b733364b9e635cl-m3043782858s.jpg"
+        "https://ap.rdcpix.com/137a9e96001f4d8fe1b733364b9e635cl-m3051528083o.jpg",
+        "https://ap.rdcpix.com/137a9e96001f4d8fe1b733364b9e635cl-m1675607841o.jpg",
+        "https://ap.rdcpix.com/137a9e96001f4d8fe1b733364b9e635cl-m3043782858o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -10853,9 +10179,9 @@
         "outputs/photos/unit-0202/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ap.rdcpix.com/d126286590695e9e777de604cb8bce40l-m3765766473s.jpg",
-        "https://ap.rdcpix.com/d126286590695e9e777de604cb8bce40l-m2881047404s.jpg",
-        "https://ap.rdcpix.com/d126286590695e9e777de604cb8bce40l-m3202858367s.jpg"
+        "https://ap.rdcpix.com/d126286590695e9e777de604cb8bce40l-m3765766473o.jpg",
+        "https://ap.rdcpix.com/d126286590695e9e777de604cb8bce40l-m2881047404o.jpg",
+        "https://ap.rdcpix.com/d126286590695e9e777de604cb8bce40l-m3202858367o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -10923,9 +10249,9 @@
         "outputs/photos/unit-0203/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/f8f4e3f33c52925f67809a8fabb560c6c-f252035205s.jpg",
-        "https://ar.rdcpix.com/f8f4e3f33c52925f67809a8fabb560c6c-f3459835707s.jpg",
-        "https://ar.rdcpix.com/f8f4e3f33c52925f67809a8fabb560c6c-f1069256712s.jpg"
+        "https://ar.rdcpix.com/f8f4e3f33c52925f67809a8fabb560c6c-f252035205o.jpg",
+        "https://ar.rdcpix.com/f8f4e3f33c52925f67809a8fabb560c6c-f3459835707o.jpg",
+        "https://ar.rdcpix.com/f8f4e3f33c52925f67809a8fabb560c6c-f1069256712o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -10980,9 +10306,9 @@
         "outputs/photos/unit-0204/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/021f5452864bee124e220f9494a3d2d4c-f3418105020s.jpg",
-        "https://ar.rdcpix.com/021f5452864bee124e220f9494a3d2d4c-f4196933322s.jpg",
-        "https://ar.rdcpix.com/021f5452864bee124e220f9494a3d2d4c-f220640153s.jpg"
+        "https://ar.rdcpix.com/021f5452864bee124e220f9494a3d2d4c-f3418105020o.jpg",
+        "https://ar.rdcpix.com/021f5452864bee124e220f9494a3d2d4c-f4196933322o.jpg",
+        "https://ar.rdcpix.com/021f5452864bee124e220f9494a3d2d4c-f220640153o.jpg"
       ],
       "notes": "",
       "amenities": [
@@ -11029,9 +10355,9 @@
         "outputs/photos/unit-0205/photo-3.jpg"
       ],
       "photo_sources": [
-        "https://ar.rdcpix.com/a536849fb03f4a8e5d32c031702d8394c-f1828729095s.jpg",
-        "https://ar.rdcpix.com/a536849fb03f4a8e5d32c031702d8394c-f577791183s.jpg",
-        "https://ar.rdcpix.com/a536849fb03f4a8e5d32c031702d8394c-f159911922s.jpg"
+        "https://ar.rdcpix.com/a536849fb03f4a8e5d32c031702d8394c-f1828729095o.jpg",
+        "https://ar.rdcpix.com/a536849fb03f4a8e5d32c031702d8394c-f577791183o.jpg",
+        "https://ar.rdcpix.com/a536849fb03f4a8e5d32c031702d8394c-f159911922o.jpg"
       ],
       "notes": "",
       "amenities": [
